@@ -481,13 +481,13 @@
           <!-- Score & Grade Row -->
           <div class="flex items-center justify-between p-2.5 rounded-xl bg-[var(--pill-bg)]">
             <div class="flex items-center gap-3">
-              <div id="health-score-circle" class="w-12 h-12 rounded-full bg-emerald-600 text-white flex flex-col items-center justify-center font-bold shadow-sm transition-colors">
-                <span id="health-score-number" class="text-sm leading-none">85</span>
+              <div id="health-score-circle" class="w-12 h-12 rounded-full bg-slate-400 dark:bg-slate-600 text-white flex flex-col items-center justify-center font-bold shadow-sm transition-colors">
+                <span id="health-score-number" class="text-sm leading-none">--</span>
                 <span class="text-[8px] opacity-80">/100</span>
               </div>
               <div>
-                <span id="health-grade-text" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 block">Sangat Sehat (Grade A)</span>
-                <span id="health-status-desc" class="text-[10px] muted-text">Arus kas stabil & rasio tabungan baik</span>
+                <span id="health-grade-text" class="text-xs font-bold text-gray-500 dark:text-gray-400 block">Belum Ada Data</span>
+                <span id="health-status-desc" class="text-[10px] muted-text">Mulai catat transaksi untuk audit otomatis</span>
               </div>
             </div>
             <button onclick="openHealthDetailModal()" class="px-2.5 py-1 rounded-lg bg-emerald-800 text-white text-[10px] font-bold tap-scale shadow-xs">
@@ -1563,14 +1563,14 @@
         </div>
 
         <!-- Big Score Hero -->
-        <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-800 to-teal-800 text-white flex items-center justify-between shadow-md">
+        <div id="modal-health-hero-box" class="p-4 rounded-2xl bg-gradient-to-r from-emerald-800 to-teal-800 text-white flex items-center justify-between shadow-md transition-all">
           <div class="flex flex-col">
             <span class="text-[10px] text-emerald-200 uppercase tracking-widest font-semibold">Skor Total Portofolio</span>
-            <h2 id="modal-health-score" class="text-3xl font-extrabold mt-0.5">85 / 100</h2>
-            <span id="modal-health-grade" class="text-xs font-semibold text-emerald-100 mt-1">Grade A • Sangat Sehat</span>
+            <h2 id="modal-health-score" class="text-3xl font-extrabold mt-0.5">-- / 100</h2>
+            <span id="modal-health-grade" class="text-xs font-semibold text-emerald-100 mt-1">Belum Ada Data • Input transaksi/saldo</span>
           </div>
           <div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
-            <span class="material-symbols-outlined text-[32px] text-white">verified</span>
+            <span id="modal-health-icon" class="material-symbols-outlined text-[32px] text-white">health_and_safety</span>
           </div>
         </div>
 
@@ -3219,84 +3219,214 @@
     ];
 
     function calculateFinancialHealth() {
-      if (!currentUserData) return { score: 75, grade: 'Sehat (Grade B)', desc: 'Portofolio siap bertumbuh' };
+      if (!currentUserData) {
+        return {
+          score: '--',
+          numericScore: 0,
+          grade: 'Belum Ada Data',
+          desc: 'Catat transaksi atau saldo untuk analisis real-time',
+          colorClass: 'bg-slate-400 dark:bg-slate-600',
+          textClass: 'text-gray-500 dark:text-gray-400',
+          savingsScore: 0,
+          savingsDesc: 'Belum ada catatan tabungan atau saldo.',
+          budgetScore: 0,
+          budgetDesc: 'Belum ada pengeluaran dicatat bulan ini.',
+          emergencyScore: 0,
+          emergencyDesc: 'Belum ada target Dana Darurat di menu Goals.',
+          cashflowScore: 0,
+          cashflowDesc: 'Belum ada transaksi pemasukan/pengeluaran.',
+          isEmpty: true
+        };
+      }
 
       const trxs = currentUserData.transactions || [];
-      const totalIncome = trxs.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
-      const totalExpense = trxs.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
-      const budgetCap = currentUserData.monthlyBudgetCap || 10000000;
+      const cards = currentUserData.cards || [];
       const goals = currentUserData.goals || [];
+      const incomeTrxs = trxs.filter(t => t.type === 'income');
+      const expenseTrxs = trxs.filter(t => t.type === 'expense');
+      const totalIncome = incomeTrxs.reduce((a, b) => a + b.amount, 0);
+      const totalExpense = expenseTrxs.reduce((a, b) => a + b.amount, 0);
+      const budgetCap = currentUserData.monthlyBudgetCap || 10000000;
       const totalSavedInGoals = goals.reduce((a, b) => a + (b.saved || 0), 0);
+      const totalCardBalance = cards.reduce((a, b) => a + (b.balance || 0), 0);
+      const customInvest = currentUserData.customInvestments || 0;
+      const customPhysical = currentUserData.customPhysicalAssets || 0;
 
-      // Pilar 1: Rasio Tabungan (Max 30)
-      let savingsScore = 15;
+      // Cek apakah ada data keuangan aktual yang dimasukkan
+      const hasAnyData = trxs.length > 0 || totalCardBalance > 0 || totalSavedInGoals > 0 || customInvest > 0 || customPhysical > 0;
+
+      if (!hasAnyData) {
+        return {
+          score: '--',
+          numericScore: 0,
+          grade: 'Belum Ada Data',
+          desc: 'Mulai catat transaksi & saldo untuk analisis real-time',
+          colorClass: 'bg-slate-400 dark:bg-slate-600',
+          textClass: 'text-gray-500 dark:text-gray-400',
+          savingsScore: 0,
+          savingsDesc: 'Belum ada catatan tabungan atau saldo.',
+          budgetScore: 0,
+          budgetDesc: 'Belum ada pengeluaran dicatat bulan ini.',
+          emergencyScore: 0,
+          emergencyDesc: 'Belum ada target Dana Darurat di menu Goals.',
+          cashflowScore: 0,
+          cashflowDesc: 'Belum ada transaksi pemasukan/pengeluaran.',
+          isEmpty: true
+        };
+      }
+
+      // 1. Pilar Rasio Tabungan & Aset (Maks 30)
+      let savingsScore = 0;
+      let savingsDesc = '';
       if (totalIncome > 0) {
-        const ratio = (totalSavedInGoals / totalIncome);
-        savingsScore = Math.min(30, Math.round(ratio * 100 * 1.5));
-      } else if (totalSavedInGoals > 0) {
-        savingsScore = 25;
+        const ratio = totalSavedInGoals / totalIncome;
+        if (ratio >= 0.20) {
+          savingsScore = 30;
+          savingsDesc = `Rasio tabungan prima: ${Math.round(ratio * 100)}% dari total pemasukan (${formatValue(totalSavedInGoals)}).`;
+        } else if (ratio >= 0.10) {
+          savingsScore = 22;
+          savingsDesc = `Rasio tabungan baik: ${Math.round(ratio * 100)}% dari pemasukan (${formatValue(totalSavedInGoals)}).`;
+        } else if (ratio >= 0.05) {
+          savingsScore = 14;
+          savingsDesc = `Rasio tabungan cukup: ${Math.round(ratio * 100)}% dari pemasukan. Tingkatkan ke 20%!`;
+        } else if (ratio > 0) {
+          savingsScore = 8;
+          savingsDesc = `Rasio tabungan ${Math.round(ratio * 100)}% dari pemasukan. Alokasikan lebih banyak ke Vault.`;
+        } else {
+          savingsScore = totalCardBalance > 0 ? 5 : 0;
+          savingsDesc = 'Belum ada tabungan dialokasikan dari pemasukan bulan ini.';
+        }
+      } else if (totalSavedInGoals > 0 || customInvest > 0) {
+        savingsScore = Math.min(30, 12 + Math.round(((totalSavedInGoals + customInvest) / 2000000) * 4));
+        savingsDesc = `Total aset tabungan & investasi terkumpul ${formatValue(totalSavedInGoals + customInvest)}.`;
+      } else {
+        savingsScore = totalCardBalance > 0 ? 6 : 0;
+        savingsDesc = 'Belum ada catatan alokasi tabungan atau pemasukan.';
       }
 
-      // Pilar 2: Disiplin Anggaran (Max 30)
-      let budgetScore = 30;
-      if (budgetCap > 0 && totalExpense > 0) {
+      // 2. Pilar Disiplin Anggaran (Maks 30)
+      let budgetScore = 0;
+      let budgetDesc = '';
+      if (totalExpense === 0) {
+        budgetScore = (totalCardBalance > 0 || totalIncome > 0) ? 20 : 0;
+        budgetDesc = 'Belum ada pengeluaran dicatat (kuota anggaran masih utuh 100%).';
+      } else if (budgetCap > 0) {
         const spendRatio = totalExpense / budgetCap;
-        if (spendRatio <= 0.6) budgetScore = 30;
-        else if (spendRatio <= 0.85) budgetScore = 25;
-        else if (spendRatio <= 1.0) budgetScore = 18;
-        else budgetScore = Math.max(5, 30 - Math.round((spendRatio - 1) * 30));
+        if (spendRatio <= 0.50) {
+          budgetScore = 30;
+          budgetDesc = `Sangat disiplin! Pengeluaran baru ${Math.round(spendRatio * 100)}% dari batas kuota.`;
+        } else if (spendRatio <= 0.75) {
+          budgetScore = 25;
+          budgetDesc = `Aman terkendali (${Math.round(spendRatio * 100)}% terpakai dari kuota ${formatValue(budgetCap)}).`;
+        } else if (spendRatio <= 0.90) {
+          budgetScore = 18;
+          budgetDesc = `Waspada mendekati batas kuota (${Math.round(spendRatio * 100)}% terpakai).`;
+        } else if (spendRatio <= 1.0) {
+          budgetScore = 12;
+          budgetDesc = `Pengeluaran mencapai batas pagu anggaran (${Math.round(spendRatio * 100)}%).`;
+        } else {
+          const overPct = spendRatio - 1;
+          budgetScore = Math.max(0, Math.round(12 - overPct * 25));
+          budgetDesc = `Overbudget sebesar ${Math.round(overPct * 100)}%! Evaluasi pos pengeluaran sekunder.`;
+        }
       }
 
-      // Pilar 3: Dana Darurat (Max 25)
-      let emergencyScore = 10;
-      const hasEmergencyGoal = goals.some(g => (g.name || '').toLowerCase().includes('darurat') || (g.category || '').toLowerCase().includes('darurat'));
-      if (hasEmergencyGoal) emergencyScore += 10;
-      if (totalSavedInGoals >= totalExpense * 2) emergencyScore = 25;
+      // 3. Pilar Cadangan Dana Darurat (Maks 25)
+      let emergencyScore = 0;
+      let emergencyDesc = '';
+      const emergencyGoals = goals.filter(g => {
+        const n = (g.name || '').toLowerCase();
+        const c = (g.category || '').toLowerCase();
+        return n.includes('darurat') || n.includes('emergency') || c.includes('darurat');
+      });
 
-      // Pilar 4: Ketahanan Arus Kas (Max 15)
-      let cashflowScore = 10;
-      if (totalIncome >= totalExpense) cashflowScore = 15;
-      else if (totalExpense > totalIncome && totalIncome > 0) cashflowScore = 5;
+      if (emergencyGoals.length > 0) {
+        const emergencySaved = emergencyGoals.reduce((a, b) => a + (b.saved || 0), 0);
+        const monthlyBenchmark = totalExpense > 0 ? totalExpense : 3000000;
+        const monthsCovered = (emergencySaved / monthlyBenchmark).toFixed(1);
 
-      const totalScore = Math.min(100, Math.max(10, savingsScore + budgetScore + emergencyScore + cashflowScore));
+        if (emergencySaved >= monthlyBenchmark * 3) {
+          emergencyScore = 25;
+          emergencyDesc = `Lengkap! Cadangan dana darurat mencukupi ~${monthsCovered} bulan pengeluaran (${formatValue(emergencySaved)}).`;
+        } else if (emergencySaved >= monthlyBenchmark) {
+          emergencyScore = 18;
+          emergencyDesc = `Bagus! Dana darurat mencukupi ~${monthsCovered} bulan pengeluaran.`;
+        } else if (emergencySaved > 0) {
+          emergencyScore = 12;
+          emergencyDesc = `Proses pengumpulan dana darurat: ${formatValue(emergencySaved)}.`;
+        } else {
+          emergencyScore = 6;
+          emergencyDesc = 'Target Dana Darurat sudah dibuat di Vault, yuk mulai sisihkan saldo!';
+        }
+      } else if (totalSavedInGoals > 0) {
+        emergencyScore = 8;
+        emergencyDesc = 'Ada target tabungan di Goals, namun belum dinamai Dana Darurat khusus.';
+      } else {
+        emergencyScore = 0;
+        emergencyDesc = 'Belum ada target Dana Darurat. Buat di menu Goals untuk perlindungan finansial.';
+      }
 
-      let grade = 'Sangat Sehat (Grade A)';
-      let statusDesc = 'Arus kas stabil & rasio tabungan terjaga rapi';
-      let colorClass = 'bg-emerald-600';
-      let textClass = 'text-emerald-600 dark:text-emerald-400';
+      // 4. Pilar Ketahanan Arus Kas (Maks 15)
+      let cashflowScore = 0;
+      let cashflowDesc = '';
+      if (trxs.length === 0) {
+        cashflowScore = totalCardBalance > 0 ? 8 : 0;
+        cashflowDesc = totalCardBalance > 0 ? 'Saldo kas tersedia di rekening, belum ada mutasi transaksi.' : 'Belum ada transaksi arus kas.';
+      } else if (totalIncome > totalExpense) {
+        cashflowScore = 15;
+        cashflowDesc = `Surplus kas positif +${formatValue(totalIncome - totalExpense)} bulan ini!`;
+      } else if (totalIncome === totalExpense && totalIncome > 0) {
+        cashflowScore = 8;
+        cashflowDesc = 'Arus kas impas (break-even), pemasukan sama dengan pengeluaran.';
+      } else if (totalExpense > totalIncome && totalIncome > 0) {
+        cashflowScore = 3;
+        cashflowDesc = `Defisit kas -${formatValue(totalExpense - totalIncome)} bulan ini! Waspada cashflow bocor.`;
+      } else if (totalIncome === 0 && totalExpense > 0) {
+        cashflowScore = 1;
+        cashflowDesc = `Pengeluaran ${formatValue(totalExpense)} tercatat tanpa adanya pemasukan.`;
+      }
 
-      if (totalScore >= 80) {
+      const rawScore = savingsScore + budgetScore + emergencyScore + cashflowScore;
+      const finalScore = Math.min(100, Math.max(0, rawScore));
+
+      let grade = 'Perlu Perhatian (Grade D)';
+      let statusDesc = 'Pengeluaran tinggi atau cadangan kas minim';
+      let colorClass = 'bg-rose-600';
+      let textClass = 'text-rose-600 dark:text-rose-400';
+
+      if (finalScore >= 85) {
         grade = 'Sangat Sehat (Grade A)';
-        statusDesc = 'Arus kas surplus & rasio tabungan unggul';
+        statusDesc = 'Arus kas surplus prima & rasio tabungan optimal';
         colorClass = 'bg-emerald-600';
         textClass = 'text-emerald-600 dark:text-emerald-400';
-      } else if (totalScore >= 65) {
-        grade = 'Sehat Terkendali (Grade B)';
-        statusDesc = 'Pengeluaran stabil di bawah batas anggaran';
+      } else if (finalScore >= 70) {
+        grade = 'Sehat (Grade B)';
+        statusDesc = 'Disiplin anggaran terjaga & siap bertumbuh';
         colorClass = 'bg-teal-600';
         textClass = 'text-teal-600 dark:text-teal-400';
-      } else if (totalScore >= 50) {
-        grade = 'Perlu Perhatian (Grade C)';
-        statusDesc = 'Mendekati kuota anggaran, perbanyak tabungan';
+      } else if (finalScore >= 50) {
+        grade = 'Cukup Waspada (Grade C)';
+        statusDesc = 'Arus kas aman, tingkatkan tabungan & dana darurat';
         colorClass = 'bg-amber-600';
         textClass = 'text-amber-600 dark:text-amber-400';
-      } else {
-        grade = 'Kritis (Grade D)';
-        statusDesc = 'Pengeluaran melebihi pemasukan atau batas kuota';
-        colorClass = 'bg-rose-600';
-        textClass = 'text-rose-600 dark:text-rose-400';
       }
 
       return {
-        score: totalScore,
+        score: finalScore,
+        numericScore: finalScore,
         grade: grade,
         desc: statusDesc,
         colorClass: colorClass,
         textClass: textClass,
         savingsScore: savingsScore,
+        savingsDesc: savingsDesc,
         budgetScore: budgetScore,
+        budgetDesc: budgetDesc,
         emergencyScore: emergencyScore,
-        cashflowScore: cashflowScore
+        emergencyDesc: emergencyDesc,
+        cashflowScore: cashflowScore,
+        cashflowDesc: cashflowDesc,
+        isEmpty: false
       };
     }
 
@@ -3319,52 +3449,90 @@
       // Update Modal Detail Elements
       const mScore = document.getElementById('modal-health-score');
       const mGrade = document.getElementById('modal-health-grade');
-      if (mScore) mScore.textContent = `${health.score} / 100`;
-      if (mGrade) mGrade.textContent = `${health.grade} • ${health.desc}`;
+      if (mScore) mScore.textContent = health.isEmpty ? '-- / 100' : `${health.score} / 100`;
+      if (mGrade) mGrade.textContent = health.isEmpty ? 'Belum Ada Data • Input transaksi/saldo' : `${health.grade} • ${health.desc}`;
 
-      // Update Pillars
+      // Update Pillars in Modal
       const pSaveScore = document.getElementById('pillar-savings-score');
       const pSaveBar = document.getElementById('pillar-savings-bar');
+      const pSaveDesc = document.getElementById('pillar-savings-desc');
       if (pSaveScore) pSaveScore.textContent = `${health.savingsScore} / 30`;
       if (pSaveBar) pSaveBar.style.width = `${Math.round((health.savingsScore / 30) * 100)}%`;
+      if (pSaveDesc && health.savingsDesc) pSaveDesc.textContent = health.savingsDesc;
 
       const pBudgetScore = document.getElementById('pillar-budget-score');
       const pBudgetBar = document.getElementById('pillar-budget-bar');
+      const pBudgetDesc = document.getElementById('pillar-budget-desc');
       if (pBudgetScore) pBudgetScore.textContent = `${health.budgetScore} / 30`;
       if (pBudgetBar) pBudgetBar.style.width = `${Math.round((health.budgetScore / 30) * 100)}%`;
+      if (pBudgetDesc && health.budgetDesc) pBudgetDesc.textContent = health.budgetDesc;
 
       const pEmerScore = document.getElementById('pillar-emergency-score');
       const pEmerBar = document.getElementById('pillar-emergency-bar');
+      const pEmerDesc = document.getElementById('pillar-emergency-desc');
       if (pEmerScore) pEmerScore.textContent = `${health.emergencyScore} / 25`;
       if (pEmerBar) pEmerBar.style.width = `${Math.round((health.emergencyScore / 25) * 100)}%`;
+      if (pEmerDesc && health.emergencyDesc) pEmerDesc.textContent = health.emergencyDesc;
 
       const pCashScore = document.getElementById('pillar-cashflow-score');
       const pCashBar = document.getElementById('pillar-cashflow-bar');
+      const pCashDesc = document.getElementById('pillar-cashflow-desc');
       if (pCashScore) pCashScore.textContent = `${health.cashflowScore} / 15`;
       if (pCashBar) pCashBar.style.width = `${Math.round((health.cashflowScore / 15) * 100)}%`;
+      if (pCashDesc && health.cashflowDesc) pCashDesc.textContent = health.cashflowDesc;
 
-      updateBehavioralAIInsight();
+      updateBehavioralAIInsight(health);
     }
 
-    function updateBehavioralAIInsight() {
+    function updateBehavioralAIInsight(health) {
       const insightEl = document.getElementById('behavioral-ai-text');
       if (!insightEl || !currentUserData) return;
 
       const trxs = currentUserData.transactions || [];
-      const totalExpense = trxs.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
-      const budgetCap = currentUserData.monthlyBudgetCap || 10000000;
+      const cards = currentUserData.cards || [];
       const goals = currentUserData.goals || [];
+      const totalExpense = trxs.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+      const totalIncome = trxs.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+      const budgetCap = currentUserData.monthlyBudgetCap || 10000000;
 
-      // Context-aware psychological insight
-      if (budgetCap > 0 && totalExpense / budgetCap >= 0.75) {
-        insightEl.textContent = 'Peringatan Anggaran: Pengeluaran sudah melampaui 75% kuota. Aktifkan batas belanja harian agar sisa hari bulan ini aman terkendali.';
-      } else if (goals.length === 0) {
-        insightEl.textContent = 'Rekomendasi Psikologi: Otak manusia termotivasi oleh visual target. Buka menu Goals dan buat target impian pertama Anda hari ini!';
-      } else if (!goals.some(g => (g.name || '').toLowerCase().includes('darurat'))) {
-        insightEl.textContent = 'Peace of Mind: Miliki tabungan berlabel "Dana Darurat" di menu Goals untuk memberikan rasa aman psikologis terhadap pengeluaran tak terduga.';
-      } else {
-        insightEl.textContent = BEHAVIORAL_INSIGHT_PRESETS[customInsightIndex % BEHAVIORAL_INSIGHT_PRESETS.length];
+      // 1. Kondisi Kosong / Baru Mendaftar
+      if (trxs.length === 0 && cards.length === 0 && goals.length === 0) {
+        insightEl.textContent = 'Selamat datang di Sovereign Wealth! Data keuangan Anda masih kosong. Mulai dengan mencatat pengeluaran atau saldo pertama Anda agar Sovereign AI dapat menganalisis kesehatan keuangan secara real-time.';
+        return;
       }
+
+      // 2. Kondisi Overbudget
+      if (budgetCap > 0 && totalExpense > budgetCap) {
+        insightEl.textContent = 'Peringatan Anggaran: Pengeluaran bulan ini telah melampaui kuota! Terapkan jeda 24 jam sebelum belanja non-pokok untuk menghentikan kebocoran.';
+        return;
+      }
+
+      // 3. Kondisi Mendekati Limit (> 75%)
+      if (budgetCap > 0 && totalExpense / budgetCap >= 0.75) {
+        insightEl.textContent = 'Waspada Kuota: Pengeluaran sudah mencapai 75%+ anggaran. Kunci pengeluaran hiburan agar sisa hari bulan ini tetap stabil.';
+        return;
+      }
+
+      // 4. Kondisi Defisit Cashflow
+      if (totalExpense > totalIncome && totalIncome > 0) {
+        insightEl.textContent = 'Defisit Arus Kas: Pengeluaran bulan ini lebih besar daripada pemasukan. Prioritaskan kebutuhan pokok dan tunda pembelian konsumtif.';
+        return;
+      }
+
+      // 5. Belum Punya Target Goals
+      if (goals.length === 0) {
+        insightEl.textContent = 'Rekomendasi Psikologi: Pikiran manusia termotivasi oleh visual target. Buka menu Goals dan buat target impian pertama Anda hari ini!';
+        return;
+      }
+
+      // 6. Belum Punya Dana Darurat
+      if (!goals.some(g => (g.name || '').toLowerCase().includes('darurat') || (g.category || '').toLowerCase().includes('darurat'))) {
+        insightEl.textContent = 'Ketenangan Batin: Miliki tabungan berlabel "Dana Darurat" di menu Goals untuk perlindungan psikologis dari risiko tak terduga.';
+        return;
+      }
+
+      // 7. Jika Sehat / Normal, Tampilkan Rotasi Presets Edukatif
+      insightEl.textContent = BEHAVIORAL_INSIGHT_PRESETS[customInsightIndex % BEHAVIORAL_INSIGHT_PRESETS.length];
     }
 
     function refreshBehavioralInsight() {
@@ -3372,7 +3540,7 @@
       const insightEl = document.getElementById('behavioral-ai-text');
       if (insightEl) {
         insightEl.textContent = BEHAVIORAL_INSIGHT_PRESETS[customInsightIndex % BEHAVIORAL_INSIGHT_PRESETS.length];
-        showToast('Insight psikologi diperbarui 💡');
+        showToast('Insight psikologi keuangan diperbarui 💡');
       }
     }
 
