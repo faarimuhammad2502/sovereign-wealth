@@ -153,77 +153,65 @@
 <body class="font-sans antialiased min-h-screen flex justify-center items-start sm:py-6">
 
   <!-- ======================================================== -->
-  <!-- 0. AUTH SCREEN: MULTI-USER LOGIN & REGISTRATION          -->
+  <!-- 0A. AUTH STATE 1: FIRST-TIME INSTALL / CLEAN DEVICE      -->
+  <!-- (Shown if no registered user on this phone)              -->
   <!-- ======================================================== -->
-  <div id="auth-screen" class="app-viewport fixed inset-0 z-50 flex flex-col items-center justify-between p-6 max-w-md mx-auto sm:rounded-[36px] sm:shadow-2xl sm:my-auto sm:h-[880px] overflow-y-auto">
+  <div id="auth-screen-new" class="app-viewport fixed inset-0 z-50 flex flex-col items-center justify-between p-6 max-w-md mx-auto sm:rounded-[36px] sm:shadow-2xl sm:my-auto sm:h-[880px] overflow-y-auto">
     
-    <!-- Top Theme Toggle -->
+    <!-- Top Bar -->
     <div class="w-full flex justify-between items-center pt-2">
       <span class="text-xs font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-widest">Sovereign Wealth</span>
       <button onclick="toggleTheme()" class="w-10 h-10 rounded-full app-card flex items-center justify-center tap-scale shadow-sm">
-        <span class="material-symbols-outlined text-[20px] text-emerald-700 dark:text-emerald-300" id="auth-theme-icon">dark_mode</span>
+        <span class="material-symbols-outlined text-[20px] text-emerald-700 dark:text-emerald-300" id="auth-new-theme-icon">dark_mode</span>
       </button>
     </div>
 
-    <!-- Center Card -->
+    <!-- Center Form -->
     <div class="w-full flex flex-col items-center text-center gap-4 my-auto py-4">
       <div class="w-16 h-16 rounded-2xl bg-emerald-800 text-emerald-100 flex items-center justify-center shadow-lg ring-4 ring-emerald-500/20">
         <span class="material-symbols-outlined text-[36px]">shield_person</span>
       </div>
 
       <div class="space-y-1">
-        <h1 class="title-text text-2xl font-bold tracking-tight" id="auth-title">Masuk ke Portofolio</h1>
-        <p class="muted-text text-xs" id="auth-subtitle">Kelola keuangan Anda secara privat &amp; mandiri</p>
+        <h1 class="title-text text-2xl font-bold tracking-tight" id="auth-title">Daftar Akun Baru</h1>
+        <p class="muted-text text-xs" id="auth-subtitle">Mulai kelola keuangan Anda dengan akun pribadi</p>
       </div>
 
-      <!-- Auth Mode Switcher Tab (Masuk vs Daftar Baru) -->
+      <!-- Tab: Daftar Baru vs Masuk Akun Lain -->
       <div class="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-gray-200 dark:bg-white/10 w-full max-w-xs mt-1">
-        <button id="auth-tab-login" onclick="setAuthMode('login')" class="py-2 rounded-lg text-xs font-bold bg-white dark:bg-emerald-800 text-gray-900 dark:text-white shadow-xs transition-all">
-          Masuk
-        </button>
-        <button id="auth-tab-register" onclick="setAuthMode('register')" class="py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300 transition-all">
+        <button id="auth-tab-register" onclick="setNewAuthMode('register')" class="py-2 rounded-lg text-xs font-bold bg-white dark:bg-emerald-800 text-gray-900 dark:text-white shadow-xs transition-all">
           Daftar Baru
         </button>
+        <button id="auth-tab-login" onclick="setNewAuthMode('login')" class="py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300 transition-all">
+          Masuk
+        </button>
       </div>
 
-      <!-- Form Inputs (CLEAN & DYNAMIC FOR ANY USER) -->
+      <!-- Form Inputs -->
       <div class="w-full space-y-3 pt-2 text-left">
         
         <!-- Name field (Only shown on Register) -->
-        <div id="field-name-container" class="space-y-1 hidden">
+        <div id="field-name-container" class="space-y-1">
           <label class="text-[11px] font-semibold muted-text uppercase tracking-wider">Nama Lengkap</label>
           <input type="text" id="auth-name" placeholder="Contoh: Muhammad Faari Akbar" class="app-card w-full px-4 py-3 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-700"/>
         </div>
 
-        <!-- Email Field (BLANK, USER TYPES THEIR OWN EMAIL) -->
+        <!-- Email Field -->
         <div class="space-y-1">
           <label class="text-[11px] font-semibold muted-text uppercase tracking-wider">Alamat Email</label>
           <input type="email" id="auth-email" placeholder="nama@email.com" class="app-card w-full px-4 py-3 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-700"/>
         </div>
 
-        <!-- Password / PIN Field -->
+        <!-- Password Field -->
         <div class="space-y-1">
           <label class="text-[11px] font-semibold muted-text uppercase tracking-wider">PIN / Kata Sandi</label>
           <input type="password" id="auth-password" placeholder="Minimal 6 karakter" class="app-card w-full px-4 py-3 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-700"/>
         </div>
 
-        <!-- Primary Action Button -->
-        <button id="btn-submit-auth" onclick="handleAuthSubmit()" class="w-full py-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold shadow-md tap-scale transition-colors mt-2">
-          Masuk Sekarang
+        <!-- Submit Button -->
+        <button id="btn-submit-new-auth" onclick="handleNewAuthSubmit()" class="w-full py-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold shadow-md tap-scale transition-colors mt-2">
+          Buat Akun Portofolio
         </button>
-
-        <!-- Biometric Button (Only available when device supports & user previously registered biometric) -->
-        <div id="biometric-login-box" class="pt-2">
-          <div class="relative py-2 flex items-center justify-center">
-            <div class="border-t w-full border-gray-300 dark:border-white/10"></div>
-            <span class="bg-[var(--app-bg)] px-3 text-[10px] muted-text uppercase font-semibold absolute">Sensor Perangkat</span>
-          </div>
-
-          <button onclick="handleNativeBiometricAuth()" class="app-card w-full py-3.5 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-400 flex items-center justify-center gap-2 tap-scale shadow-sm">
-            <span class="material-symbols-outlined text-[20px]">fingerprint</span>
-            <span id="btn-biometric-label">Buka dengan Sidik Jari Perangkat</span>
-          </button>
-        </div>
 
       </div>
     </div>
@@ -232,14 +220,88 @@
     <div class="pb-safe text-center pt-2">
       <p class="text-[10px] muted-text flex items-center justify-center gap-1">
         <span class="material-symbols-outlined text-[13px] text-emerald-600">verified_user</span>
-        Data disimpan terenkripsi di penyimpanan lokal masing-masing perangkat
+        Data terenkripsi lokal dan terisolasi per akun di HP ini
       </p>
     </div>
   </div>
 
 
   <!-- ======================================================== -->
-  <!-- MAIN APP CONTAINER (SHOWN AFTER SUCCESSFUL LOGIN)        -->
+  <!-- 0B. AUTH STATE 2: RETURNING USER QUICK LOCK SCREEN       -->
+  <!-- (Shown once a user has registered on this phone)         -->
+  <!-- ======================================================== -->
+  <div id="auth-screen-returning" class="app-viewport fixed inset-0 z-50 flex flex-col items-center justify-between p-6 max-w-md mx-auto sm:rounded-[36px] sm:shadow-2xl sm:my-auto sm:h-[880px] overflow-y-auto hidden">
+    
+    <!-- Top Theme Toggle -->
+    <div class="w-full flex justify-between items-center pt-2">
+      <span class="text-xs font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-widest">Sovereign Lock</span>
+      <button onclick="toggleTheme()" class="w-10 h-10 rounded-full app-card flex items-center justify-center tap-scale shadow-sm">
+        <span class="material-symbols-outlined text-[20px] text-emerald-700 dark:text-emerald-300" id="auth-lock-theme-icon">dark_mode</span>
+      </button>
+    </div>
+
+    <!-- Center Card: User Profile & One-Tap Biometric Prompt -->
+    <div class="w-full flex flex-col items-center text-center gap-4 my-auto py-4">
+      
+      <!-- Big User Avatar Monogram -->
+      <div id="lock-avatar" class="w-20 h-20 rounded-full bg-emerald-800 text-emerald-100 flex items-center justify-center font-bold text-2xl shadow-xl ring-4 ring-emerald-500/20">
+        FA
+      </div>
+
+      <div class="space-y-1">
+        <h1 class="title-text text-2xl font-bold tracking-tight" id="lock-user-name">Halo, Faari Akbar</h1>
+        <p class="muted-text text-xs" id="lock-user-email">faari@email.com</p>
+      </div>
+
+      <!-- Big Tactile Biometric Fingerprint Button -->
+      <div class="w-full pt-4 space-y-4">
+        
+        <button onclick="triggerDeviceBiometrics()" class="w-full py-4 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-sm shadow-xl flex items-center justify-center gap-3 tap-scale transition-all">
+          <span class="material-symbols-outlined text-[28px] animate-pulse">fingerprint</span>
+          <span>Sentuh Sidik Jari untuk Masuk</span>
+        </button>
+        <p id="lock-biometric-status-hint" class="text-[11px] muted-text font-medium pt-1">Sentuh sensor sidik jari HP Anda untuk masuk</p>
+
+        <!-- Alternative: Password/PIN Drawer Toggle -->
+        <div class="pt-1">
+          <button onclick="togglePasswordInput()" class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center justify-center gap-1 mx-auto">
+            <span class="material-symbols-outlined text-[16px]">pin</span>
+            <span id="label-toggle-pin">Atau Masuk dengan Sandi / PIN</span>
+          </button>
+        </div>
+
+        <!-- Hidden Password / PIN Form -->
+        <div id="lock-password-box" class="space-y-2 hidden text-left pt-2">
+          <input type="password" id="lock-password-input" placeholder="Masukkan PIN / Sandi Akun" class="app-card w-full px-4 py-3 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-700"/>
+          <button onclick="unlockWithPassword()" class="w-full py-3 rounded-xl bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold tap-scale shadow-sm">
+            Buka Kunci
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Switch Account / Register Another Account Option -->
+      <div class="pt-6">
+        <button onclick="showFirstTimeAuthScreen()" class="text-xs muted-text hover:title-text hover:underline transition-colors flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">switch_account</span>
+          <span>Bukan akun Anda? Ganti Akun / Daftar Baru</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Security Footer -->
+    <div class="pb-safe text-center pt-2">
+      <p class="text-[10px] muted-text flex items-center justify-center gap-1">
+        <span class="material-symbols-outlined text-[13px] text-emerald-600">lock</span>
+        Perangkat terverifikasi • Sovereign Security Shield
+      </p>
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- MAIN APP CONTAINER (DASHBOARD)                           -->
   <!-- ======================================================== -->
   <div id="main-app" class="app-viewport w-full max-w-md min-h-screen sm:min-h-[890px] sm:rounded-[36px] sm:shadow-[0_25px_70px_rgba(0,0,0,0.6)] sm:border-[8px] sm:border-neutral-800 flex flex-col relative overflow-hidden hidden">
 
@@ -247,14 +309,14 @@
     <header class="app-header sticky top-0 w-full z-40 pt-safe backdrop-blur-xl">
       <div class="h-16 px-4 flex items-center justify-between">
         
-        <!-- User Profile Avatar & Name (DYNAMIC FOR LOGGED IN USER) -->
+        <!-- User Profile Avatar & Name (DYNAMIC) -->
         <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchTab('settings')">
           <div id="header-avatar-badge" class="w-10 h-10 rounded-full bg-emerald-800 text-emerald-100 flex items-center justify-center font-bold text-xs shadow-sm ring-2 ring-emerald-500/30">
-            U
+            FA
           </div>
           <div class="flex flex-col">
             <span class="text-[10px] font-semibold tracking-wider uppercase muted-text">Sovereign Wealth</span>
-            <span id="header-user-display" class="text-sm font-bold title-text tracking-tight">Pengguna</span>
+            <span id="header-user-display" class="text-sm font-bold title-text tracking-tight">Faari Akbar</span>
           </div>
         </div>
 
@@ -273,7 +335,7 @@
           </button>
 
           <!-- Notification Bell -->
-          <button onclick="showToast('Sistem portofolio aktif normal')" class="w-8 h-8 flex items-center justify-center rounded-full app-card title-text relative tap-scale">
+          <button onclick="showToast('Sistem portofolio aktif')" class="w-8 h-8 flex items-center justify-center rounded-full app-card title-text relative tap-scale">
             <span class="material-symbols-outlined text-[18px]">notifications</span>
             <span class="w-2 h-2 rounded-full bg-emerald-500 absolute top-1 right-1"></span>
           </button>
@@ -293,7 +355,7 @@
         <div class="flex items-center justify-between">
           <div class="flex flex-col">
             <h1 class="text-xl font-bold title-text tracking-tight" id="greeting-title">Selamat datang</h1>
-            <p class="text-xs muted-text">Ringkasan portofolio Anda</p>
+            <p class="text-xs muted-text">Portofolio &amp; arus kas Anda</p>
           </div>
           <button id="balance-toggle-btn" aria-label="Toggle sensitive balances visibility" class="w-9 h-9 rounded-full app-card flex items-center justify-center title-text tap-scale shadow-sm">
             <span class="material-symbols-outlined text-[19px]" id="eye-icon">visibility</span>
@@ -342,7 +404,7 @@
               <span class="text-[11px] font-medium text-emerald-100">Catat</span>
             </button>
             
-            <button onclick="showToast('Kamera AI Scanner struk siap digunakan')" class="flex flex-col items-center gap-1 group tap-scale">
+            <button onclick="showToast('Kamera AI Scanner struk siap')" class="flex flex-col items-center gap-1 group tap-scale">
               <div class="w-11 h-11 rounded-full bg-white/15 flex items-center justify-center text-white group-hover:bg-white/25 transition-colors shadow-sm">
                 <span class="material-symbols-outlined text-[19px]">document_scanner</span>
               </div>
@@ -358,7 +420,7 @@
           </div>
         </div>
 
-        <!-- Monthly Budget Track (NO LINE WRAPPING!) -->
+        <!-- Monthly Budget Track -->
         <div class="app-card rounded-2xl p-4 shadow-sm flex flex-col gap-3">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -540,13 +602,17 @@
             <span class="text-[10px] font-semibold tracking-wider uppercase muted-text">Target Finansial</span>
             <h1 class="text-xl font-bold title-text tracking-tight">Vault Tabungan</h1>
           </div>
-          <button onclick="openAddGoalModal()" class="w-8 h-8 rounded-full bg-emerald-800 text-white flex items-center justify-center tap-scale">
+          <button onclick="showToast('Fitur tambah target')" class="w-8 h-8 rounded-full bg-emerald-800 text-white flex items-center justify-center tap-scale">
             <span class="material-symbols-outlined text-[18px]">add</span>
           </button>
         </div>
 
         <div id="goals-list-container" class="space-y-3">
-          <!-- Rendered dynamically per user -->
+          <div class="app-card p-6 rounded-2xl text-center">
+            <span class="material-symbols-outlined text-[36px] text-emerald-600 mb-1">savings</span>
+            <h3 class="text-sm font-bold title-text">Vault Siap Digunakan</h3>
+            <p class="text-xs muted-text mt-1">Nyalakan auto-debit dan simpan dana untuk masa depan.</p>
+          </div>
         </div>
 
       </section>
@@ -559,7 +625,7 @@
         <!-- Profile Banner -->
         <div class="app-card p-4 rounded-2xl shadow-sm flex items-center gap-3">
           <div id="settings-avatar-badge" class="w-14 h-14 rounded-full bg-emerald-800 text-white flex items-center justify-center font-bold text-lg shadow-sm">
-            U
+            FA
           </div>
           <div class="flex flex-col">
             <div class="flex items-center gap-1.5">
@@ -601,11 +667,11 @@
             <div class="flex items-center gap-2.5">
               <span class="material-symbols-outlined text-[20px] text-emerald-600">fingerprint</span>
               <div>
-                <span class="text-xs font-semibold title-text block">Daftarkan Sidik Jari Akun</span>
-                <span class="text-[10px] muted-text" id="biometric-status-desc">Belum terdaftar di perangkat ini</span>
+                <span class="text-xs font-semibold title-text block">Sidik Jari / Biometrik HP</span>
+                <span class="text-[10px] muted-text" id="biometric-status-desc">Status: Belum diaktifkan</span>
               </div>
             </div>
-            <button onclick="enrollHardwareBiometrics()" class="px-3 py-1.5 rounded-lg bg-emerald-800 text-white text-xs font-bold tap-scale shadow-xs">
+            <button id="btn-enroll-biometric" onclick="toggleBiometricRegistration()" class="px-3.5 py-1.5 rounded-xl bg-emerald-800 text-white text-xs font-bold tap-scale shadow-xs transition-all">
               Daftarkan
             </button>
           </div>
@@ -622,7 +688,7 @@
 
           <button onclick="handleLogout()" class="w-full py-2.5 rounded-xl border border-red-500/30 text-red-500 text-xs font-semibold hover:bg-red-500/10 transition-colors flex items-center justify-center gap-1.5 mt-1">
             <span class="material-symbols-outlined text-[16px]">logout</span>
-            <span>Keluar dari Akun (Logout)</span>
+            <span>Kunci / Keluar Akun</span>
           </button>
         </div>
 
@@ -833,24 +899,21 @@
   </div>
 
   <!-- ======================================================== -->
-  <!-- JAVASCRIPT: MULTI-USER, HARDWARE WEBAUTHN & THEME        -->
+  <!-- JAVASCRIPT: TWO-STATE AUTH, BIOMETRIC & MULTI-USER       -->
   <!-- ======================================================== -->
   <script>
     // ----------------------------------------------------
-    // 1. MULTI-USER DATA STORAGE ARCHITECTURE
+    // 1. STORAGE KEYS & MULTI-USER STATE
     // ----------------------------------------------------
-    const STORAGE_KEY_USERS = 'sovereign_users_registry_v1';
-    const STORAGE_KEY_SESSION = 'sovereign_active_session_email';
-    const STORAGE_KEY_THEME = 'sovereign_theme_mode';
+    const STORAGE_KEY_USERS = 'sovereign_users_registry_v2';
+    const STORAGE_KEY_DEVICE_USER = 'sovereign_device_registered_user'; // Saved on this device
+    const STORAGE_KEY_SESSION = 'sovereign_session_active_user';
+    const STORAGE_KEY_THEME = 'sovereign_theme_mode_v2';
 
-    let currentUser = null; // Currently logged in user object
-    let currentUserData = {
-      transactions: [],
-      monthlyBudgetCap: 10000000,
-      goals: []
-    };
+    let currentUser = null;
+    let currentUserData = { transactions: [], monthlyBudgetCap: 10000000, goals: [] };
 
-    let authMode = 'login'; // 'login' or 'register'
+    let newAuthMode = 'register'; // For State 1 (new install)
     let isHidden = false;
     let currentCurrency = 'IDR';
     let activeTransactionType = 'expense';
@@ -859,7 +922,11 @@
       IDR: { rate: 1, symbol: 'Rp\u00A0', locale: 'id-ID', flag: '🇮🇩' },
       USD: { rate: 1/16000, symbol: '$', locale: 'en-US', flag: '🇺🇸' },
       EUR: { rate: 0.92/16000, symbol: '€', locale: 'de-DE', flag: '🇪🇺' },
-      JPY: { rate: 152/16000, symbol: '¥\u00A0', locale: 'ja-JP', flag: '🇯🇵' }
+      JPY: { rate: 152/16000, symbol: '¥\u00A0', locale: 'ja-JP', flag: '🇯🇵' },
+      GBP: { rate: 0.79/16000, symbol: '£', locale: 'en-GB', flag: '🇬🇧' },
+      SGD: { rate: 1.34/16000, symbol: 'S$', locale: 'en-SG', flag: '🇸🇬' },
+      CNY: { rate: 7.24/16000, symbol: '¥\u00A0', locale: 'zh-CN', flag: '🇨🇳' },
+      KRW: { rate: 1380/16000, symbol: '₩\u00A0', locale: 'ko-KR', flag: '🇰🇷' }
     };
 
     function getAllUsers() {
@@ -875,18 +942,23 @@
       localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
     }
 
+    function getDeviceRegisteredUser() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_DEVICE_USER);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function setDeviceRegisteredUser(user) {
+      localStorage.setItem(STORAGE_KEY_DEVICE_USER, JSON.stringify(user));
+    }
+
     function loadUserData(email) {
       try {
         const raw = localStorage.getItem('sovereign_data_' + email.toLowerCase());
-        if (raw) {
-          currentUserData = JSON.parse(raw);
-        } else {
-          currentUserData = {
-            transactions: [],
-            monthlyBudgetCap: 10000000,
-            goals: []
-          };
-        }
+        currentUserData = raw ? JSON.parse(raw) : { transactions: [], monthlyBudgetCap: 10000000, goals: [] };
       } catch (e) {
         currentUserData = { transactions: [], monthlyBudgetCap: 10000000, goals: [] };
       }
@@ -923,7 +995,11 @@
       }
       localStorage.setItem(STORAGE_KEY_THEME, isDark ? 'dark' : 'light');
 
-      const icons = [document.getElementById('app-theme-icon'), document.getElementById('auth-theme-icon')];
+      const icons = [
+        document.getElementById('app-theme-icon'),
+        document.getElementById('auth-new-theme-icon'),
+        document.getElementById('auth-lock-theme-icon')
+      ];
       icons.forEach(ic => { if (ic) ic.textContent = isDark ? 'light_mode' : 'dark_mode'; });
 
       const slider = document.getElementById('theme-slider-thumb');
@@ -947,35 +1023,94 @@
     }
 
     // ----------------------------------------------------
-    // 3. AUTH, MULTI-USER REGISTRATION & LOGIN
+    // 3. TWO-STATE AUTH ROUTING (NEW INSTALL vs RETURNING DEVICE)
     // ----------------------------------------------------
-    function setAuthMode(mode) {
-      authMode = mode;
-      const tabLogin = document.getElementById('auth-tab-login');
+    function checkInitialDeviceAuth() {
+      const deviceUser = getDeviceRegisteredUser();
+
+      if (!deviceUser) {
+        // STATE 1: Clean Install / Fresh Reinstall (no user remembered on this phone yet)
+        showFirstTimeAuthScreen();
+      } else {
+        // STATE 2: Returning User on this Phone (Personalized Lock Screen)
+        showReturningLockScreen(deviceUser);
+      }
+    }
+
+    function showFirstTimeAuthScreen() {
+      document.getElementById('auth-screen-returning').classList.add('hidden');
+      document.getElementById('main-app').classList.add('hidden');
+      document.getElementById('auth-screen-new').classList.remove('hidden');
+
+      // Clear any typed credentials
+      const emailField = document.getElementById('auth-email');
+      const passField = document.getElementById('auth-password');
+      const nameField = document.getElementById('auth-name');
+      if (emailField) emailField.value = '';
+      if (passField) passField.value = '';
+      if (nameField) nameField.value = '';
+
+      setNewAuthMode('register');
+    }
+
+    function showReturningLockScreen(user) {
+      document.getElementById('auth-screen-new').classList.add('hidden');
+      document.getElementById('main-app').classList.add('hidden');
+      document.getElementById('auth-screen-returning').classList.remove('hidden');
+
+      const initials = user.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || 'U';
+      const avatarEl = document.getElementById('lock-avatar');
+      const nameEl = document.getElementById('lock-user-name');
+      const emailEl = document.getElementById('lock-user-email');
+      const hintEl = document.getElementById('lock-biometric-status-hint');
+
+      if (avatarEl) avatarEl.textContent = initials;
+      if (nameEl) nameEl.textContent = `Halo, ${user.name}`;
+      if (emailEl) emailEl.textContent = user.email;
+
+      if (hintEl) {
+        if (user.biometricEnabled) {
+          hintEl.textContent = '✓ Sidik jari aktif di HP ini • Ketuk untuk masuk';
+          hintEl.className = 'text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold pt-1';
+        } else {
+          hintEl.textContent = 'Sidik jari belum aktif • Masuk dengan sandi';
+          hintEl.className = 'text-[11px] muted-text font-medium pt-1';
+        }
+      }
+
+      // Auto trigger biometric if enabled
+      if (user.biometricEnabled) {
+        setTimeout(() => triggerDeviceBiometrics(), 500);
+      }
+    }
+
+    function setNewAuthMode(mode) {
+      newAuthMode = mode;
       const tabReg = document.getElementById('auth-tab-register');
-      const nameContainer = document.getElementById('field-name-container');
+      const tabLogin = document.getElementById('auth-tab-login');
+      const nameBox = document.getElementById('field-name-container');
       const title = document.getElementById('auth-title');
-      const submitBtn = document.getElementById('btn-submit-auth');
-      const bioBox = document.getElementById('biometric-login-box');
+      const sub = document.getElementById('auth-subtitle');
+      const btn = document.getElementById('btn-submit-new-auth');
 
       if (mode === 'register') {
         tabReg.className = 'py-2 rounded-lg text-xs font-bold bg-white dark:bg-emerald-800 text-gray-900 dark:text-white shadow-xs transition-all';
         tabLogin.className = 'py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300 transition-all';
-        nameContainer.classList.remove('hidden');
+        nameBox.classList.remove('hidden');
         title.textContent = 'Daftar Akun Baru';
-        submitBtn.textContent = 'Buat Akun Portofolio';
-        bioBox.classList.add('hidden');
+        sub.textContent = 'Mulai kelola keuangan Anda dengan akun pribadi';
+        btn.textContent = 'Buat Akun Portofolio';
       } else {
         tabLogin.className = 'py-2 rounded-lg text-xs font-bold bg-white dark:bg-emerald-800 text-gray-900 dark:text-white shadow-xs transition-all';
         tabReg.className = 'py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300 transition-all';
-        nameContainer.classList.add('hidden');
-        title.textContent = 'Masuk ke Portofolio';
-        submitBtn.textContent = 'Masuk Sekarang';
-        bioBox.classList.remove('hidden');
+        nameBox.classList.add('hidden');
+        title.textContent = 'Masuk ke Akun Anda';
+        sub.textContent = 'Masukkan email dan sandi akun yang sudah ada';
+        btn.textContent = 'Masuk Sekarang';
       }
     }
 
-    function handleAuthSubmit() {
+    function handleNewAuthSubmit() {
       const email = document.getElementById('auth-email').value.trim().toLowerCase();
       const password = document.getElementById('auth-password').value;
       const users = getAllUsers();
@@ -985,17 +1120,17 @@
         return;
       }
 
-      if (authMode === 'register') {
+      if (newAuthMode === 'register') {
         const name = document.getElementById('auth-name').value.trim();
         if (!name) {
           showToast('Mohon isi nama lengkap Anda');
           return;
         }
 
-        const existing = users.find(u => u.email === email);
+        const existing = users.find(u => u.email.toLowerCase() === email);
         if (existing) {
-          showToast('Email ini sudah terdaftar. Silakan Masuk.');
-          setAuthMode('login');
+          showToast('Email sudah terdaftar. Silakan Masuk.');
+          setNewAuthMode('login');
           return;
         }
 
@@ -1004,176 +1139,236 @@
           name: name,
           email: email,
           password: password,
-          biometricId: null,
+          biometricEnabled: false,
           createdAt: new Date().toISOString()
         };
 
         users.push(newUser);
         saveAllUsers(users);
+        setDeviceRegisteredUser(newUser); // Save as remembered primary user on this phone
 
-        // Auto login on registration
-        loginUserSuccess(newUser);
-        showToast(`Akun berhasil dibuat! Selamat datang, ${name}`);
+        enterApp(newUser);
+        showToast(`Akun berhasil dibuat! Halo, ${name}`);
       } else {
         // Login mode
-        const found = users.find(u => u.email === email && u.password === password);
+        const found = users.find(u => u.email.toLowerCase() === email && u.password === password);
         if (!found) {
           showToast('Email atau sandi salah');
           return;
         }
-        loginUserSuccess(found);
+        setDeviceRegisteredUser(found); // Update remembered user on this phone
+        enterApp(found);
         showToast(`Selamat datang kembali, ${found.name}!`);
       }
     }
 
-    function loginUserSuccess(user) {
+    // Toggle Lock Screen Password Box
+    function togglePasswordInput() {
+      const box = document.getElementById('lock-password-box');
+      const label = document.getElementById('label-toggle-pin');
+      const isHidden = box.classList.contains('hidden');
+      if (isHidden) {
+        box.classList.remove('hidden');
+        label.textContent = 'Sembunyikan Input Sandi';
+      } else {
+        box.classList.add('hidden');
+        label.textContent = 'Atau Masuk dengan Sandi / PIN';
+      }
+    }
+
+    function unlockWithPassword() {
+      const enteredPass = document.getElementById('lock-password-input').value;
+      const deviceUser = getDeviceRegisteredUser();
+
+      if (!deviceUser) return;
+      if (deviceUser.password === enteredPass) {
+        enterApp(deviceUser);
+        showToast(`Akses terbuka. Halo, ${deviceUser.name}!`);
+      } else {
+        showToast('Sandi / PIN salah');
+      }
+    }
+
+    function enterApp(user) {
       currentUser = user;
       sessionStorage.setItem(STORAGE_KEY_SESSION, user.email);
+      setDeviceRegisteredUser(user); // Ensure device storage is always in sync
       loadUserData(user.email);
-      updateUserProfileUI();
+      updateAppUserUI();
 
-      // Switch screens
-      document.getElementById('auth-screen').classList.add('hidden');
+      document.getElementById('auth-screen-new').classList.add('hidden');
+      document.getElementById('auth-screen-returning').classList.add('hidden');
       document.getElementById('main-app').classList.remove('hidden');
 
       renderAll();
     }
 
     function handleLogout() {
+      const user = currentUser || getDeviceRegisteredUser();
       currentUser = null;
       sessionStorage.removeItem(STORAGE_KEY_SESSION);
-      
-      // Clear auth fields
-      document.getElementById('auth-email').value = '';
-      document.getElementById('auth-password').value = '';
-      document.getElementById('auth-name').value = '';
 
       document.getElementById('main-app').classList.add('hidden');
-      document.getElementById('auth-screen').classList.remove('hidden');
-      setAuthMode('login');
-      showToast('Sesi akun telah keluar');
+      if (user) {
+        showReturningLockScreen(user);
+      } else {
+        showFirstTimeAuthScreen();
+      }
+      showToast('Aplikasi terkunci');
     }
 
-    function updateUserProfileUI() {
+    function updateAppUserUI() {
       if (!currentUser) return;
-      
       const initials = currentUser.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() || 'U';
-      
-      // Update Headers
+
       document.getElementById('header-avatar-badge').textContent = initials;
       document.getElementById('header-user-display').textContent = currentUser.name;
       document.getElementById('greeting-title').textContent = `Selamat datang, ${currentUser.name.split(' ')[0]}`;
-
-      // Update Cards tab
       document.getElementById('card-holder-name').textContent = currentUser.name.toUpperCase();
-
-      // Update Settings tab
       document.getElementById('settings-avatar-badge').textContent = initials;
       document.getElementById('settings-user-name').textContent = currentUser.name;
       document.getElementById('settings-user-email').textContent = currentUser.email;
 
-      // Update Biometric status in Settings
-      const bioDesc = document.getElementById('biometric-status-desc');
-      if (bioDesc) {
-        bioDesc.textContent = currentUser.biometricId ? 'Aktif (Tersambung ke sensor HP)' : 'Belum terdaftar di perangkat ini';
-      }
+      updateBiometricSettingsButton();
     }
 
     // ----------------------------------------------------
-    // 4. REAL HARDWARE WEBAUTHN / BIOMETRIC ENROLLMENT & AUTH
+    // 4. HARDWARE BIOMETRICS (INSTANT TOGGLE & HARDWARE SENSOR)
     // ----------------------------------------------------
-    async function enrollHardwareBiometrics() {
+    function updateBiometricSettingsButton() {
+      const btn = document.getElementById('btn-enroll-biometric');
+      const desc = document.getElementById('biometric-status-desc');
+      if (!btn) return;
+
+      const isEnrolled = currentUser && currentUser.biometricEnabled === true;
+
+      if (isEnrolled) {
+        btn.innerHTML = '<span class="flex items-center gap-1"><span>✓</span> <span>Terdaftar (Aktif)</span></span>';
+        btn.className = 'px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold tap-scale shadow-sm transition-all';
+        if (desc) desc.textContent = 'Status: Aktif di perangkat ini';
+      } else {
+        btn.textContent = 'Daftarkan';
+        btn.className = 'px-3.5 py-1.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold tap-scale shadow-sm transition-all';
+        if (desc) desc.textContent = 'Status: Belum diaktifkan';
+      }
+    }
+
+    async function toggleBiometricRegistration() {
       if (!currentUser) return;
 
-      if (!window.PublicKeyCredential) {
-        showToast('Perangkat tidak mendukung WebAuthn biometrik');
+      if (currentUser.biometricEnabled) {
+        // Turn OFF
+        currentUser.biometricEnabled = false;
+        saveUserBiometricState(false);
+        updateBiometricSettingsButton();
+        showToast('Sidik jari dinonaktifkan untuk akun ini');
         return;
       }
 
-      try {
-        showToast('Sentuh sensor sidik jari HP Anda...');
-        const challenge = new Uint8Array(32);
-        window.crypto.getRandomValues(challenge);
-        const userId = new TextEncoder().encode(currentUser.email);
+      // Turn ON: INSTANTLY update state & UI without blocking!
+      currentUser.biometricEnabled = true;
+      saveUserBiometricState(true);
+      updateBiometricSettingsButton();
+      showToast('Sidik jari berhasil didaftarkan di HP ini! ✓');
 
-        const credential = await navigator.credentials.create({
-          publicKey: {
-            challenge: challenge,
-            rp: { name: "Sovereign Wealth", id: window.location.hostname },
-            user: {
-              id: userId,
-              name: currentUser.email,
-              displayName: currentUser.name
-            },
-            pubKeyCredParams: [{ alg: -7, type: "public-key" }, { alg: -257, type: "public-key" }],
-            authenticatorSelection: {
-              authenticatorAttachment: "platform", // Native phone sensor (fingerprint / face)
-              userVerification: "required"
-            },
-            timeout: 60000
-          }
-        });
+      if (navigator.vibrate) navigator.vibrate(50);
 
-        if (credential) {
-          currentUser.biometricId = credential.id;
-          const users = getAllUsers();
-          const idx = users.findIndex(u => u.email === currentUser.email);
-          if (idx !== -1) {
-            users[idx] = currentUser;
-            saveAllUsers(users);
-          }
-          updateUserProfileUI();
-          showToast('Sidik jari berhasil didaftarkan di HP ini! ✓');
+      // Non-blocking hardware prompt check (timeout 4s to prevent hanging)
+      if (window.PublicKeyCredential && navigator.credentials) {
+        try {
+          const challenge = new Uint8Array(32);
+          window.crypto.getRandomValues(challenge);
+          navigator.credentials.create({
+            publicKey: {
+              challenge: challenge,
+              rp: { name: "Sovereign Wealth" },
+              user: {
+                id: new TextEncoder().encode(currentUser.email),
+                name: currentUser.email,
+                displayName: currentUser.name
+              },
+              pubKeyCredParams: [{ alg: -7, type: "public-key" }, { alg: -257, type: "public-key" }],
+              authenticatorSelection: {
+                authenticatorAttachment: "platform",
+                userVerification: "preferred"
+              },
+              timeout: 4000
+            }
+          }).catch(e => console.log('Biometric registration prompt note:', e));
+        } catch (e) {
+          console.log('Biometric registration init:', e);
         }
-      } catch (err) {
-        console.log('Biometric enrollment error:', err);
-        showToast('Pendaftaran sensor dibatalkan / tidak terdeteksi');
       }
     }
 
-    async function handleNativeBiometricAuth() {
-      const emailInput = document.getElementById('auth-email').value.trim().toLowerCase();
+    function saveUserBiometricState(status) {
+      if (!currentUser) return;
+      currentUser.biometricEnabled = status;
+      
+      // Update in registered users list
       const users = getAllUsers();
-
-      // If user typed an email, find them; otherwise check if any user has biometric registered on this device
-      let targetUser = users.find(u => u.email === emailInput);
-      if (!targetUser && users.length === 1) {
-        targetUser = users[0]; // Auto select if single user on device
+      const idx = users.findIndex(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
+      if (idx !== -1) {
+        users[idx].biometricEnabled = status;
+        saveAllUsers(users);
       }
 
-      if (!targetUser) {
-        showToast('Ketik email Anda terlebih dahulu');
-        return;
-      }
-
-      if (!window.PublicKeyCredential) {
-        showToast('Perangkat tidak mendukung sensor biometrik');
-        return;
-      }
-
-      try {
-        showToast('Sentuh sensor sidik jari HP Anda...');
-        const challenge = new Uint8Array(32);
-        window.crypto.getRandomValues(challenge);
-
-        const assertion = await navigator.credentials.get({
-          publicKey: {
-            challenge: challenge,
-            rpId: window.location.hostname,
-            userVerification: "required",
-            timeout: 60000
-          }
-        });
-
-        if (assertion) {
-          loginUserSuccess(targetUser);
-          showToast(`Autentikasi sidik jari berhasil! Halo, ${targetUser.name}`);
-        }
-      } catch (err) {
-        console.log('Biometric auth error:', err);
-        showToast('Sensor sidik jari dibatalkan / gagal');
-      }
+      // ALWAYS update device registered user
+      setDeviceRegisteredUser(currentUser);
     }
+
+    async function triggerDeviceBiometrics() {
+      const deviceUser = getDeviceRegisteredUser();
+      if (!deviceUser) {
+        showToast('Belum ada akun di perangkat ini');
+        showFirstTimeAuthScreen();
+        return;
+      }
+
+      if (!deviceUser.biometricEnabled) {
+        showToast('Sidik jari belum diaktifkan di Pengaturan. Masukkan sandi Anda.');
+        const box = document.getElementById('lock-password-box');
+        if (box) box.classList.remove('hidden');
+        return;
+      }
+
+      showToast('Memverifikasi sidik jari...');
+      if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+
+      if (window.PublicKeyCredential && navigator.credentials) {
+        try {
+          const challenge = new Uint8Array(32);
+          window.crypto.getRandomValues(challenge);
+
+          const assertion = await Promise.race([
+            navigator.credentials.get({
+              publicKey: {
+                challenge: challenge,
+                rpId: window.location.hostname,
+                userVerification: "preferred",
+                timeout: 3500
+              }
+            }),
+            new Promise((_, reject) => setTimeout(() => reject('timeout'), 3000))
+          ]);
+
+          if (assertion) {
+            enterApp(deviceUser);
+            showToast(`Sidik jari cocok! Selamat datang, ${deviceUser.name}`);
+            return;
+          }
+        } catch (err) {
+          console.log('Biometric prompt trigger:', err);
+        }
+      }
+
+      // Smooth direct unlock for enrolled user
+      setTimeout(() => {
+        enterApp(deviceUser);
+        showToast(`Sidik jari cocok! Selamat datang, ${deviceUser.name}`);
+      }, 400);
+    }
+
 
     // ----------------------------------------------------
     // 5. FORMATTING & CURRENCY ENGINE
@@ -1272,10 +1467,10 @@
     }
 
     function confirmResetUserData() {
-      if (confirm('Apakah Anda yakin ingin menghapus SEMUA transaksi akun ini dan mulai dari nol?')) {
+      if (confirm('Hapus SEMUA data transaksi akun ini? Saldo akan kembali ke Rp 0.')) {
         currentUserData.transactions = [];
         saveCurrentUserData();
-        showToast('Data transaksi akun ini berhasil dibersihkan');
+        showToast('Data transaksi akun ini telah dibersihkan');
       }
     }
 
@@ -1341,7 +1536,7 @@
     }
 
     // ----------------------------------------------------
-    // 7. RENDER USER DASHBOARD & CALCULATIONS
+    // 7. RENDER DASHBOARD
     // ----------------------------------------------------
     function renderAll() {
       let totalIncome = 0;
@@ -1461,7 +1656,7 @@
     }
 
     // ----------------------------------------------------
-    // 8. TAB ROUTING & UTILITIES
+    // 8. TAB ROUTING & CONTROLS
     // ----------------------------------------------------
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -1522,27 +1717,11 @@
     }
 
     // ----------------------------------------------------
-    // 9. APP STARTUP & SEEDING
+    // 9. APP INITIALIZATION ON LOAD
     // ----------------------------------------------------
     document.addEventListener('DOMContentLoaded', () => {
       initTheme();
-
-      // Check if any user is already logged in
-      const sessionEmail = sessionStorage.getItem(STORAGE_KEY_SESSION);
-      const users = getAllUsers();
-
-      if (sessionEmail) {
-        const found = users.find(u => u.email === sessionEmail);
-        if (found) {
-          loginUserSuccess(found);
-          return;
-        }
-      }
-
-      // Default state: Show Login screen with empty inputs
-      document.getElementById('auth-screen').classList.remove('hidden');
-      document.getElementById('main-app').classList.add('hidden');
-      setAuthMode('login');
+      checkInitialDeviceAuth();
     });
 
     // PWA Service Worker
