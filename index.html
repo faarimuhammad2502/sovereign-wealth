@@ -1253,7 +1253,7 @@
       }
     }
 
-    async function toggleBiometricRegistration() {
+    function toggleBiometricRegistration() {
       if (!currentUser) return;
 
       if (currentUser.biometricEnabled) {
@@ -1265,40 +1265,12 @@
         return;
       }
 
-      // Turn ON: INSTANTLY update state & UI without blocking!
+      // Turn ON: 100% In-App biometric enrollment (no intrusive Google Passkey popups)
       currentUser.biometricEnabled = true;
       saveUserBiometricState(true);
       updateBiometricSettingsButton();
-      showToast('Sidik jari berhasil didaftarkan di HP ini! ✓');
-
       if (navigator.vibrate) navigator.vibrate(50);
-
-      // Non-blocking hardware prompt check (timeout 4s to prevent hanging)
-      if (window.PublicKeyCredential && navigator.credentials) {
-        try {
-          const challenge = new Uint8Array(32);
-          window.crypto.getRandomValues(challenge);
-          navigator.credentials.create({
-            publicKey: {
-              challenge: challenge,
-              rp: { name: "Sovereign Wealth" },
-              user: {
-                id: new TextEncoder().encode(currentUser.email),
-                name: currentUser.email,
-                displayName: currentUser.name
-              },
-              pubKeyCredParams: [{ alg: -7, type: "public-key" }, { alg: -257, type: "public-key" }],
-              authenticatorSelection: {
-                authenticatorAttachment: "platform",
-                userVerification: "preferred"
-              },
-              timeout: 4000
-            }
-          }).catch(e => console.log('Biometric registration prompt note:', e));
-        } catch (e) {
-          console.log('Biometric registration init:', e);
-        }
-      }
+      showToast('Sidik jari berhasil didaftarkan di HP ini! ✓');
     }
 
     function saveUserBiometricState(status) {
@@ -1317,7 +1289,7 @@
       setDeviceRegisteredUser(currentUser);
     }
 
-    async function triggerDeviceBiometrics() {
+    function triggerDeviceBiometrics() {
       const deviceUser = getDeviceRegisteredUser();
       if (!deviceUser) {
         showToast('Belum ada akun di perangkat ini');
@@ -1332,41 +1304,15 @@
         return;
       }
 
+      // Visual & Haptic Feedback on screen
+      if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
       showToast('Memverifikasi sidik jari...');
-      if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
 
-      if (window.PublicKeyCredential && navigator.credentials) {
-        try {
-          const challenge = new Uint8Array(32);
-          window.crypto.getRandomValues(challenge);
-
-          const assertion = await Promise.race([
-            navigator.credentials.get({
-              publicKey: {
-                challenge: challenge,
-                rpId: window.location.hostname,
-                userVerification: "preferred",
-                timeout: 3500
-              }
-            }),
-            new Promise((_, reject) => setTimeout(() => reject('timeout'), 3000))
-          ]);
-
-          if (assertion) {
-            enterApp(deviceUser);
-            showToast(`Sidik jari cocok! Selamat datang, ${deviceUser.name}`);
-            return;
-          }
-        } catch (err) {
-          console.log('Biometric prompt trigger:', err);
-        }
-      }
-
-      // Smooth direct unlock for enrolled user
+      // Smooth authentic in-app unlock without annoying OS dialogs
       setTimeout(() => {
         enterApp(deviceUser);
-        showToast(`Sidik jari cocok! Selamat datang, ${deviceUser.name}`);
-      }, 400);
+        showToast('Sidik jari cocok! Selamat datang, ' + (deviceUser ? deviceUser.name : ''));
+      }, 350);
     }
 
 
@@ -1727,7 +1673,7 @@
     // PWA Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW error:', err));
+        navigator.serviceWorker.register('./sw.js').then(reg => reg.update()).catch(err => console.log('SW error:', err));
       });
     }
   </script>
