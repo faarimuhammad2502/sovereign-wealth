@@ -562,6 +562,25 @@
           <span id="analytics-net-cashflow" class="text-xs font-bold text-emerald-600 dark:text-emerald-400">+ Rp 0</span>
         </div>
 
+        <!-- MINI GRAFIK TREN ARUS KAS SVG (TAHAP 3) -->
+        <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[19px] text-emerald-600">show_chart</span>
+              <h3 class="text-xs font-bold uppercase tracking-wider title-text">Tren Arus Kas (Visual Chart)</h3>
+            </div>
+            <div class="flex items-center gap-3 text-[10px]">
+              <span class="flex items-center gap-1 text-emerald-600 font-semibold"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> In</span>
+              <span class="flex items-center gap-1 text-red-500 font-semibold"><span class="w-2 h-2 rounded-full bg-red-500"></span> Out</span>
+            </div>
+          </div>
+
+          <!-- Dynamic SVG Canvas -->
+          <div id="analytics-chart-container" class="w-full h-40 flex items-center justify-center overflow-hidden">
+            <!-- Rendered by renderCashflowChart() -->
+          </div>
+        </div>
+
         <!-- 3. BREAKDOWN PER CATEGORY -->
         <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
           <div class="flex items-center justify-between">
@@ -815,6 +834,17 @@
           <button onclick="exportUserDataJSON()" class="w-full py-2.5 rounded-xl border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-semibold hover:bg-blue-500/10 transition-colors flex items-center justify-center gap-1.5">
             <span class="material-symbols-outlined text-[16px]">download</span>
             <span>Unduh Cadangan Portofolio (JSON)</span>
+          </button>
+
+          <button onclick="triggerImportJSON()" class="w-full py-2.5 rounded-xl border border-teal-500/30 text-teal-600 dark:text-teal-400 text-xs font-semibold hover:bg-teal-500/10 transition-colors flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">upload_file</span>
+            <span>Pulihkan Data dari Cadangan (Import JSON)</span>
+          </button>
+          <input type="file" id="import-json-input" accept=".json" class="hidden" onchange="handleImportJSONFile(event)"/>
+
+          <button onclick="openEStatementModal()" class="w-full py-2.5 rounded-xl border border-purple-500/30 text-purple-600 dark:text-purple-400 text-xs font-semibold hover:bg-purple-500/10 transition-colors flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">receipt_long</span>
+            <span>Cetak / Unduh Laporan (E-Statement)</span>
           </button>
         </div>
 
@@ -1538,6 +1568,85 @@
         <button onclick="closeHealthDetailModal()" class="w-full py-3 rounded-xl bg-emerald-800 text-white font-bold text-xs tap-scale">
           Tutup &amp; Kembali
         </button>
+      </div>
+    </div>
+
+  
+    <!-- ========================================== -->
+    <!-- MODAL: E-STATEMENT FINANCIAL REPORT        -->
+    <!-- ========================================== -->
+    <div id="modal-estatement" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="app-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-4 max-h-[88vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b pb-3 border-gray-200 dark:border-white/10">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px] text-purple-600">receipt_long</span>
+            <h3 class="text-base font-bold title-text">E-Statement Portofolio</h3>
+          </div>
+          <button onclick="closeEStatementModal()" class="w-8 h-8 rounded-full app-card flex items-center justify-center muted-text hover:title-text">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+
+        <!-- Printable Document Container -->
+        <div id="estatement-printable" class="p-4 rounded-2xl bg-white text-gray-900 border border-gray-200 space-y-3.5 text-xs shadow-xs">
+          <!-- Document Header -->
+          <div class="flex justify-between items-start border-b pb-3 border-gray-200">
+            <div>
+              <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block">SOVEREIGN WEALTH</span>
+              <h2 class="text-sm font-bold text-gray-900 mt-0.5">RINGKASAN KEUANGAN PRIBADI</h2>
+              <span id="statement-date" class="text-[9px] text-gray-500 block">Periode Cetak: Oktober 2026</span>
+            </div>
+            <div class="text-right">
+              <span id="statement-user-name" class="font-bold text-gray-900 block">Muhammad Faari Akbar</span>
+              <span id="statement-user-email" class="text-[10px] text-gray-500 block">faari@email.com</span>
+              <span class="inline-block px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[8px] font-bold mt-1">Akun Terverifikasi</span>
+            </div>
+          </div>
+
+          <!-- Financial Snapshot Grid -->
+          <div class="grid grid-cols-2 gap-2 bg-gray-50 p-2.5 rounded-xl border border-gray-200">
+            <div>
+              <span class="text-[9px] text-gray-500 block uppercase font-medium">Total Pemasukan</span>
+              <span id="statement-income" class="font-bold text-emerald-700 text-xs">Rp 0</span>
+            </div>
+            <div>
+              <span class="text-[9px] text-gray-500 block uppercase font-medium">Total Pengeluaran</span>
+              <span id="statement-expense" class="font-bold text-red-600 text-xs">Rp 0</span>
+            </div>
+            <div>
+              <span class="text-[9px] text-gray-500 block uppercase font-medium">Arus Kas Bersih (Net)</span>
+              <span id="statement-net" class="font-bold text-gray-900 text-xs">Rp 0</span>
+            </div>
+            <div>
+              <span class="text-[9px] text-gray-500 block uppercase font-medium">Dana di Vault Tabungan</span>
+              <span id="statement-goals" class="font-bold text-teal-700 text-xs">Rp 0</span>
+            </div>
+          </div>
+
+          <!-- Recent Transactions in Statement -->
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-gray-700 block mb-1">Riwayat Transaksi Terbaru:</span>
+            <div id="statement-trx-list" class="divide-y divide-gray-100 max-h-44 overflow-y-auto text-[11px]">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Footer Seal -->
+          <div class="border-t pt-2 flex items-center justify-between text-[9px] text-gray-400">
+            <span>Sovereign Wealth Secure Ledger</span>
+            <span>Dokumen Resmi Pribadi</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="window.print()" class="py-3 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs tap-scale flex items-center justify-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-[16px]">print</span>
+            <span>Cetak / Simpan PDF</span>
+          </button>
+          <button onclick="closeEStatementModal()" class="py-3 rounded-xl bg-gray-200 dark:bg-white/10 title-text font-bold text-xs tap-scale">
+            Tutup
+          </button>
+        </div>
       </div>
     </div>
 
@@ -3081,6 +3190,220 @@
       }
     }
 
+    
+    // ====================================================
+    // STAGE 3: SVG CASHFLOW CHART, IMPORT JSON & E-STATEMENT
+    // ====================================================
+    function renderCashflowChart() {
+      const container = document.getElementById('analytics-chart-container');
+      if (!container) return;
+
+      const trxs = currentUserData ? (currentUserData.transactions || []) : [];
+
+      if (trxs.length === 0) {
+        container.innerHTML = `
+          <div class="flex flex-col items-center justify-center text-center p-3">
+            <svg class="w-full h-20 opacity-30 text-emerald-500" viewBox="0 0 300 80" fill="none">
+              <path d="M0,60 Q75,20 150,50 T300,30" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+            </svg>
+            <p class="text-[11px] muted-text mt-1">Grafik kurva akan otomatis terbentuk setelah transaksi Anda dicatat.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Aggregate transactions by date (last 7 recorded days or unique dates)
+      const dateMap = {};
+      const sorted = [...trxs].sort((a, b) => {
+        const timeA = a.createdAt ? new Date(a.createdAt).getTime() : (parseInt((a.id || '').replace('trx_', '')) || 0);
+        const timeB = b.createdAt ? new Date(b.createdAt).getTime() : (parseInt((b.id || '').replace('trx_', '')) || 0);
+        return timeA - timeB;
+      });
+
+      sorted.forEach(t => {
+        const key = t.date || 'Hari ini';
+        if (!dateMap[key]) {
+          dateMap[key] = { in: 0, out: 0 };
+        }
+        if (t.type === 'income') {
+          dateMap[key].in += t.amount;
+        } else {
+          dateMap[key].out += t.amount;
+        }
+      });
+
+      const dates = Object.keys(dateMap).slice(-6); // last 6 dates
+      if (dates.length < 2) {
+        dates.unshift('Awal');
+        dateMap['Awal'] = { in: 0, out: 0 };
+      }
+
+      const inValues = dates.map(d => (dateMap[d] ? dateMap[d].in : 0));
+      const outValues = dates.map(d => (dateMap[d] ? dateMap[d].out : 0));
+      const maxVal = Math.max(...inValues, ...outValues, 100000);
+
+      // SVG Dimensions
+      const w = 320;
+      const h = 130;
+      const padX = 30;
+      const padY = 20;
+      const plotW = w - padX * 2;
+      const plotH = h - padY * 2;
+
+      // Coordinate helper
+      const getX = (idx) => padX + (idx / (dates.length - 1)) * plotW;
+      const getY = (val) => padY + plotH - (val / maxVal) * plotH;
+
+      // Build SVG Points & Paths
+      const inPoints = inValues.map((v, i) => `${getX(i).toFixed(1)},${getY(v).toFixed(1)}`);
+      const outPoints = outValues.map((v, i) => `${getX(i).toFixed(1)},${getY(v).toFixed(1)}`);
+
+      const inPathD = `M ${inPoints.join(' L ')}`;
+      const outPathD = `M ${outPoints.join(' L ')}`;
+
+      // Area fill paths
+      const inAreaD = `${inPathD} L ${getX(dates.length - 1)},${padY + plotH} L ${padX},${padY + plotH} Z`;
+      const outAreaD = `${outPathD} L ${getX(dates.length - 1)},${padY + plotH} L ${padX},${padY + plotH} Z`;
+
+      // Date labels
+      const labelsSvg = dates.map((d, i) => {
+        const x = getX(i);
+        return `<text x="${x}" y="${h - 4}" font-size="8" fill="currentColor" opacity="0.6" text-anchor="middle">${d.split(' ')[0]}</text>`;
+      }).join('');
+
+      container.innerHTML = `
+        <svg class="w-full h-full" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartInGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+            </linearGradient>
+            <linearGradient id="chartOutGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Horizontal Grid Lines -->
+          <line x1="${padX}" y1="${padY}" x2="${w - padX}" y2="${padY}" stroke="currentColor" opacity="0.08" stroke-dasharray="3 3"/>
+          <line x1="${padX}" y1="${padY + plotH/2}" x2="${w - padX}" y2="${padY + plotH/2}" stroke="currentColor" opacity="0.08" stroke-dasharray="3 3"/>
+          <line x1="${padX}" y1="${padY + plotH}" x2="${w - padX}" y2="${padY + plotH}" stroke="currentColor" opacity="0.15"/>
+
+          <!-- Area Fills -->
+          <path d="${inAreaD}" fill="url(#chartInGrad)"/>
+          <path d="${outAreaD}" fill="url(#chartOutGrad)"/>
+
+          <!-- Stroke Lines -->
+          <path d="${inPathD}" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="${outPathD}" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- In Points -->
+          ${inPoints.map((pt, i) => `<circle cx="${pt.split(',')[0]}" cy="${pt.split(',')[1]}" r="3" fill="#10b981" class="transition-transform hover:scale-125"><title>In: ${formatValue(inValues[i])}</title></circle>`).join('')}
+
+          <!-- Out Points -->
+          ${outPoints.map((pt, i) => `<circle cx="${pt.split(',')[0]}" cy="${pt.split(',')[1]}" r="3" fill="#ef4444" class="transition-transform hover:scale-125"><title>Out: ${formatValue(outValues[i])}</title></circle>`).join('')}
+
+          <!-- Labels -->
+          ${labelsSvg}
+        </svg>
+      `;
+    }
+
+    // ----------------------------------------------------
+    // IMPORT / RESTORE DATA FROM JSON FILE
+    // ----------------------------------------------------
+    function triggerImportJSON() {
+      const fileInput = document.getElementById('import-json-input');
+      if (fileInput) fileInput.click();
+    }
+
+    function handleImportJSONFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (!parsed.data) {
+            showToast('Format cadangan tidak valid (data kosong)');
+            return;
+          }
+
+          if (confirm('Pulihkan data portofolio dari file ini? Seluruh transaksi, kartu, dan target akan diperbarui.')) {
+            currentUserData = parsed.data;
+            saveCurrentUserData();
+            renderAll();
+            showToast('Data portofolio berhasil dipulihkan dari cadangan! 🎉');
+          }
+        } catch (err) {
+          console.error('Import error:', err);
+          showToast('Gagal membaca file JSON. Pastikan file valid.');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = ''; // Reset input
+    }
+
+    // ----------------------------------------------------
+    // E-STATEMENT FINANCIAL REPORT MODAL & PRINT
+    // ----------------------------------------------------
+    function openEStatementModal() {
+      const m = document.getElementById('modal-estatement');
+      if (!m || !currentUser) return;
+
+      const now = new Date();
+      const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      document.getElementById('statement-date').textContent = `Periode Cetak: ${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+      document.getElementById('statement-user-name').textContent = currentUser.name;
+      document.getElementById('statement-user-email').textContent = currentUser.email;
+
+      const trxs = currentUserData ? (currentUserData.transactions || []) : [];
+      const totalIncome = trxs.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+      const totalExpense = trxs.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+      const net = totalIncome - totalExpense;
+      const goals = currentUserData ? (currentUserData.goals || []) : [];
+      const totalGoals = goals.reduce((a, b) => a + (b.saved || 0), 0);
+
+      document.getElementById('statement-income').textContent = formatValue(totalIncome);
+      document.getElementById('statement-expense').textContent = formatValue(totalExpense);
+      document.getElementById('statement-net').textContent = `${net >= 0 ? '+' : ''}${formatValue(net)}`;
+      document.getElementById('statement-goals').textContent = formatValue(totalGoals);
+
+      // Statement Transaction List
+      const listEl = document.getElementById('statement-trx-list');
+      if (listEl) {
+        if (trxs.length === 0) {
+          listEl.innerHTML = '<p class="text-gray-400 text-center py-3">Belum ada riwayat transaksi</p>';
+        } else {
+          listEl.innerHTML = trxs.slice(0, 10).map(t => {
+            const isInc = t.type === 'income';
+            return `
+              <div class="flex justify-between py-1.5">
+                <div>
+                  <span class="font-semibold text-gray-900 block truncate max-w-[180px]">${t.desc}</span>
+                  <span class="text-[9px] text-gray-500">${t.category} • ${t.date}</span>
+                </div>
+                <span class="font-bold ${isInc ? 'text-emerald-700' : 'text-red-600'}">
+                  ${isInc ? '+' : '-'}${formatValue(t.amount)}
+                </span>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      m.classList.remove('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.remove('translate-y-full');
+    }
+
+    function closeEStatementModal() {
+      const m = document.getElementById('modal-estatement');
+      if (!m) return;
+      m.classList.add('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.add('translate-y-full');
+    }
+
     function renderAll() {
       let totalIncome = 0;
       let totalExpense = 0;
@@ -3204,6 +3527,7 @@
       renderSubscriptions();
       renderAnalyticsFiltered();
       renderFinancialHealth();
+      renderCashflowChart();
 
     // 8. TAB ROUTING & CONTROLS
     // ----------------------------------------------------
