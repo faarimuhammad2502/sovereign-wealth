@@ -29,14 +29,14 @@
   "screenshots": [
     {
       "src": "stitch_src/home_wealth_dashboard/screen.png",
-      "sizes": "393x852",
+      "sizes": "483x1600",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Sovereign Wealth Dashboard"
     },
     {
       "src": "stitch_src/analytics_cashflow/screen.png",
-      "sizes": "393x852",
+      "sizes": "291x1600",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Analytics & Cashflow"
