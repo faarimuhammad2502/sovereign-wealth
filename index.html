@@ -420,6 +420,52 @@
           </div>
         </div>
 
+        <!-- ALOKASI 4 PILAR ASET (TAHAP 4) -->
+        <div class="app-card rounded-2xl p-4 shadow-sm flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[19px] text-emerald-600">pie_chart</span>
+              <span class="text-xs font-bold uppercase tracking-wider title-text">Alokasi 4 Pilar Kekayaan</span>
+            </div>
+            <button onclick="openAssetsModal()" class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-0.5">
+              <span class="material-symbols-outlined text-[14px]">tune</span>
+              <span>Atur Aset</span>
+            </button>
+          </div>
+
+          <!-- 4 Pill Grid -->
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <!-- Pilar 1: Kas & Bank -->
+            <div class="p-2.5 rounded-xl bg-[var(--pill-bg)] flex flex-col gap-0.5">
+              <span class="text-[10px] muted-text font-medium flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Kas &amp; Bank
+              </span>
+              <span id="pillar-val-cash" class="font-bold title-text balance-sensitive">Rp 0</span>
+            </div>
+            <!-- Pilar 2: Tabungan Vault -->
+            <div class="p-2.5 rounded-xl bg-[var(--pill-bg)] flex flex-col gap-0.5">
+              <span class="text-[10px] muted-text font-medium flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-teal-500"></span> Tabungan Vault
+              </span>
+              <span id="pillar-val-savings" class="font-bold title-text balance-sensitive">Rp 0</span>
+            </div>
+            <!-- Pilar 3: Investasi Portofolio -->
+            <div class="p-2.5 rounded-xl bg-[var(--pill-bg)] flex flex-col gap-0.5">
+              <span class="text-[10px] muted-text font-medium flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span> Investasi / Saham
+              </span>
+              <span id="pillar-val-invest" class="font-bold title-text balance-sensitive">Rp 0</span>
+            </div>
+            <!-- Pilar 4: Emas & Aset Fisik -->
+            <div class="p-2.5 rounded-xl bg-[var(--pill-bg)] flex flex-col gap-0.5">
+              <span class="text-[10px] muted-text font-medium flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span> Emas &amp; Aset Fisik
+              </span>
+              <span id="pillar-val-physical" class="font-bold title-text balance-sensitive">Rp 0</span>
+            </div>
+          </div>
+        </div>
+
         <!-- FINANCIAL HEALTH SCORE & BEHAVIORAL AI (TAHAP 2) -->
         <div class="app-card rounded-2xl p-4 shadow-sm flex flex-col gap-3">
           <div class="flex items-center justify-between">
@@ -590,6 +636,22 @@
           <div id="analytics-categories-list" class="space-y-2.5 text-xs">
             <!-- Dynamic categories per user -->
           </div>
+        </div>
+
+        <!-- KALKULATOR FINANSIAL PRO (TAHAP 4) -->
+        <div class="app-card p-4 rounded-2xl shadow-sm flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-purple-500/15 text-purple-600 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[20px]">calculate</span>
+            </div>
+            <div>
+              <h3 class="text-xs font-bold title-text">Kalkulator Finansial Pro</h3>
+              <p class="text-[10px] muted-text">Simulasi 50/30/20, Dana Darurat &amp; Zakat Mal</p>
+            </div>
+          </div>
+          <button onclick="openCalculatorsModal()" class="px-3 py-1.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold tap-scale shadow-xs">
+            Buka
+          </button>
         </div>
 
         <!-- 4. RECURRING SUBSCRIPTIONS TRACKER (TAHAP 1) -->
@@ -1645,6 +1707,156 @@
           </button>
           <button onclick="closeEStatementModal()" class="py-3 rounded-xl bg-gray-200 dark:bg-white/10 title-text font-bold text-xs tap-scale">
             Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+
+  
+    <!-- ========================================== -->
+    <!-- MODAL: ATUR 4 PILAR ASET                   -->
+    <!-- ========================================== -->
+    <div id="modal-assets" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="app-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b pb-3 border-gray-200 dark:border-white/10">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px] text-emerald-600">pie_chart</span>
+            <h3 class="text-base font-bold title-text">Kelola 4 Pilar Kekayaan</h3>
+          </div>
+          <button onclick="closeAssetsModal()" class="w-8 h-8 rounded-full app-card flex items-center justify-center muted-text hover:title-text">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div class="p-3 rounded-xl bg-[var(--pill-bg)] space-y-1">
+            <span class="font-semibold title-text block">1. Kas &amp; Bank: <span id="modal-asset-cash" class="text-emerald-600 font-bold">Rp 0</span></span>
+            <span class="text-[10px] muted-text block">Dihitung otomatis dari seluruh kartu dan rekening aktif Anda.</span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[var(--pill-bg)] space-y-1">
+            <span class="font-semibold title-text block">2. Tabungan Vault: <span id="modal-asset-savings" class="text-teal-600 font-bold">Rp 0</span></span>
+            <span class="text-[10px] muted-text block">Dihitung otomatis dari seluruh saldo target di menu Goals.</span>
+          </div>
+
+          <div>
+            <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">3. Nilai Investasi (Saham / Reksadana / Crypto) (Rp)</label>
+            <div class="flex items-center gap-2 border-b-2 border-blue-600 pb-1">
+              <span class="text-xl font-bold title-text">Rp</span>
+              <input type="number" id="input-asset-invest" placeholder="0" class="w-full text-lg font-bold title-text bg-transparent focus:outline-none"/>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">4. Nilai Emas &amp; Aset Fisik (Logam Mulia / Properti) (Rp)</label>
+            <div class="flex items-center gap-2 border-b-2 border-amber-600 pb-1">
+              <span class="text-xl font-bold title-text">Rp</span>
+              <input type="number" id="input-asset-physical" placeholder="0" class="w-full text-lg font-bold title-text bg-transparent focus:outline-none"/>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="saveCustomAssets()" class="w-full py-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-md tap-scale transition-colors mt-2">
+          Simpan Alokasi Aset
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: KALKULATOR FINANSIAL PRO            -->
+    <!-- ========================================== -->
+    <div id="modal-calculators" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="app-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-3.5 max-h-[88vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b pb-3 border-gray-200 dark:border-white/10">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px] text-purple-600">calculate</span>
+            <h3 class="text-base font-bold title-text">Kalkulator Finansial Pro</h3>
+          </div>
+          <button onclick="closeCalculatorsModal()" class="w-8 h-8 rounded-full app-card flex items-center justify-center muted-text hover:title-text">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+
+        <!-- Calculator Tabs -->
+        <div class="grid grid-cols-3 gap-1 p-1 rounded-xl bg-[var(--pill-bg)]">
+          <button id="calc-tab-503020" onclick="switchCalcTab('503020')" class="py-1.5 rounded-lg text-[11px] font-bold bg-purple-700 text-white shadow-xs transition-all">Aturan 50/30/20</button>
+          <button id="calc-tab-emergency" onclick="switchCalcTab('emergency')" class="py-1.5 rounded-lg text-[11px] font-bold text-gray-500 hover:title-text transition-all">Dana Darurat</button>
+          <button id="calc-tab-zakat" onclick="switchCalcTab('zakat')" class="py-1.5 rounded-lg text-[11px] font-bold text-gray-500 hover:title-text transition-all">Zakat Mal</button>
+        </div>
+
+        <!-- PANE 1: 50/30/20 -->
+        <div id="calc-pane-503020" class="space-y-3">
+          <p class="text-[11px] muted-text">Bagi pemasukan bersih Anda ke dalam 3 alokasi ideal: 50% Kebutuhan, 30% Keinginan, dan 20% Tabungan/Investasi.</p>
+          <div>
+            <label class="text-[10px] font-semibold uppercase tracking-wider muted-text block mb-1">Total Pemasukan Bulanan (Rp)</label>
+            <input type="number" id="calc-income-input" oninput="calculate503020()" placeholder="Contoh: 10000000" class="app-card w-full px-3 py-2.5 rounded-xl text-xs font-bold title-text focus:outline-none"/>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20">
+              <span class="text-[10px] text-blue-600 dark:text-blue-400 font-bold block">50% Kebutuhan</span>
+              <span id="calc-res-needs" class="font-bold title-text text-xs mt-1 block">Rp 0</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
+              <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold block">30% Keinginan</span>
+              <span id="calc-res-wants" class="font-bold title-text text-xs mt-1 block">Rp 0</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+              <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block">20% Tabungan</span>
+              <span id="calc-res-savings" class="font-bold title-text text-xs mt-1 block">Rp 0</span>
+            </div>
+          </div>
+          <button onclick="applyBudgetFromCalculator()" class="w-full py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold tap-scale shadow-xs">
+            Terapkan 50% + 30% ke Batas Kuota Anggaran
+          </button>
+        </div>
+
+        <!-- PANE 2: DANA DARURAT -->
+        <div id="calc-pane-emergency" class="space-y-3 hidden">
+          <p class="text-[11px] muted-text">Hitung target cadangan dana darurat yang wajib disiapkan berdasarkan status tanggungan Anda.</p>
+          <div>
+            <label class="text-[10px] font-semibold uppercase tracking-wider muted-text block mb-1">Pengeluaran Bulanan Rata-rata (Rp)</label>
+            <input type="number" id="calc-exp-input" oninput="calculateEmergencyFund()" placeholder="Contoh: 5000000" class="app-card w-full px-3 py-2.5 rounded-xl text-xs font-bold title-text focus:outline-none"/>
+          </div>
+          <div>
+            <label class="text-[10px] font-semibold uppercase tracking-wider muted-text block mb-1">Status Tanggungan</label>
+            <select id="calc-status-select" onchange="calculateEmergencyFund()" class="app-card w-full px-3 py-2.5 rounded-xl text-xs font-medium focus:outline-none">
+              <option value="3">Lajang (Cadangan 3 Bulan)</option>
+              <option value="6" selected>Menikah tanpa anak (Cadangan 6 Bulan)</option>
+              <option value="12">Menikah dengan anak (Cadangan 12 Bulan)</option>
+            </select>
+          </div>
+          <div class="p-3 rounded-xl bg-teal-500/10 border border-teal-500/20 text-center">
+            <span class="text-[10px] text-teal-700 dark:text-teal-300 uppercase font-bold block">Target Ideal Dana Darurat:</span>
+            <span id="calc-res-emergency" class="text-lg font-bold text-teal-600 dark:text-teal-400 mt-0.5 block">Rp 0</span>
+          </div>
+          <button onclick="createEmergencyGoalFromCalc()" class="w-full py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold tap-scale shadow-xs">
+            + Buat Target Ini ke Menu Goals
+          </button>
+        </div>
+
+        <!-- PANE 3: ZAKAT MAL -->
+        <div id="calc-pane-zakat" class="space-y-3 hidden">
+          <p class="text-[11px] muted-text">Kalkulator Zakat Mal (Kekayaan) 2,5% jika total harta bersih telah mencapai batas nishab emas (85 gram = ~Rp 115.000.000).</p>
+          <div class="p-3 rounded-xl bg-[var(--pill-bg)] space-y-1">
+            <div class="flex justify-between text-xs">
+              <span class="muted-text">Total Kekayaan Anda:</span>
+              <span id="calc-zakat-wealth" class="font-bold title-text">Rp 0</span>
+            </div>
+            <div class="flex justify-between text-xs">
+              <span class="muted-text">Standar Nishab (85 gr):</span>
+              <span class="font-bold title-text">Rp 115.000.000</span>
+            </div>
+            <div class="flex justify-between text-xs pt-1 border-t border-gray-200 dark:border-white/10">
+              <span class="font-semibold title-text">Status Kewajiban:</span>
+              <span id="calc-zakat-status" class="font-bold text-emerald-600">Belum Wajib Zakat</span>
+            </div>
+          </div>
+          <div class="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 text-center">
+            <span class="text-[10px] text-purple-700 dark:text-purple-300 uppercase font-bold block">Kewajiban Zakat Mal (2,5%):</span>
+            <span id="calc-res-zakat" class="text-lg font-bold text-purple-700 dark:text-purple-300 mt-0.5 block">Rp 0</span>
+          </div>
+          <button onclick="recordZakatExpense()" class="w-full py-2.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold tap-scale shadow-xs">
+            Catat Pembayaran Zakat ke Transaksi
           </button>
         </div>
       </div>
@@ -3404,6 +3616,242 @@
       m.querySelector('div').classList.add('translate-y-full');
     }
 
+    
+    // ====================================================
+    // STAGE 4: 4 ASSET PILLARS & FINANCIAL CALCULATORS PRO
+    // ====================================================
+    function openAssetsModal() {
+      const m = document.getElementById('modal-assets');
+      if (!m) return;
+
+      const cashTotal = (currentUserData.cards || []).reduce((a, b) => a + (b.balance || 0), 0);
+      const savingsTotal = (currentUserData.goals || []).reduce((a, b) => a + (b.saved || 0), 0);
+
+      document.getElementById('modal-asset-cash').textContent = formatValue(cashTotal);
+      document.getElementById('modal-asset-savings').textContent = formatValue(savingsTotal);
+      document.getElementById('input-asset-invest').value = currentUserData.customInvestments || '';
+      document.getElementById('input-asset-physical').value = currentUserData.customPhysicalAssets || '';
+
+      m.classList.remove('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.remove('translate-y-full');
+    }
+
+    function closeAssetsModal() {
+      const m = document.getElementById('modal-assets');
+      if (!m) return;
+      m.classList.add('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.add('translate-y-full');
+    }
+
+    function saveCustomAssets() {
+      const inv = parseFloat(document.getElementById('input-asset-invest').value) || 0;
+      const phy = parseFloat(document.getElementById('input-asset-physical').value) || 0;
+
+      currentUserData.customInvestments = inv;
+      currentUserData.customPhysicalAssets = phy;
+
+      saveCurrentUserData();
+      closeAssetsModal();
+      showToast('Alokasi 4 pilar kekayaan berhasil diperbarui! 💎');
+    }
+
+    function renderAssetPillars() {
+      if (!currentUserData) return;
+
+      const cashTotal = (currentUserData.cards || []).reduce((a, b) => a + (b.balance || 0), 0);
+      const savingsTotal = (currentUserData.goals || []).reduce((a, b) => a + (b.saved || 0), 0);
+      const investTotal = currentUserData.customInvestments || 0;
+      const physicalTotal = currentUserData.customPhysicalAssets || 0;
+
+      const cEl = document.getElementById('pillar-val-cash');
+      const sEl = document.getElementById('pillar-val-savings');
+      const iEl = document.getElementById('pillar-val-invest');
+      const pEl = document.getElementById('pillar-val-physical');
+
+      if (cEl) cEl.textContent = isHidden ? '••••••••' : formatValue(cashTotal);
+      if (sEl) sEl.textContent = isHidden ? '••••••••' : formatValue(savingsTotal);
+      if (iEl) iEl.textContent = isHidden ? '••••••••' : formatValue(investTotal);
+      if (pEl) pEl.textContent = isHidden ? '••••••••' : formatValue(physicalTotal);
+
+      // Upgrade Net Worth Hero Card to reflect complete 4-pillar portfolio
+      const grandTotal = cashTotal + savingsTotal + investTotal + physicalTotal;
+      const heroNet = document.getElementById('hero-net-worth');
+      if (heroNet) {
+        if (grandTotal > 0 || (currentUserData.cards && currentUserData.cards.length > 0)) {
+          heroNet.textContent = isHidden ? '••••••••' : formatValue(grandTotal);
+        }
+      }
+    }
+
+    // ----------------------------------------------------
+    // CALCULATOR CONTROLS & CALCULATIONS
+    // ----------------------------------------------------
+    function openCalculatorsModal() {
+      const m = document.getElementById('modal-calculators');
+      if (!m) return;
+
+      // Prefill with current data
+      const trxs = currentUserData ? (currentUserData.transactions || []) : [];
+      const totalIncome = trxs.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+      const totalExpense = trxs.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+
+      const incInput = document.getElementById('calc-income-input');
+      if (incInput) {
+        incInput.value = totalIncome > 0 ? totalIncome : (currentUserData.monthlyBudgetCap || 10000000);
+        calculate503020();
+      }
+
+      const expInput = document.getElementById('calc-exp-input');
+      if (expInput) {
+        expInput.value = totalExpense > 0 ? totalExpense : 5000000;
+        calculateEmergencyFund();
+      }
+
+      calculateZakatMal();
+
+      m.classList.remove('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.remove('translate-y-full');
+    }
+
+    function closeCalculatorsModal() {
+      const m = document.getElementById('modal-calculators');
+      if (!m) return;
+      m.classList.add('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.add('translate-y-full');
+    }
+
+    function switchCalcTab(tab) {
+      const tabs = ['503020', 'emergency', 'zakat'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`calc-tab-${t}`);
+        const pane = document.getElementById(`calc-pane-${t}`);
+        if (!btn || !pane) return;
+        if (t === tab) {
+          btn.className = 'py-1.5 rounded-lg text-[11px] font-bold bg-purple-700 text-white shadow-xs transition-all';
+          pane.classList.remove('hidden');
+        } else {
+          btn.className = 'py-1.5 rounded-lg text-[11px] font-bold text-gray-500 hover:title-text transition-all';
+          pane.classList.add('hidden');
+        }
+      });
+      if (tab === 'zakat') calculateZakatMal();
+    }
+
+    function calculate503020() {
+      const inc = parseFloat(document.getElementById('calc-income-input').value) || 0;
+      const needs = inc * 0.5;
+      const wants = inc * 0.3;
+      const savings = inc * 0.2;
+
+      document.getElementById('calc-res-needs').textContent = formatValue(needs);
+      document.getElementById('calc-res-wants').textContent = formatValue(wants);
+      document.getElementById('calc-res-savings').textContent = formatValue(savings);
+    }
+
+    function applyBudgetFromCalculator() {
+      const inc = parseFloat(document.getElementById('calc-income-input').value) || 0;
+      if (inc <= 0) {
+        showToast('Masukkan nominal pemasukan yang valid');
+        return;
+      }
+      const budgetCap = inc * 0.8; // 50% needs + 30% wants = 80% spending cap
+      currentUserData.monthlyBudgetCap = budgetCap;
+      saveCurrentUserData();
+      closeCalculatorsModal();
+      showToast(`Batas kuota anggaran diperbarui menjadi ${formatValue(budgetCap)} (80% alokasi) ✅`);
+    }
+
+    function calculateEmergencyFund() {
+      const exp = parseFloat(document.getElementById('calc-exp-input').value) || 0;
+      const mult = parseInt(document.getElementById('calc-status-select').value) || 6;
+      const target = exp * mult;
+      document.getElementById('calc-res-emergency').textContent = formatValue(target);
+    }
+
+    function createEmergencyGoalFromCalc() {
+      const exp = parseFloat(document.getElementById('calc-exp-input').value) || 0;
+      const mult = parseInt(document.getElementById('calc-status-select').value) || 6;
+      const target = exp * mult;
+
+      if (target <= 0) {
+        showToast('Masukkan pengeluaran untuk menghitung target');
+        return;
+      }
+
+      if (!currentUserData.goals) currentUserData.goals = [];
+      currentUserData.goals.push({
+        id: 'goal_' + Date.now(),
+        name: `Dana Darurat (${mult} Bulan)`,
+        category: 'Dana Darurat',
+        icon: 'health_and_safety',
+        target: target,
+        saved: 0,
+        deadline: 'Target Prioritas',
+        createdAt: new Date().toISOString()
+      });
+
+      saveCurrentUserData();
+      closeCalculatorsModal();
+      showToast(`Target Dana Darurat (${formatValue(target)}) berhasil ditambahkan ke Vault! 🎯`);
+      setTimeout(() => switchTab('goals'), 600);
+    }
+
+    function calculateZakatMal() {
+      if (!currentUserData) return;
+      const cashTotal = (currentUserData.cards || []).reduce((a, b) => a + (b.balance || 0), 0);
+      const savingsTotal = (currentUserData.goals || []).reduce((a, b) => a + (b.saved || 0), 0);
+      const investTotal = currentUserData.customInvestments || 0;
+      const physicalTotal = currentUserData.customPhysicalAssets || 0;
+
+      const grandTotal = cashTotal + savingsTotal + investTotal + physicalTotal;
+      const nishab = 115000000; // 85 gram emas murni
+
+      const wealthEl = document.getElementById('calc-zakat-wealth');
+      const statusEl = document.getElementById('calc-zakat-status');
+      const resEl = document.getElementById('calc-res-zakat');
+
+      if (wealthEl) wealthEl.textContent = formatValue(grandTotal);
+
+      if (grandTotal >= nishab) {
+        const zakatDue = grandTotal * 0.025;
+        if (statusEl) {
+          statusEl.textContent = 'Wajib Zakat Mal (Telah Mencapai Nishab)';
+          statusEl.className = 'font-bold text-emerald-600 dark:text-emerald-400';
+        }
+        if (resEl) resEl.textContent = formatValue(zakatDue);
+      } else {
+        if (statusEl) {
+          statusEl.textContent = 'Belum Wajib (Di bawah nishab Rp 115 Juta)';
+          statusEl.className = 'font-bold text-gray-500';
+        }
+        if (resEl) resEl.textContent = 'Rp 0';
+      }
+    }
+
+    function recordZakatExpense() {
+      const cashTotal = (currentUserData.cards || []).reduce((a, b) => a + (b.balance || 0), 0);
+      const savingsTotal = (currentUserData.goals || []).reduce((a, b) => a + (b.saved || 0), 0);
+      const grandTotal = cashTotal + savingsTotal + (currentUserData.customInvestments || 0) + (currentUserData.customPhysicalAssets || 0);
+      const nishab = 115000000;
+
+      const zakatAmt = grandTotal >= nishab ? grandTotal * 0.025 : 250000;
+
+      if (!currentUserData.transactions) currentUserData.transactions = [];
+      currentUserData.transactions.unshift({
+        id: 'trx_' + Date.now(),
+        type: 'expense',
+        amount: zakatAmt,
+        desc: 'Pembayaran Zakat Mal / Sedekah',
+        category: 'Lainnya',
+        date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
+        time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+      });
+
+      saveCurrentUserData();
+      closeCalculatorsModal();
+      showToast(`Zakat sebesar ${formatValue(zakatAmt)} berhasil dicatat ke transaksi! 🤲`);
+    }
+
     function renderAll() {
       let totalIncome = 0;
       let totalExpense = 0;
@@ -3528,6 +3976,7 @@
       renderAnalyticsFiltered();
       renderFinancialHealth();
       renderCashflowChart();
+      renderAssetPillars();
 
     // 8. TAB ROUTING & CONTROLS
     // ----------------------------------------------------
