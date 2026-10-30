@@ -1,11 +1,12 @@
 {
+  "id": "sovereign-wealth-app",
   "name": "Sovereign Wealth - Personal Finance",
   "short_name": "Sovereign",
   "description": "Personal Wealth, Expense & Cashflow Management App by Muhammad Faari Akbar",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "background_color": "#1b4332",
   "theme_color": "#1b4332",
   "lang": "id",
@@ -23,6 +24,22 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "stitch_src/home_wealth_dashboard/screen.png",
+      "sizes": "393x852",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Sovereign Wealth Dashboard"
+    },
+    {
+      "src": "stitch_src/analytics_cashflow/screen.png",
+      "sizes": "393x852",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Analytics & Cashflow"
     }
   ],
   "shortcuts": [
