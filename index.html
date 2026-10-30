@@ -420,6 +420,50 @@
           </div>
         </div>
 
+        <!-- FINANCIAL HEALTH SCORE & BEHAVIORAL AI (TAHAP 2) -->
+        <div class="app-card rounded-2xl p-4 shadow-sm flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[19px] text-emerald-600">health_and_safety</span>
+              <span class="text-xs font-bold uppercase tracking-wider title-text">Skor Kesehatan Finansial</span>
+            </div>
+            <button onclick="openHealthDetailModal()" class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+              Detail Audit ➔
+            </button>
+          </div>
+
+          <!-- Score & Grade Row -->
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-[var(--pill-bg)]">
+            <div class="flex items-center gap-3">
+              <div id="health-score-circle" class="w-12 h-12 rounded-full bg-emerald-600 text-white flex flex-col items-center justify-center font-bold shadow-sm transition-colors">
+                <span id="health-score-number" class="text-sm leading-none">85</span>
+                <span class="text-[8px] opacity-80">/100</span>
+              </div>
+              <div>
+                <span id="health-grade-text" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 block">Sangat Sehat (Grade A)</span>
+                <span id="health-status-desc" class="text-[10px] muted-text">Arus kas stabil & rasio tabungan baik</span>
+              </div>
+            </div>
+            <button onclick="openHealthDetailModal()" class="px-2.5 py-1 rounded-lg bg-emerald-800 text-white text-[10px] font-bold tap-scale shadow-xs">
+              Cek Skor
+            </button>
+          </div>
+
+          <!-- Behavioral AI Nudge Prompt (Psikologi Keuangan) -->
+          <div class="p-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 flex items-start gap-2.5">
+            <span class="material-symbols-outlined text-emerald-600 text-[18px] shrink-0 mt-0.5">psychology</span>
+            <div class="flex-1">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 block">Behavioral AI Insight</span>
+              <p id="behavioral-ai-text" class="text-xs title-text mt-0.5 leading-relaxed">
+                Memuat insight perilaku keuangan Anda...
+              </p>
+            </div>
+            <button onclick="refreshBehavioralInsight()" class="text-gray-400 hover:text-emerald-600 p-1 rounded-full tap-scale" title="Ganti Insight">
+              <span class="material-symbols-outlined text-[15px]">refresh</span>
+            </button>
+          </div>
+        </div>
+
         <!-- Monthly Budget Track -->
         <div class="app-card rounded-2xl p-4 shadow-sm flex flex-col gap-3">
           <div class="flex items-center justify-between">
@@ -876,7 +920,12 @@
           <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">Nominal (Rupiah)</label>
           <div class="flex items-center gap-2 border-b-2 border-emerald-700 pb-1">
             <span class="text-xl font-bold title-text">Rp</span>
-            <input type="number" id="input-trx-amount" placeholder="0" class="w-full text-2xl font-bold title-text bg-transparent focus:outline-none"/>
+            <input type="number" id="input-trx-amount" oninput="checkImpulseNudge()" placeholder="0" class="w-full text-2xl font-bold title-text bg-transparent focus:outline-none"/>
+          </div>
+          <!-- Anti-Impulse Buying Nudge (Psikologi) -->
+          <div id="impulse-nudge-box" class="hidden mt-2 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-[11px] flex items-start gap-2">
+            <span class="material-symbols-outlined text-[16px] text-amber-600 shrink-0 mt-0.5">psychology_alt</span>
+            <span><strong>Nudge Refleksi:</strong> Nominal di atas Rp 500k. Apakah ini kebutuhan primer mendesak atau kepuasan sesaat? Tunda 24 jam jika ragu.</span>
           </div>
         </div>
 
@@ -1401,6 +1450,93 @@
 
         <button onclick="saveSubscription()" class="w-full py-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-md tap-scale transition-colors mt-2">
           Simpan Langganan
+        </button>
+      </div>
+    </div>
+
+  
+    <!-- ========================================== -->
+    <!-- MODAL: FINANCIAL HEALTH AUDIT DETAIL       -->
+    <!-- ========================================== -->
+    <div id="modal-health-detail" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="app-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-4 max-h-[85vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b pb-3 border-gray-200 dark:border-white/10">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px] text-emerald-600">health_and_safety</span>
+            <h3 class="text-base font-bold title-text">Audit Kesehatan Finansial</h3>
+          </div>
+          <button onclick="closeHealthDetailModal()" class="w-8 h-8 rounded-full app-card flex items-center justify-center muted-text hover:title-text">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+
+        <!-- Big Score Hero -->
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-800 to-teal-800 text-white flex items-center justify-between shadow-md">
+          <div class="flex flex-col">
+            <span class="text-[10px] text-emerald-200 uppercase tracking-widest font-semibold">Skor Total Portofolio</span>
+            <h2 id="modal-health-score" class="text-3xl font-extrabold mt-0.5">85 / 100</h2>
+            <span id="modal-health-grade" class="text-xs font-semibold text-emerald-100 mt-1">Grade A • Sangat Sehat</span>
+          </div>
+          <div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
+            <span class="material-symbols-outlined text-[32px] text-white">verified</span>
+          </div>
+        </div>
+
+        <!-- 4 Pillars Breakdown -->
+        <div class="space-y-2.5">
+          <h4 class="text-xs font-bold uppercase tracking-wider muted-text">4 Pilar Evaluasi Finansial:</h4>
+          
+          <!-- Pilar 1: Rasio Tabungan -->
+          <div class="app-card p-3 rounded-xl border border-gray-100 dark:border-white/5 space-y-1">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-semibold title-text">1. Rasio Tabungan (Target >= 20%)</span>
+              <span id="pillar-savings-score" class="font-bold text-emerald-600 dark:text-emerald-400">30 / 30</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
+              <div id="pillar-savings-bar" class="h-full bg-emerald-600 rounded-full" style="width: 100%;"></div>
+            </div>
+            <span id="pillar-savings-desc" class="text-[10px] muted-text block">Alokasi tabungan bulanan terjaga dengan baik.</span>
+          </div>
+
+          <!-- Pilar 2: Disiplin Anggaran -->
+          <div class="app-card p-3 rounded-xl border border-gray-100 dark:border-white/5 space-y-1">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-semibold title-text">2. Disiplin Anggaran Bulanan</span>
+              <span id="pillar-budget-score" class="font-bold text-emerald-600 dark:text-emerald-400">25 / 30</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
+              <div id="pillar-budget-bar" class="h-full bg-emerald-600 rounded-full" style="width: 83%;"></div>
+            </div>
+            <span id="pillar-budget-desc" class="text-[10px] muted-text block">Pengeluaran masih berada di dalam batas kuota yang Anda tentukan.</span>
+          </div>
+
+          <!-- Pilar 3: Dana Darurat -->
+          <div class="app-card p-3 rounded-xl border border-gray-100 dark:border-white/5 space-y-1">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-semibold title-text">3. Cadangan Dana Darurat (Vault)</span>
+              <span id="pillar-emergency-score" class="font-bold text-emerald-600 dark:text-emerald-400">20 / 25</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
+              <div id="pillar-emergency-bar" class="h-full bg-emerald-600 rounded-full" style="width: 80%;"></div>
+            </div>
+            <span id="pillar-emergency-desc" class="text-[10px] muted-text block">Tersedia target Dana Darurat aktif di vault Anda.</span>
+          </div>
+
+          <!-- Pilar 4: Ketahanan Arus Kas -->
+          <div class="app-card p-3 rounded-xl border border-gray-100 dark:border-white/5 space-y-1">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-semibold title-text">4. Ketahanan Arus Kas (Surplus)</span>
+              <span id="pillar-cashflow-score" class="font-bold text-emerald-600 dark:text-emerald-400">15 / 15</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
+              <div id="pillar-cashflow-bar" class="h-full bg-emerald-600 rounded-full" style="width: 100%;"></div>
+            </div>
+            <span id="pillar-cashflow-desc" class="text-[10px] muted-text block">Pemasukan melebihi pengeluaran (surplus positif).</span>
+          </div>
+        </div>
+
+        <button onclick="closeHealthDetailModal()" class="w-full py-3 rounded-xl bg-emerald-800 text-white font-bold text-xs tap-scale">
+          Tutup &amp; Kembali
         </button>
       </div>
     </div>
@@ -2747,6 +2883,204 @@
       }
     }
 
+    
+    // ====================================================
+    // FINANCIAL HEALTH SCORE & BEHAVIORAL AI (TAHAP 2)
+    // ====================================================
+    let customInsightIndex = 0;
+
+    const BEHAVIORAL_INSIGHT_PRESETS = [
+      "Psikologi Finansial: Menunda pembelian non-esensial selama 24 jam terbukti menurunkan pengeluaran impulsif hingga 40%.",
+      "Kunci Ketenangan Pikiran (Peace of Mind): Memiliki dana darurat setara 3 bulan pengeluaran adalah peredam stres finansial terkuat.",
+      "Aturan Alokasi 50/30/20: 50% untuk kebutuhan pokok, 30% untuk gaya hidup, dan 20% amankan untuk tabungan masa depan.",
+      "Behavioral Economics: Menentukan kuota anggaran di awal bulan membantu otak membuat keputusan belanja yang lebih rasional.",
+      "Disiplin Tabungan: Bukan berapa banyak yang Anda hasilkan, tetapi berapa banyak yang berhasil Anda pertahankan dan kembangkan."
+    ];
+
+    function calculateFinancialHealth() {
+      if (!currentUserData) return { score: 75, grade: 'Sehat (Grade B)', desc: 'Portofolio siap bertumbuh' };
+
+      const trxs = currentUserData.transactions || [];
+      const totalIncome = trxs.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+      const totalExpense = trxs.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+      const budgetCap = currentUserData.monthlyBudgetCap || 10000000;
+      const goals = currentUserData.goals || [];
+      const totalSavedInGoals = goals.reduce((a, b) => a + (b.saved || 0), 0);
+
+      // Pilar 1: Rasio Tabungan (Max 30)
+      let savingsScore = 15;
+      if (totalIncome > 0) {
+        const ratio = (totalSavedInGoals / totalIncome);
+        savingsScore = Math.min(30, Math.round(ratio * 100 * 1.5));
+      } else if (totalSavedInGoals > 0) {
+        savingsScore = 25;
+      }
+
+      // Pilar 2: Disiplin Anggaran (Max 30)
+      let budgetScore = 30;
+      if (budgetCap > 0 && totalExpense > 0) {
+        const spendRatio = totalExpense / budgetCap;
+        if (spendRatio <= 0.6) budgetScore = 30;
+        else if (spendRatio <= 0.85) budgetScore = 25;
+        else if (spendRatio <= 1.0) budgetScore = 18;
+        else budgetScore = Math.max(5, 30 - Math.round((spendRatio - 1) * 30));
+      }
+
+      // Pilar 3: Dana Darurat (Max 25)
+      let emergencyScore = 10;
+      const hasEmergencyGoal = goals.some(g => (g.name || '').toLowerCase().includes('darurat') || (g.category || '').toLowerCase().includes('darurat'));
+      if (hasEmergencyGoal) emergencyScore += 10;
+      if (totalSavedInGoals >= totalExpense * 2) emergencyScore = 25;
+
+      // Pilar 4: Ketahanan Arus Kas (Max 15)
+      let cashflowScore = 10;
+      if (totalIncome >= totalExpense) cashflowScore = 15;
+      else if (totalExpense > totalIncome && totalIncome > 0) cashflowScore = 5;
+
+      const totalScore = Math.min(100, Math.max(10, savingsScore + budgetScore + emergencyScore + cashflowScore));
+
+      let grade = 'Sangat Sehat (Grade A)';
+      let statusDesc = 'Arus kas stabil & rasio tabungan terjaga rapi';
+      let colorClass = 'bg-emerald-600';
+      let textClass = 'text-emerald-600 dark:text-emerald-400';
+
+      if (totalScore >= 80) {
+        grade = 'Sangat Sehat (Grade A)';
+        statusDesc = 'Arus kas surplus & rasio tabungan unggul';
+        colorClass = 'bg-emerald-600';
+        textClass = 'text-emerald-600 dark:text-emerald-400';
+      } else if (totalScore >= 65) {
+        grade = 'Sehat Terkendali (Grade B)';
+        statusDesc = 'Pengeluaran stabil di bawah batas anggaran';
+        colorClass = 'bg-teal-600';
+        textClass = 'text-teal-600 dark:text-teal-400';
+      } else if (totalScore >= 50) {
+        grade = 'Perlu Perhatian (Grade C)';
+        statusDesc = 'Mendekati kuota anggaran, perbanyak tabungan';
+        colorClass = 'bg-amber-600';
+        textClass = 'text-amber-600 dark:text-amber-400';
+      } else {
+        grade = 'Kritis (Grade D)';
+        statusDesc = 'Pengeluaran melebihi pemasukan atau batas kuota';
+        colorClass = 'bg-rose-600';
+        textClass = 'text-rose-600 dark:text-rose-400';
+      }
+
+      return {
+        score: totalScore,
+        grade: grade,
+        desc: statusDesc,
+        colorClass: colorClass,
+        textClass: textClass,
+        savingsScore: savingsScore,
+        budgetScore: budgetScore,
+        emergencyScore: emergencyScore,
+        cashflowScore: cashflowScore
+      };
+    }
+
+    function renderFinancialHealth() {
+      const health = calculateFinancialHealth();
+
+      const numEl = document.getElementById('health-score-number');
+      const gradeEl = document.getElementById('health-grade-text');
+      const descEl = document.getElementById('health-status-desc');
+      const circleEl = document.getElementById('health-score-circle');
+
+      if (numEl) numEl.textContent = health.score;
+      if (gradeEl) {
+        gradeEl.textContent = health.grade;
+        gradeEl.className = `text-xs font-bold ${health.textClass} block`;
+      }
+      if (descEl) descEl.textContent = health.desc;
+      if (circleEl) circleEl.className = `w-12 h-12 rounded-full ${health.colorClass} text-white flex flex-col items-center justify-center font-bold shadow-sm transition-colors`;
+
+      // Update Modal Detail Elements
+      const mScore = document.getElementById('modal-health-score');
+      const mGrade = document.getElementById('modal-health-grade');
+      if (mScore) mScore.textContent = `${health.score} / 100`;
+      if (mGrade) mGrade.textContent = `${health.grade} • ${health.desc}`;
+
+      // Update Pillars
+      const pSaveScore = document.getElementById('pillar-savings-score');
+      const pSaveBar = document.getElementById('pillar-savings-bar');
+      if (pSaveScore) pSaveScore.textContent = `${health.savingsScore} / 30`;
+      if (pSaveBar) pSaveBar.style.width = `${Math.round((health.savingsScore / 30) * 100)}%`;
+
+      const pBudgetScore = document.getElementById('pillar-budget-score');
+      const pBudgetBar = document.getElementById('pillar-budget-bar');
+      if (pBudgetScore) pBudgetScore.textContent = `${health.budgetScore} / 30`;
+      if (pBudgetBar) pBudgetBar.style.width = `${Math.round((health.budgetScore / 30) * 100)}%`;
+
+      const pEmerScore = document.getElementById('pillar-emergency-score');
+      const pEmerBar = document.getElementById('pillar-emergency-bar');
+      if (pEmerScore) pEmerScore.textContent = `${health.emergencyScore} / 25`;
+      if (pEmerBar) pEmerBar.style.width = `${Math.round((health.emergencyScore / 25) * 100)}%`;
+
+      const pCashScore = document.getElementById('pillar-cashflow-score');
+      const pCashBar = document.getElementById('pillar-cashflow-bar');
+      if (pCashScore) pCashScore.textContent = `${health.cashflowScore} / 15`;
+      if (pCashBar) pCashBar.style.width = `${Math.round((health.cashflowScore / 15) * 100)}%`;
+
+      updateBehavioralAIInsight();
+    }
+
+    function updateBehavioralAIInsight() {
+      const insightEl = document.getElementById('behavioral-ai-text');
+      if (!insightEl || !currentUserData) return;
+
+      const trxs = currentUserData.transactions || [];
+      const totalExpense = trxs.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+      const budgetCap = currentUserData.monthlyBudgetCap || 10000000;
+      const goals = currentUserData.goals || [];
+
+      // Context-aware psychological insight
+      if (budgetCap > 0 && totalExpense / budgetCap >= 0.75) {
+        insightEl.textContent = 'Peringatan Anggaran: Pengeluaran sudah melampaui 75% kuota. Aktifkan batas belanja harian agar sisa hari bulan ini aman terkendali.';
+      } else if (goals.length === 0) {
+        insightEl.textContent = 'Rekomendasi Psikologi: Otak manusia termotivasi oleh visual target. Buka menu Goals dan buat target impian pertama Anda hari ini!';
+      } else if (!goals.some(g => (g.name || '').toLowerCase().includes('darurat'))) {
+        insightEl.textContent = 'Peace of Mind: Miliki tabungan berlabel "Dana Darurat" di menu Goals untuk memberikan rasa aman psikologis terhadap pengeluaran tak terduga.';
+      } else {
+        insightEl.textContent = BEHAVIORAL_INSIGHT_PRESETS[customInsightIndex % BEHAVIORAL_INSIGHT_PRESETS.length];
+      }
+    }
+
+    function refreshBehavioralInsight() {
+      customInsightIndex++;
+      const insightEl = document.getElementById('behavioral-ai-text');
+      if (insightEl) {
+        insightEl.textContent = BEHAVIORAL_INSIGHT_PRESETS[customInsightIndex % BEHAVIORAL_INSIGHT_PRESETS.length];
+        showToast('Insight psikologi diperbarui 💡');
+      }
+    }
+
+    function openHealthDetailModal() {
+      const m = document.getElementById('modal-health-detail');
+      if (!m) return;
+      m.classList.remove('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.remove('translate-y-full');
+    }
+
+    function closeHealthDetailModal() {
+      const m = document.getElementById('modal-health-detail');
+      if (!m) return;
+      m.classList.add('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.add('translate-y-full');
+    }
+
+    function checkImpulseNudge() {
+      const val = parseFloat(document.getElementById('input-trx-amount').value) || 0;
+      const nudgeBox = document.getElementById('impulse-nudge-box');
+      if (!nudgeBox) return;
+
+      if (activeTransactionType === 'expense' && val >= 500000) {
+        nudgeBox.classList.remove('hidden');
+      } else {
+        nudgeBox.classList.add('hidden');
+      }
+    }
+
     function renderAll() {
       let totalIncome = 0;
       let totalExpense = 0;
@@ -2869,6 +3203,7 @@
       renderGoals();
       renderSubscriptions();
       renderAnalyticsFiltered();
+      renderFinancialHealth();
 
     // 8. TAB ROUTING & CONTROLS
     // ----------------------------------------------------

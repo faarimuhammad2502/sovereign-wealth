@@ -1,5 +1,5 @@
 // Sovereign Wealth Service Worker for PWABuilder & Offline Support
-const CACHE_NAME = 'sovereign-wealth-v6';
+const CACHE_NAME = 'sovereign-wealth-v7';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
