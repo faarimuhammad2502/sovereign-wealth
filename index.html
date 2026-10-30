@@ -521,17 +521,17 @@
             <span class="text-[10px] font-semibold tracking-wider uppercase muted-text">Manajemen Kartu</span>
             <h1 class="text-xl font-bold title-text tracking-tight">Kartu &amp; Rekening</h1>
           </div>
-          <button onclick="showToast('Fitur penambahan kartu aktif')" class="w-8 h-8 rounded-full bg-emerald-800 text-white flex items-center justify-center tap-scale">
+          <button onclick="openCardModal()" class="w-8 h-8 rounded-full bg-emerald-800 text-white flex items-center justify-center tap-scale shadow-sm" title="Tambah Kartu">
             <span class="material-symbols-outlined text-[18px]">add</span>
           </button>
         </div>
 
-        <!-- Virtual Card Showcase -->
+        <!-- Virtual Card Showcase (HERO CARD) -->
         <div class="relative">
           <div id="card-hero-element" class="w-full h-48 rounded-2xl p-5 relative overflow-hidden bg-gradient-to-tr from-[#012d1d] via-[#1b4332] to-[#2c694e] text-white shadow-xl flex flex-col justify-between transition-all duration-300">
             <div class="relative z-10 flex items-start justify-between">
               <div>
-                <span class="text-[10px] tracking-wider uppercase text-emerald-200">Kartu Platinum Debit</span>
+                <span id="card-type-display" class="text-[10px] tracking-wider uppercase text-emerald-200">Kartu Platinum Debit</span>
                 <div id="card-balance-display" class="balance-sensitive text-lg sm:text-xl font-bold mt-0.5 whitespace-nowrap">Rp 0</div>
               </div>
               <div class="flex items-center gap-2">
@@ -545,14 +545,14 @@
 
             <div class="relative z-10 flex items-end justify-between">
               <div class="flex flex-col gap-0.5">
-                <span class="text-sm tracking-widest font-mono opacity-90">•••• •••• •••• 4821</span>
+                <span id="card-number-display" class="text-sm tracking-widest font-mono opacity-90">•••• •••• •••• 4821</span>
                 <div class="flex items-center gap-3 text-xs text-white/80">
                   <span id="card-holder-name" class="font-semibold tracking-wide uppercase">PENGGUNA</span>
                   <span>08/29</span>
                 </div>
               </div>
               <div class="flex flex-col items-end">
-                <span class="text-[9px] uppercase tracking-widest text-emerald-200 font-bold">World Elite</span>
+                <span id="card-bank-display" class="text-[9px] uppercase tracking-widest text-emerald-200 font-bold">SOVEREIGN</span>
                 <div class="flex -space-x-2 mt-0.5 opacity-90">
                   <div class="w-4 h-4 rounded-full bg-emerald-300"></div>
                   <div class="w-4 h-4 rounded-full bg-amber-400"></div>
@@ -581,12 +581,23 @@
               </div>
               <span class="text-[11px] muted-text font-medium">Batas</span>
             </button>
-            <button onclick="showToast('Tersambung ke Google Pay')" class="flex flex-col items-center gap-1 p-1 rounded-xl tap-scale">
+            <button onclick="openCardModal()" class="flex flex-col items-center gap-1 p-1 rounded-xl tap-scale">
               <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-600 flex items-center justify-center">
-                <span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+                <span class="material-symbols-outlined text-[18px]">add_card</span>
               </div>
-              <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">Wallet</span>
+              <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">+ Tambah</span>
             </button>
+          </div>
+        </div>
+
+        <!-- List of User's Cards & Accounts -->
+        <div class="space-y-2.5 pt-2">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-bold title-text">Daftar Kartu &amp; Rekening</h2>
+            <button onclick="openCardModal()" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline tap-scale">+ Tambah Baru</button>
+          </div>
+          <div id="cards-list-container" class="space-y-2">
+            <!-- Dynamically populated cards -->
           </div>
         </div>
 
@@ -602,16 +613,34 @@
             <span class="text-[10px] font-semibold tracking-wider uppercase muted-text">Target Finansial</span>
             <h1 class="text-xl font-bold title-text tracking-tight">Vault Tabungan</h1>
           </div>
-          <button onclick="showToast('Fitur tambah target')" class="w-8 h-8 rounded-full bg-emerald-800 text-white flex items-center justify-center tap-scale">
+          <button onclick="openGoalModal()" class="w-8 h-8 rounded-full bg-emerald-800 text-white flex items-center justify-center tap-scale shadow-sm" title="Tambah Target">
             <span class="material-symbols-outlined text-[18px]">add</span>
           </button>
         </div>
 
-        <div id="goals-list-container" class="space-y-3">
-          <div class="app-card p-6 rounded-2xl text-center">
-            <span class="material-symbols-outlined text-[36px] text-emerald-600 mb-1">savings</span>
-            <h3 class="text-sm font-bold title-text">Vault Siap Digunakan</h3>
-            <p class="text-xs muted-text mt-1">Nyalakan auto-debit dan simpan dana untuk masa depan.</p>
+        <!-- Goals Summary Hero Card -->
+        <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold muted-text uppercase tracking-wider">Total Tabungan Terkumpul</span>
+            <span id="goals-total-percent" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full">0%</span>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <span id="goals-total-saved" class="balance-sensitive text-2xl font-bold title-text">Rp 0</span>
+            <span class="text-xs muted-text">Target: <span id="goals-total-target" class="font-semibold title-text">Rp 0</span></span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
+            <div id="goals-total-bar" class="h-full bg-gradient-to-r from-emerald-600 to-teal-400 rounded-full transition-all duration-500" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Goals List -->
+        <div class="space-y-2.5 pt-1">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-bold title-text">Rencana &amp; Impian Anda</h2>
+            <button onclick="openGoalModal()" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline tap-scale">+ Target Baru</button>
+          </div>
+          <div id="goals-list-container" class="space-y-3">
+            <!-- Dynamically populated goals -->
           </div>
         </div>
 
@@ -899,6 +928,156 @@
   </div>
 
   <!-- ======================================================== -->
+  
+    <!-- ========================================== -->
+    <!-- MODAL: ADD CARD                            -->
+    <!-- ========================================== -->
+    <div id="modal-card" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="app-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b pb-3 border-gray-200 dark:border-white/10">
+          <h3 class="text-base font-bold title-text">Tambah Kartu / Rekening</h3>
+          <button onclick="closeCardModal()" class="w-8 h-8 rounded-full app-card flex items-center justify-center muted-text hover:title-text">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">Nama Bank / Penerbit</label>
+          <input type="text" id="input-card-bank" placeholder="Contoh: Bank BCA, Mandiri, Jenius, GoPay" class="app-card w-full px-3 py-2.5 rounded-xl text-xs font-medium focus:outline-none"/>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">Jenis Kartu</label>
+            <select id="input-card-type" class="app-card w-full px-3 py-2.5 rounded-xl text-xs font-medium focus:outline-none">
+              <option value="Debit Platinum">Debit Platinum</option>
+              <option value="Debit Gold">Debit Gold</option>
+              <option value="Kartu Kredit">Kartu Kredit</option>
+              <option value="E-Wallet">E-Wallet</option>
+              <option value="Rekening Utama">Rekening Utama</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">4 Digit Terakhir</label>
+            <input type="text" id="input-card-number" maxlength="4" placeholder="Contoh: 8829" class="app-card w-full px-3 py-2.5 rounded-xl text-xs font-medium focus:outline-none"/>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">Saldo Kartu / Rekening (Rp)</label>
+          <div class="flex items-center gap-2 border-b-2 border-emerald-700 pb-1">
+            <span class="text-xl font-bold title-text">Rp</span>
+            <input type="number" id="input-card-balance" placeholder="0" class="w-full text-xl font-bold title-text bg-transparent focus:outline-none"/>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1.5">Warna Tema Kartu</label>
+          <div class="grid grid-cols-4 gap-2" id="card-color-picker">
+            <button type="button" onclick="selectCardColor('emerald')" class="card-color-btn h-10 rounded-xl bg-gradient-to-r from-[#012d1d] to-[#1b4332] ring-2 ring-emerald-500 shadow-xs" data-color="emerald" title="Emerald"></button>
+            <button type="button" onclick="selectCardColor('obsidian')" class="card-color-btn h-10 rounded-xl bg-gradient-to-r from-[#111827] to-[#374151] opacity-70 hover:opacity-100 shadow-xs" data-color="obsidian" title="Obsidian"></button>
+            <button type="button" onclick="selectCardColor('gold')" class="card-color-btn h-10 rounded-xl bg-gradient-to-r from-[#78350f] to-[#b45309] opacity-70 hover:opacity-100 shadow-xs" data-color="gold" title="Gold"></button>
+            <button type="button" onclick="selectCardColor('navy')" class="card-color-btn h-10 rounded-xl bg-gradient-to-r from-[#0c2340] to-[#2563eb] opacity-70 hover:opacity-100 shadow-xs" data-color="navy" title="Navy"></button>
+          </div>
+        </div>
+
+        <button onclick="saveCard()" class="w-full py-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-md tap-scale transition-colors mt-2">
+          Simpan Kartu / Rekening
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: ADD GOAL                            -->
+    <!-- ========================================== -->
+    <div id="modal-goal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="app-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b pb-3 border-gray-200 dark:border-white/10">
+          <h3 class="text-base font-bold title-text">Tambah Target Tabungan</h3>
+          <button onclick="closeGoalModal()" class="w-8 h-8 rounded-full app-card flex items-center justify-center muted-text hover:title-text">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">Nama Target / Rencana</label>
+          <input type="text" id="input-goal-name" placeholder="Contoh: Dana Darurat, Beli Rumah, Liburan Jepang" class="app-card w-full px-3 py-2.5 rounded-xl text-xs font-medium focus:outline-none"/>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">Kategori &amp; Ikon</label>
+          <select id="input-goal-category" class="app-card w-full px-3 py-2.5 rounded-xl text-xs font-medium focus:outline-none">
+            <option value="Dana Darurat|health_and_safety">🛡️ Dana Darurat</option>
+            <option value="Tempat Tinggal|home">🏠 Rumah &amp; Properti</option>
+            <option value="Kendaraan|directions_car">🚗 Kendaraan Impian</option>
+            <option value="Liburan & Travel|flight">✈️ Liburan &amp; Travel</option>
+            <option value="Pendidikan|school">🎓 Pendidikan &amp; Kursus</option>
+            <option value="Investasi|trending_up">📈 Portofolio Investasi</option>
+            <option value="Tabungan Umum|savings">💎 Tabungan Masa Depan</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">Target Nominal (Rp)</label>
+          <div class="flex items-center gap-2 border-b-2 border-emerald-700 pb-1">
+            <span class="text-xl font-bold title-text">Rp</span>
+            <input type="number" id="input-goal-target" placeholder="0" class="w-full text-xl font-bold title-text bg-transparent focus:outline-none"/>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">Terkumpul Saat Ini (Rp)</label>
+            <input type="number" id="input-goal-saved" placeholder="0" class="app-card w-full px-3 py-2 rounded-xl text-xs font-medium focus:outline-none"/>
+          </div>
+          <div>
+            <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">Target Selesai</label>
+            <input type="text" id="input-goal-deadline" placeholder="Desember 2026" class="app-card w-full px-3 py-2 rounded-xl text-xs font-medium focus:outline-none"/>
+          </div>
+        </div>
+
+        <button onclick="saveGoal()" class="w-full py-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-md tap-scale transition-colors mt-2">
+          Buat Target Tabungan
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: DEPOSIT / SETOR TO GOAL             -->
+    <!-- ========================================== -->
+    <div id="modal-goal-deposit" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="app-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b pb-3 border-gray-200 dark:border-white/10">
+          <div>
+            <h3 class="text-base font-bold title-text">Setor Dana ke Vault</h3>
+            <p id="deposit-goal-name" class="text-xs text-emerald-600 font-semibold">Target</p>
+          </div>
+          <button onclick="closeDepositGoalModal()" class="w-8 h-8 rounded-full app-card flex items-center justify-center muted-text hover:title-text">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+
+        <input type="hidden" id="deposit-goal-id"/>
+
+        <div>
+          <label class="text-[11px] font-semibold muted-text uppercase tracking-wider block mb-1">Nominal yang Disetor (Rp)</label>
+          <div class="flex items-center gap-2 border-b-2 border-emerald-700 pb-1">
+            <span class="text-xl font-bold title-text">Rp</span>
+            <input type="number" id="input-deposit-amount" placeholder="0" class="w-full text-2xl font-bold title-text bg-transparent focus:outline-none"/>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 p-2 rounded-xl bg-[var(--pill-bg)]">
+          <input type="checkbox" id="deposit-auto-record" checked class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500"/>
+          <label for="deposit-auto-record" class="text-xs title-text font-medium">Catat sebagai transaksi pengeluaran/alokasi</label>
+        </div>
+
+        <button onclick="saveGoalDeposit()" class="w-full py-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-md tap-scale transition-colors mt-2">
+          Konfirmasi Setor Dana
+        </button>
+      </div>
+    </div>
+
   <!-- JAVASCRIPT: TWO-STATE AUTH, BIOMETRIC & MULTI-USER       -->
   <!-- ======================================================== -->
   <script>
@@ -1484,6 +1663,370 @@
     // ----------------------------------------------------
     // 7. RENDER DASHBOARD
     // ----------------------------------------------------
+    
+    // ====================================================
+    // CARDS & WALLETS CRUD ENGINE
+    // ====================================================
+    let selectedCardColor = 'emerald';
+    const CARD_GRADIENTS = {
+      emerald: 'from-[#012d1d] via-[#1b4332] to-[#2c694e]',
+      obsidian: 'from-[#111827] via-[#1f2937] to-[#374151]',
+      gold: 'from-[#78350f] via-[#92400e] to-[#b45309]',
+      navy: 'from-[#0c2340] via-[#1e3a8a] to-[#2563eb]'
+    };
+
+    function selectCardColor(color) {
+      selectedCardColor = color;
+      document.querySelectorAll('.card-color-btn').forEach(btn => {
+        if (btn.getAttribute('data-color') === color) {
+          btn.classList.add('ring-2', 'ring-emerald-500');
+          btn.classList.remove('opacity-70');
+        } else {
+          btn.classList.remove('ring-2', 'ring-emerald-500');
+          btn.classList.add('opacity-70');
+        }
+      });
+    }
+
+    function openCardModal() {
+      const m = document.getElementById('modal-card');
+      if (!m) return;
+      document.getElementById('input-card-bank').value = '';
+      document.getElementById('input-card-number').value = '';
+      document.getElementById('input-card-balance').value = '';
+      selectCardColor('emerald');
+      m.classList.remove('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.remove('translate-y-full');
+    }
+
+    function closeCardModal() {
+      const m = document.getElementById('modal-card');
+      if (!m) return;
+      m.classList.add('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.add('translate-y-full');
+    }
+
+    function saveCard() {
+      const bank = document.getElementById('input-card-bank').value.trim();
+      const type = document.getElementById('input-card-type').value;
+      const numRaw = document.getElementById('input-card-number').value.trim();
+      const balRaw = parseFloat(document.getElementById('input-card-balance').value) || 0;
+
+      if (!bank) {
+        showToast('Mohon masukkan nama bank / rekening');
+        return;
+      }
+
+      const last4 = numRaw.length >= 4 ? numRaw.slice(-4) : (numRaw || '8888');
+
+      if (!currentUserData.cards) currentUserData.cards = [];
+
+      const newCard = {
+        id: 'card_' + Date.now(),
+        bank: bank,
+        number: last4,
+        type: type,
+        balance: balRaw,
+        color: selectedCardColor,
+        gradient: CARD_GRADIENTS[selectedCardColor] || CARD_GRADIENTS.emerald,
+        isFrozen: false,
+        createdAt: new Date().toISOString()
+      };
+
+      currentUserData.cards.push(newCard);
+      currentUserData.activeCardId = newCard.id;
+      saveCurrentUserData();
+      closeCardModal();
+      showToast(`Kartu ${bank} berhasil ditambahkan! 🎉`);
+    }
+
+    function setActiveCard(cardId) {
+      if (!currentUserData.cards) return;
+      const found = currentUserData.cards.find(c => c.id === cardId);
+      if (found) {
+        currentUserData.activeCardId = cardId;
+        saveCurrentUserData();
+        showToast(`Kartu aktif: ${found.bank}`);
+      }
+    }
+
+    function deleteCard(cardId) {
+      if (!currentUserData.cards) return;
+      if (currentUserData.cards.length <= 1) {
+        showToast('Minimal harus ada 1 kartu di dompet Anda');
+        return;
+      }
+      currentUserData.cards = currentUserData.cards.filter(c => c.id !== cardId);
+      if (currentUserData.activeCardId === cardId) {
+        currentUserData.activeCardId = currentUserData.cards[0].id;
+      }
+      saveCurrentUserData();
+      showToast('Kartu berhasil dihapus');
+    }
+
+    function renderCards() {
+      if (!currentUserData.cards || currentUserData.cards.length === 0) {
+        currentUserData.cards = [
+          {
+            id: 'card_default',
+            bank: 'Sovereign Platinum Debit',
+            number: '4821',
+            type: 'Debit Platinum',
+            balance: 0,
+            color: 'emerald',
+            gradient: CARD_GRADIENTS.emerald,
+            isFrozen: false
+          }
+        ];
+        currentUserData.activeCardId = 'card_default';
+      }
+
+      const activeCard = currentUserData.cards.find(c => c.id === currentUserData.activeCardId) || currentUserData.cards[0];
+
+      // Update Hero Showcase
+      const hero = document.getElementById('card-hero-element');
+      const typeDisplay = document.getElementById('card-type-display');
+      const balDisplay = document.getElementById('card-balance-display');
+      const numDisplay = document.getElementById('card-number-display');
+      const bankDisplay = document.getElementById('card-bank-display');
+
+      if (hero && activeCard) {
+        hero.className = `w-full h-48 rounded-2xl p-5 relative overflow-hidden bg-gradient-to-tr ${activeCard.gradient} text-white shadow-xl flex flex-col justify-between transition-all duration-300`;
+        if (activeCard.isFrozen) {
+          hero.classList.add('grayscale', 'opacity-60');
+        }
+        if (typeDisplay) typeDisplay.textContent = activeCard.type;
+        if (balDisplay) balDisplay.textContent = isHidden ? '••••••••' : formatValue(activeCard.balance);
+        if (numDisplay) numDisplay.textContent = `•••• •••• •••• ${activeCard.number}`;
+        if (bankDisplay) bankDisplay.textContent = activeCard.bank.toUpperCase();
+      }
+
+      // Render Cards List
+      const listContainer = document.getElementById('cards-list-container');
+      if (listContainer) {
+        listContainer.innerHTML = currentUserData.cards.map(c => {
+          const isActive = c.id === activeCard.id;
+          return `
+            <div class="app-card p-3 rounded-2xl shadow-xs flex items-center justify-between transition-all ${isActive ? 'ring-2 ring-emerald-600' : ''}">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-11 h-8 rounded-lg bg-gradient-to-tr ${c.gradient} text-white text-[9px] font-bold flex items-center justify-center shrink-0 shadow-xs">
+                  ${c.number}
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-bold title-text truncate">${c.bank}</span>
+                    ${isActive ? '<span class="px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold">Aktif</span>' : ''}
+                  </div>
+                  <span class="text-[10px] muted-text truncate">${c.type} • Saldo: ${isHidden ? '••••••••' : formatValue(c.balance)}</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0 pl-2">
+                ${!isActive ? `<button onclick="setActiveCard('${c.id}')" class="px-2.5 py-1 rounded-lg bg-[var(--pill-bg)] text-xs font-semibold title-text tap-scale">Pilih</button>` : ''}
+                ${currentUserData.cards.length > 1 ? `<button onclick="deleteCard('${c.id}')" class="w-7 h-7 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 tap-scale"><span class="material-symbols-outlined text-[16px]">delete</span></button>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // ====================================================
+    // GOALS & SAVING VAULTS CRUD ENGINE
+    // ====================================================
+    function openGoalModal() {
+      const m = document.getElementById('modal-goal');
+      if (!m) return;
+      document.getElementById('input-goal-name').value = '';
+      document.getElementById('input-goal-target').value = '';
+      document.getElementById('input-goal-saved').value = '';
+      document.getElementById('input-goal-deadline').value = '';
+      m.classList.remove('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.remove('translate-y-full');
+    }
+
+    function closeGoalModal() {
+      const m = document.getElementById('modal-goal');
+      if (!m) return;
+      m.classList.add('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.add('translate-y-full');
+    }
+
+    function saveGoal() {
+      const name = document.getElementById('input-goal-name').value.trim();
+      const catVal = document.getElementById('input-goal-category').value;
+      const [category, icon] = catVal.split('|');
+      const target = parseFloat(document.getElementById('input-goal-target').value) || 0;
+      const saved = parseFloat(document.getElementById('input-goal-saved').value) || 0;
+      const deadline = document.getElementById('input-goal-deadline').value.trim() || '2026';
+
+      if (!name) {
+        showToast('Mohon masukkan nama target tabungan');
+        return;
+      }
+      if (target <= 0) {
+        showToast('Target nominal harus lebih dari 0');
+        return;
+      }
+
+      if (!currentUserData.goals) currentUserData.goals = [];
+
+      const newGoal = {
+        id: 'goal_' + Date.now(),
+        name: name,
+        category: category,
+        icon: icon,
+        target: target,
+        saved: saved,
+        deadline: deadline,
+        createdAt: new Date().toISOString()
+      };
+
+      currentUserData.goals.push(newGoal);
+      saveCurrentUserData();
+      closeGoalModal();
+      showToast(`Target "${name}" berhasil dibuat! 🎯`);
+    }
+
+    function deleteGoal(goalId) {
+      if (!currentUserData.goals) return;
+      currentUserData.goals = currentUserData.goals.filter(g => g.id !== goalId);
+      saveCurrentUserData();
+      showToast('Target tabungan berhasil dihapus');
+    }
+
+    function openDepositGoalModal(goalId) {
+      if (!currentUserData.goals) return;
+      const goal = currentUserData.goals.find(g => g.id === goalId);
+      if (!goal) return;
+
+      document.getElementById('deposit-goal-id').value = goal.id;
+      document.getElementById('deposit-goal-name').textContent = `${goal.name} (Terkumpul: ${formatValue(goal.saved)} / ${formatValue(goal.target)})`;
+      document.getElementById('input-deposit-amount').value = '';
+
+      const m = document.getElementById('modal-goal-deposit');
+      if (!m) return;
+      m.classList.remove('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.remove('translate-y-full');
+    }
+
+    function closeDepositGoalModal() {
+      const m = document.getElementById('modal-goal-deposit');
+      if (!m) return;
+      m.classList.add('opacity-0', 'pointer-events-none');
+      m.querySelector('div').classList.add('translate-y-full');
+    }
+
+    function saveGoalDeposit() {
+      const goalId = document.getElementById('deposit-goal-id').value;
+      const amount = parseFloat(document.getElementById('input-deposit-amount').value) || 0;
+      const autoRecord = document.getElementById('deposit-auto-record').checked;
+
+      if (amount <= 0) {
+        showToast('Nominal setor harus lebih dari 0');
+        return;
+      }
+
+      if (!currentUserData.goals) return;
+      const idx = currentUserData.goals.findIndex(g => g.id === goalId);
+      if (idx === -1) return;
+
+      currentUserData.goals[idx].saved += amount;
+
+      // Automatically add expense transaction if checked
+      if (autoRecord) {
+        if (!currentUserData.transactions) currentUserData.transactions = [];
+        currentUserData.transactions.unshift({
+          id: 'trx_' + Date.now(),
+          type: 'expense',
+          amount: amount,
+          desc: `Setor Vault: ${currentUserData.goals[idx].name}`,
+          category: 'Investasi & Tabungan',
+          date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
+          time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+        });
+      }
+
+      saveCurrentUserData();
+      closeDepositGoalModal();
+      showToast(`Berhasil menambah ${formatValue(amount)} ke "${currentUserData.goals[idx].name}"! 💰`);
+    }
+
+    function renderGoals() {
+      if (!currentUserData.goals) currentUserData.goals = [];
+
+      const totalTarget = currentUserData.goals.reduce((acc, g) => acc + (g.target || 0), 0);
+      const totalSaved = currentUserData.goals.reduce((acc, g) => acc + (g.saved || 0), 0);
+      const percent = totalTarget > 0 ? Math.min(100, Math.round((totalSaved / totalTarget) * 100)) : 0;
+
+      const savedEl = document.getElementById('goals-total-saved');
+      const targetEl = document.getElementById('goals-total-target');
+      const percentEl = document.getElementById('goals-total-percent');
+      const barEl = document.getElementById('goals-total-bar');
+
+      if (savedEl) savedEl.textContent = isHidden ? '••••••••' : formatValue(totalSaved);
+      if (targetEl) targetEl.textContent = formatValue(totalTarget);
+      if (percentEl) percentEl.textContent = `${percent}%`;
+      if (barEl) barEl.style.width = `${percent}%`;
+
+      const listContainer = document.getElementById('goals-list-container');
+      if (listContainer) {
+        if (currentUserData.goals.length === 0) {
+          listContainer.innerHTML = `
+            <div class="app-card p-6 rounded-2xl text-center flex flex-col items-center">
+              <span class="material-symbols-outlined text-[42px] text-emerald-600 mb-2">savings</span>
+              <h3 class="text-sm font-bold title-text">Belum Ada Target Tabungan</h3>
+              <p class="text-xs muted-text max-w-xs mt-1">Buat target impian Anda (misal Dana Darurat, Rumah, Mobil, atau Liburan) untuk mulai menabung.</p>
+              <button onclick="openGoalModal()" class="mt-4 px-4 py-2.5 rounded-xl bg-emerald-800 text-white text-xs font-bold tap-scale shadow-xs flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]">add</span>
+                <span>Buat Target Pertama</span>
+              </button>
+            </div>
+          `;
+        } else {
+          listContainer.innerHTML = currentUserData.goals.map(g => {
+            const p = g.target > 0 ? Math.min(100, Math.round((g.saved / g.target) * 100)) : 0;
+            const remaining = Math.max(0, g.target - g.saved);
+            return `
+              <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-full bg-emerald-500/15 text-emerald-600 flex items-center justify-center shrink-0">
+                      <span class="material-symbols-outlined text-[20px]">${g.icon || 'savings'}</span>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span class="text-xs font-bold title-text truncate">${g.name}</span>
+                      <span class="text-[10px] muted-text truncate">${g.category} • Target ${g.deadline}</span>
+                    </div>
+                  </div>
+                  <button onclick="deleteGoal('${g.id}')" class="w-7 h-7 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 tap-scale">
+                    <span class="material-symbols-outlined text-[16px]">delete</span>
+                  </button>
+                </div>
+
+                <div class="space-y-1">
+                  <div class="flex items-baseline justify-between text-xs">
+                    <span class="font-bold title-text">${isHidden ? '••••••••' : formatValue(g.saved)}</span>
+                    <span class="muted-text text-[11px]">${p}% (Sisa ${isHidden ? '••••••••' : formatValue(remaining)})</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
+                    <div class="h-full bg-emerald-600 rounded-full transition-all duration-300" style="width: ${p}%;"></div>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-1 border-t border-gray-100 dark:border-white/5">
+                  <span class="text-[10px] muted-text">Target: ${formatValue(g.target)}</span>
+                  <button onclick="openDepositGoalModal('${g.id}')" class="px-3 py-1.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold tap-scale shadow-xs flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">add_circle</span>
+                    <span>Setor Tabungan</span>
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+    }
+
     function renderAll() {
       let totalIncome = 0;
       let totalExpense = 0;
@@ -1602,6 +2145,9 @@
     }
 
     // ----------------------------------------------------
+    renderCards();
+      renderGoals();
+
     // 8. TAB ROUTING & CONTROLS
     // ----------------------------------------------------
     function switchTab(tabId) {
