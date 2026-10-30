@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
@@ -85,6 +85,60 @@
     };
   </script>
   <style>
+    /* CSS Variables for Dark & Light Mode */
+    :root {
+      --app-bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --card-border: #edeeef;
+      --text-title: #012d1d;
+      --text-body: #191c1d;
+      --text-muted: #5a6860;
+      --header-bg: rgba(248, 249, 250, 0.92);
+      --nav-bg: rgba(255, 255, 255, 0.94);
+      --badge-bg: #e7e8e9;
+    }
+
+    html.dark {
+      --app-bg: #0e1310;
+      --card-bg: #18201b;
+      --card-border: #233027;
+      --text-title: #e2ede6;
+      --text-body: #f1f5f2;
+      --text-muted: #8d9e94;
+      --header-bg: rgba(14, 19, 16, 0.92);
+      --nav-bg: rgba(24, 32, 27, 0.94);
+      --badge-bg: #233027;
+    }
+
+    body {
+      background-color: #080b09;
+      color: var(--text-body);
+    }
+
+    .app-viewport {
+      background-color: var(--app-bg);
+      color: var(--text-body);
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .app-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .app-header {
+      background-color: var(--header-bg);
+      border-bottom: 1px solid var(--card-border);
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .app-nav {
+      background-color: var(--nav-bg);
+      border: 1px solid var(--card-border);
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
     .pb-safe { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px); }
     .pt-safe { padding-top: max(env(safe-area-inset-top, 0px), 12px); }
     ::-webkit-scrollbar { display: none; }
@@ -99,13 +153,13 @@
     }
   </style>
 </head>
-<body class="bg-neutral-900 text-on-surface font-sans antialiased min-h-screen flex justify-center items-start sm:py-6">
+<body class="font-sans antialiased min-h-screen flex justify-center items-start sm:py-6">
 
   <!-- Mobile Screen Frame Container -->
-  <div class="w-full max-w-md bg-surface min-h-screen sm:min-h-[890px] sm:rounded-[36px] sm:shadow-[0_25px_70px_rgba(0,0,0,0.5)] sm:border-[8px] sm:border-neutral-800 flex flex-col relative overflow-hidden">
+  <div class="app-viewport w-full max-w-md min-h-screen sm:min-h-[890px] sm:rounded-[36px] sm:shadow-[0_25px_70px_rgba(0,0,0,0.6)] sm:border-[8px] sm:border-neutral-800 flex flex-col relative overflow-hidden">
 
     <!-- Top Sticky Header -->
-    <header class="sticky top-0 w-full z-40 pt-safe bg-surface/90 backdrop-blur-xl border-b border-surface-container">
+    <header class="app-header sticky top-0 w-full z-40 pt-safe backdrop-blur-xl">
       <div class="h-16 px-4 flex items-center justify-between">
         
         <!-- Profile / Brand -->
@@ -114,24 +168,29 @@
             FA
           </div>
           <div class="flex flex-col">
-            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant">Sovereign Wealth</span>
-            <span class="text-sm font-bold text-primary tracking-tight" id="header-user-name">Faari Akbar</span>
+            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant dark:text-[#8D9E94]">Sovereign Wealth</span>
+            <span class="text-sm font-bold text-primary dark:text-[#E2EDE6] tracking-tight" id="header-user-name">Faari Akbar</span>
           </div>
         </div>
 
-        <!-- Controls: Currency Switcher & Notifications -->
+        <!-- Controls: Theme Toggle + Currency Switcher & Notifications -->
         <div class="flex items-center gap-1.5">
+          <!-- Dark / Light Mode Toggle Button -->
+          <button id="theme-toggle-btn" onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-primary dark:text-[#B1F0CE] tap-scale shadow-xs transition-colors" title="Ubah Mode Gelap / Terang">
+            <span class="material-symbols-outlined text-[18px]" id="theme-icon">dark_mode</span>
+          </button>
+
           <!-- Currency Switcher Pill -->
-          <button id="currency-modal-trigger" class="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-xs font-semibold text-primary border border-surface-container-highest shadow-xs tap-scale">
+          <button id="currency-modal-trigger" class="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-surface-container dark:bg-white/10 hover:bg-surface-container-high transition-colors text-xs font-semibold text-primary dark:text-[#E2EDE6] border border-surface-container-highest dark:border-white/10 shadow-xs tap-scale">
             <span id="curr-flag">🇮🇩</span>
             <span id="curr-code">IDR</span>
-            <span class="material-symbols-outlined text-[14px] text-on-surface-variant">expand_more</span>
+            <span class="material-symbols-outlined text-[14px] text-on-surface-variant dark:text-[#8D9E94]">expand_more</span>
           </button>
 
           <!-- Notification Bell -->
-          <button id="notif-btn" aria-label="Notifications" class="w-9 h-9 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-low transition-colors relative tap-scale">
-            <span class="material-symbols-outlined text-[20px]">notifications</span>
-            <span class="w-2 h-2 rounded-full bg-secondary absolute top-1.5 right-1.5 ring-2 ring-surface"></span>
+          <button id="notif-btn" aria-label="Notifications" class="w-8 h-8 flex items-center justify-center rounded-full text-on-surface dark:text-[#E2EDE6] hover:bg-surface-container-low transition-colors relative tap-scale">
+            <span class="material-symbols-outlined text-[19px]">notifications</span>
+            <span class="w-2 h-2 rounded-full bg-secondary absolute top-1 right-1 ring-2 ring-surface dark:ring-[#18201B]"></span>
           </button>
         </div>
       </div>
@@ -143,108 +202,114 @@
       <!-- ========================================== -->
       <!-- TAB 1: HOME (Wealth Dashboard)             -->
       <!-- ========================================== -->
-      <section id="tab-home" class="tab-content active px-4 pt-4 space-y-5">
+      <section id="tab-home" class="tab-content active px-4 pt-4 space-y-4">
         
         <!-- Greeting & Privacy Toggle -->
         <div class="flex items-center justify-between">
           <div class="flex flex-col">
-            <h1 class="text-xl font-bold text-primary tracking-tight">Selamat pagi, Faari</h1>
-            <p class="text-xs text-on-surface-variant">Ringkasan portofolio &amp; arus kas Anda</p>
+            <h1 class="text-xl font-bold text-primary dark:text-[#E2EDE6] tracking-tight">Selamat pagi, Faari</h1>
+            <p class="text-xs text-on-surface-variant dark:text-[#8D9E94]">Ringkasan portofolio &amp; arus kas Anda</p>
           </div>
-          <button id="balance-toggle-btn" aria-label="Toggle sensitive balances visibility" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary transition-all hover:bg-surface-container-high tap-scale shadow-sm">
+          <button id="balance-toggle-btn" aria-label="Toggle sensitive balances visibility" class="w-10 h-10 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-secondary dark:text-[#B1F0CE] transition-all hover:bg-surface-container-high tap-scale shadow-sm">
             <span class="material-symbols-outlined text-[20px]" id="eye-icon">visibility</span>
           </button>
         </div>
 
         <!-- Net Worth Hero Card -->
-        <div class="relative overflow-hidden bg-primary-container text-on-primary rounded-2xl p-5 shadow-xl flex flex-col gap-4">
+        <div class="relative overflow-hidden bg-primary-container dark:bg-gradient-to-tr dark:from-[#012d1d] dark:via-[#163c2c] dark:to-[#1b4332] text-on-primary rounded-2xl p-5 shadow-xl border border-white/5 flex flex-col gap-3.5">
           <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full bg-secondary/30 blur-2xl pointer-events-none"></div>
           <div class="absolute -left-10 -bottom-10 w-40 h-40 rounded-full bg-primary/40 blur-xl pointer-events-none"></div>
 
-          <div class="relative z-10 flex flex-col gap-1.5">
+          <div class="relative z-10 flex flex-col gap-1">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] font-medium tracking-wider uppercase text-primary-fixed-dim">Total Kekayaan Bersih</span>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed/20 text-secondary-fixed text-[11px] font-medium backdrop-blur-sm">
+              <span class="text-[10px] font-semibold tracking-wider uppercase text-primary-fixed-dim">Total Kekayaan Bersih</span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed/20 text-secondary-fixed text-[10px] font-semibold backdrop-blur-sm">
                 <span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed animate-pulse"></span>
                 Live synced
               </span>
             </div>
 
-            <div class="flex items-baseline gap-1 mt-1">
-              <span class="currency-money balance-sensitive text-3xl sm:text-4xl font-bold text-on-primary tracking-tight" data-usd="42850">Rp 685.600.000</span>
+            <!-- Balanced Font Size: Never wraps onto multiple lines -->
+            <div class="flex items-baseline gap-1 mt-1 overflow-hidden">
+              <span class="currency-money balance-sensitive text-2xl sm:text-3xl font-bold text-on-primary tracking-tight whitespace-nowrap" data-usd="42850">Rp 685.600.000</span>
             </div>
 
             <div class="flex items-center gap-2 mt-1">
-              <div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold">
-                <span class="material-symbols-outlined text-[15px]">arrow_upward_alt</span>
-                <span class="currency-money balance-sensitive" data-usd="3240">+Rp 51.840.000</span>
-                <span class="text-on-secondary-container/80 text-[11px] font-normal">(+8.4% bulan ini)</span>
+              <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container dark:bg-emerald-950/80 text-on-secondary-container dark:text-[#B1F0CE] text-xs font-semibold">
+                <span class="material-symbols-outlined text-[14px]">arrow_upward_alt</span>
+                <span class="currency-money balance-sensitive whitespace-nowrap" data-usd="3240">+Rp 51.840.000</span>
+                <span class="opacity-80 text-[10px] font-normal">(+8.4%)</span>
               </div>
             </div>
           </div>
 
           <!-- Quick Action Pill Buttons -->
           <div class="relative z-10 grid grid-cols-4 gap-2 pt-2 border-t border-white/10">
-            <button id="btn-send-nav" onclick="openSendFlow()" class="flex flex-col items-center gap-1.5 group tap-scale">
-              <div class="w-12 h-12 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
-                <span class="material-symbols-outlined text-[20px]">north_east</span>
+            <button id="btn-send-nav" onclick="openSendFlow()" class="flex flex-col items-center gap-1 group tap-scale">
+              <div class="w-11 h-11 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[19px]">north_east</span>
               </div>
               <span class="text-[11px] font-medium text-surface-container-high">Kirim</span>
             </button>
             
-            <button id="btn-expense" class="flex flex-col items-center gap-1.5 group tap-scale">
-              <div class="w-12 h-12 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
-                <span class="material-symbols-outlined text-[20px]">add</span>
+            <button id="btn-expense" class="flex flex-col items-center gap-1 group tap-scale">
+              <div class="w-11 h-11 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[19px]">add</span>
               </div>
               <span class="text-[11px] font-medium text-surface-container-high">Catat</span>
             </button>
             
-            <button id="btn-scan" class="flex flex-col items-center gap-1.5 group tap-scale">
-              <div class="w-12 h-12 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
-                <span class="material-symbols-outlined text-[20px]">document_scanner</span>
+            <button id="btn-scan" class="flex flex-col items-center gap-1 group tap-scale">
+              <div class="w-11 h-11 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[19px]">document_scanner</span>
               </div>
               <span class="text-[11px] font-medium text-surface-container-high">Scan AI</span>
             </button>
             
-            <button onclick="switchTab('analytics')" class="flex flex-col items-center gap-1.5 group tap-scale">
-              <div class="w-12 h-12 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
-                <span class="material-symbols-outlined text-[20px]">tune</span>
+            <button onclick="switchTab('analytics')" class="flex flex-col items-center gap-1 group tap-scale">
+              <div class="w-11 h-11 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[19px]">tune</span>
               </div>
               <span class="text-[11px] font-medium text-surface-container-high">Budget</span>
             </button>
           </div>
         </div>
 
-        <!-- Monthly Budget Track -->
-        <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container-low flex flex-col gap-3.5">
+        <!-- Monthly Budget Track (FIXED: Clean layout, No awkward text wrapping!) -->
+        <div class="app-card rounded-2xl p-4 shadow-sm flex flex-col gap-3">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <div class="w-2.5 h-2.5 rounded-full bg-secondary"></div>
-              <span class="text-sm font-semibold text-primary">Anggaran Bulan Ini</span>
+              <span class="text-sm font-semibold text-primary dark:text-[#E2EDE6]">Anggaran Bulan Ini</span>
             </div>
-            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant text-[11px] font-semibold">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 dark:bg-emerald-950/60 text-on-secondary-fixed-variant dark:text-[#B1F0CE] text-[11px] font-semibold">
               On Track • Sisa 14 hari
             </span>
           </div>
 
-          <div class="flex items-baseline justify-between">
-            <div class="flex items-baseline gap-1.5">
-              <span class="text-xs text-on-surface-variant font-medium">Terpakai</span>
-              <span class="currency-money balance-sensitive text-xl font-bold text-primary" data-usd="2450">Rp 39.200.000</span>
-              <span class="text-xs text-on-surface-variant">dari <span class="currency-money" data-usd="4000">Rp 64.000.000</span></span>
+          <!-- Structured Amount Display: Won't break into awkward 2 lines! -->
+          <div class="flex items-center justify-between gap-2 pt-0.5">
+            <div class="flex flex-col min-w-0">
+              <div class="flex items-baseline gap-1.5">
+                <span class="text-xs text-on-surface-variant dark:text-[#8D9E94] font-medium">Terpakai:</span>
+                <span class="currency-money balance-sensitive text-base sm:text-lg font-bold text-primary dark:text-[#B1F0CE] whitespace-nowrap" data-usd="2450">Rp 39.200.000</span>
+              </div>
+              <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] truncate">
+                dari batas kuota <span class="currency-money font-medium whitespace-nowrap" data-usd="4000">Rp 64.000.000</span>
+              </span>
             </div>
-            <span class="text-xs font-bold text-secondary">61.2%</span>
+            <span class="text-xs font-bold text-secondary dark:text-[#B1F0CE] bg-secondary-fixed/50 dark:bg-emerald-950/70 border border-secondary/20 px-2.5 py-1 rounded-full shrink-0">61.2%</span>
           </div>
 
-          <div class="space-y-2">
-            <div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex gap-0.5 p-0.5">
+          <div class="space-y-2 pt-1">
+            <div class="w-full h-3 bg-surface-container dark:bg-white/10 rounded-full overflow-hidden flex gap-0.5 p-0.5">
               <div class="h-full rounded-full bg-tertiary-container" style="width: 21%;" title="Food"></div>
               <div class="h-full rounded-full bg-surface-tint" style="width: 8%;" title="Subscriptions"></div>
               <div class="h-full rounded-full bg-secondary" style="width: 23.75%;" title="Housing"></div>
               <div class="h-full rounded-full bg-primary-fixed-dim" style="width: 8.5%;" title="Misc"></div>
             </div>
             
-            <div class="flex items-center justify-between pt-1 text-on-surface-variant text-[11px]">
+            <div class="flex items-center justify-between pt-0.5 text-on-surface-variant dark:text-[#8D9E94] text-[11px]">
               <div class="flex items-center gap-1">
                 <span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
                 <span>Makan</span>
@@ -268,64 +333,64 @@
         <!-- Spending Breakdown Carousel -->
         <div class="flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <h2 class="text-base font-bold text-primary tracking-tight">Kategori Pengeluaran</h2>
-            <button onclick="switchTab('analytics')" class="text-xs font-semibold text-secondary hover:underline tap-scale">Lihat Analisis</button>
+            <h2 class="text-base font-bold text-primary dark:text-[#E2EDE6] tracking-tight">Kategori Pengeluaran</h2>
+            <button onclick="switchTab('analytics')" class="text-xs font-semibold text-secondary dark:text-[#B1F0CE] hover:underline tap-scale">Lihat Analisis</button>
           </div>
 
           <div class="flex gap-3 overflow-x-auto pb-1 -mx-4 px-4 no-scrollbar">
             <!-- Food & Dining -->
-            <div class="flex-shrink-0 w-40 bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm border border-surface-container-low flex flex-col justify-between h-36">
+            <div class="app-card flex-shrink-0 w-40 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between h-36">
               <div class="flex items-center justify-between">
-                <div class="w-9 h-9 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary">
+                <div class="w-9 h-9 rounded-full bg-tertiary-fixed dark:bg-red-950 flex items-center justify-center text-tertiary dark:text-red-300">
                   <span class="material-symbols-outlined text-[18px]">restaurant</span>
                 </div>
-                <span class="text-xs text-on-surface-variant font-medium">34.3%</span>
+                <span class="text-xs text-on-surface-variant dark:text-[#8D9E94] font-medium">34.3%</span>
               </div>
               <div>
-                <span class="text-xs text-on-surface-variant block truncate">Kuliner &amp; Belanja</span>
-                <span class="currency-money balance-sensitive text-sm font-bold text-primary mt-0.5 block" data-usd="840">Rp 13.440.000</span>
+                <span class="text-xs text-on-surface-variant dark:text-[#8D9E94] block truncate">Kuliner &amp; Belanja</span>
+                <span class="currency-money balance-sensitive text-xs sm:text-sm font-bold text-primary dark:text-[#E2EDE6] mt-0.5 block whitespace-nowrap" data-usd="840">Rp 13.440.000</span>
               </div>
             </div>
 
             <!-- Housing -->
-            <div class="flex-shrink-0 w-40 bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm border border-surface-container-low flex flex-col justify-between h-36">
+            <div class="app-card flex-shrink-0 w-40 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between h-36">
               <div class="flex items-center justify-between">
-                <div class="w-9 h-9 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed-variant">
+                <div class="w-9 h-9 rounded-full bg-secondary-fixed dark:bg-emerald-950 flex items-center justify-center text-on-secondary-fixed-variant dark:text-emerald-300">
                   <span class="material-symbols-outlined text-[18px]">home</span>
                 </div>
-                <span class="text-xs text-on-surface-variant font-medium">38.8%</span>
+                <span class="text-xs text-on-surface-variant dark:text-[#8D9E94] font-medium">38.8%</span>
               </div>
               <div>
-                <span class="text-xs text-on-surface-variant block truncate">Tempat Tinggal</span>
-                <span class="currency-money balance-sensitive text-sm font-bold text-primary mt-0.5 block" data-usd="950">Rp 15.200.000</span>
+                <span class="text-xs text-on-surface-variant dark:text-[#8D9E94] block truncate">Tempat Tinggal</span>
+                <span class="currency-money balance-sensitive text-xs sm:text-sm font-bold text-primary dark:text-[#E2EDE6] mt-0.5 block whitespace-nowrap" data-usd="950">Rp 15.200.000</span>
               </div>
             </div>
 
             <!-- Investments -->
-            <div class="flex-shrink-0 w-40 bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm border border-surface-container-low flex flex-col justify-between h-36">
+            <div class="app-card flex-shrink-0 w-40 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between h-36">
               <div class="flex items-center justify-between">
-                <div class="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center text-on-primary">
+                <div class="w-9 h-9 rounded-full bg-primary-container dark:bg-emerald-900 flex items-center justify-center text-on-primary">
                   <span class="material-symbols-outlined text-[18px]">trending_up</span>
                 </div>
-                <span class="text-xs text-secondary font-semibold">Invest</span>
+                <span class="text-xs text-secondary dark:text-[#B1F0CE] font-semibold">Invest</span>
               </div>
               <div>
-                <span class="text-xs text-on-surface-variant block truncate">Investasi Reksadana</span>
-                <span class="currency-money balance-sensitive text-sm font-bold text-primary mt-0.5 block" data-usd="1250">Rp 20.000.000</span>
+                <span class="text-xs text-on-surface-variant dark:text-[#8D9E94] block truncate">Investasi Pasar</span>
+                <span class="currency-money balance-sensitive text-xs sm:text-sm font-bold text-primary dark:text-[#E2EDE6] mt-0.5 block whitespace-nowrap" data-usd="1250">Rp 20.000.000</span>
               </div>
             </div>
 
             <!-- Tech & Cloud -->
-            <div class="flex-shrink-0 w-40 bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm border border-surface-container-low flex flex-col justify-between h-36">
+            <div class="app-card flex-shrink-0 w-40 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between h-36">
               <div class="flex items-center justify-between">
-                <div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-secondary">
+                <div class="w-9 h-9 rounded-full bg-surface-container-high dark:bg-white/10 flex items-center justify-center text-secondary dark:text-[#B1F0CE]">
                   <span class="material-symbols-outlined text-[18px]">cloud_sync</span>
                 </div>
-                <span class="text-xs text-on-surface-variant font-medium">13.1%</span>
+                <span class="text-xs text-on-surface-variant dark:text-[#8D9E94] font-medium">13.1%</span>
               </div>
               <div>
-                <span class="text-xs text-on-surface-variant block truncate">Cloud &amp; Subs</span>
-                <span class="currency-money balance-sensitive text-sm font-bold text-primary mt-0.5 block" data-usd="320">Rp 5.120.000</span>
+                <span class="text-xs text-on-surface-variant dark:text-[#8D9E94] block truncate">Cloud &amp; Subs</span>
+                <span class="currency-money balance-sensitive text-xs sm:text-sm font-bold text-primary dark:text-[#E2EDE6] mt-0.5 block whitespace-nowrap" data-usd="320">Rp 5.120.000</span>
               </div>
             </div>
           </div>
@@ -334,94 +399,94 @@
         <!-- Recent Transactions -->
         <div class="flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <h2 class="text-base font-bold text-primary tracking-tight">Transaksi Terakhir</h2>
-            <button class="text-xs font-semibold text-secondary hover:underline tap-scale" onclick="showToast('Menampilkan seluruh riwayat')">Semua</button>
+            <h2 class="text-base font-bold text-primary dark:text-[#E2EDE6] tracking-tight">Transaksi Terakhir</h2>
+            <button class="text-xs font-semibold text-secondary dark:text-[#B1F0CE] hover:underline tap-scale" onclick="showToast('Menampilkan seluruh riwayat')">Semua</button>
           </div>
 
-          <div class="bg-surface-container-lowest rounded-2xl p-2 shadow-sm border border-surface-container-low divide-y divide-surface-container-low">
+          <div class="app-card rounded-2xl p-2 shadow-sm divide-y divide-surface-container-low dark:divide-white/5">
             
             <!-- Apple Services -->
-            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 rounded-xl transition-colors">
+            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 dark:hover:bg-white/5 rounded-xl transition-colors">
               <div class="flex items-center gap-3 min-w-0">
-                <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface shrink-0">
+                <div class="w-10 h-10 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-on-surface dark:text-[#E2EDE6] shrink-0">
                   <span class="material-symbols-outlined text-[20px]">music_note</span>
                 </div>
                 <div class="flex flex-col min-w-0">
-                  <span class="text-sm font-semibold text-on-surface truncate">Apple Services</span>
-                  <span class="text-xs text-on-surface-variant truncate">iCloud+ &amp; Music • Hari ini, 09:41</span>
+                  <span class="text-xs sm:text-sm font-semibold text-on-surface dark:text-[#E2EDE6] truncate">Apple Services</span>
+                  <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] truncate">iCloud+ &amp; Music • Hari ini</span>
                 </div>
               </div>
               <div class="text-right shrink-0 pl-2">
-                <span class="currency-money balance-sensitive text-xs sm:text-sm text-tertiary-container font-bold block" data-usd="-9.99">-Rp 159.840</span>
-                <span class="text-[11px] text-on-surface-variant">Subs</span>
+                <span class="currency-money balance-sensitive text-xs sm:text-sm text-tertiary-container dark:text-red-400 font-bold block whitespace-nowrap" data-usd="-9.99">-Rp 159.840</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Subs</span>
               </div>
             </div>
 
             <!-- Freelance Payout -->
-            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 rounded-xl transition-colors">
+            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 dark:hover:bg-white/5 rounded-xl transition-colors">
               <div class="flex items-center gap-3 min-w-0">
-                <div class="w-10 h-10 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-on-secondary-fixed-variant shrink-0">
+                <div class="w-10 h-10 rounded-full bg-secondary-fixed/50 dark:bg-emerald-950 flex items-center justify-center text-on-secondary-fixed-variant dark:text-emerald-300 shrink-0">
                   <span class="material-symbols-outlined text-[20px]">payments</span>
                 </div>
                 <div class="flex flex-col min-w-0">
-                  <span class="text-sm font-semibold text-on-surface truncate">Gaji &amp; Freelance</span>
-                  <span class="text-xs text-on-surface-variant truncate">Project Sprint • Kemarin</span>
+                  <span class="text-xs sm:text-sm font-semibold text-on-surface dark:text-[#E2EDE6] truncate">Gaji &amp; Freelance</span>
+                  <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] truncate">Project Sprint • Kemarin</span>
                 </div>
               </div>
               <div class="text-right shrink-0 pl-2">
-                <span class="currency-money balance-sensitive text-xs sm:text-sm text-secondary font-bold block" data-usd="1200">+Rp 19.200.000</span>
-                <span class="text-[11px] text-secondary font-medium">Income</span>
+                <span class="currency-money balance-sensitive text-xs sm:text-sm text-secondary dark:text-emerald-400 font-bold block whitespace-nowrap" data-usd="1200">+Rp 19.200.000</span>
+                <span class="text-[10px] text-secondary dark:text-emerald-400 font-medium">Income</span>
               </div>
             </div>
 
             <!-- Supermarket -->
-            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 rounded-xl transition-colors">
+            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 dark:hover:bg-white/5 rounded-xl transition-colors">
               <div class="flex items-center gap-3 min-w-0">
-                <div class="w-10 h-10 rounded-full bg-tertiary-fixed/60 flex items-center justify-center text-tertiary shrink-0">
+                <div class="w-10 h-10 rounded-full bg-tertiary-fixed/60 dark:bg-red-950 flex items-center justify-center text-tertiary dark:text-red-300 shrink-0">
                   <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
                 </div>
                 <div class="flex flex-col min-w-0">
-                  <span class="text-sm font-semibold text-on-surface truncate">Grand Lucky / Supermarket</span>
-                  <span class="text-xs text-on-surface-variant truncate">Bahan Masak &amp; Buah • 18 Okt</span>
+                  <span class="text-xs sm:text-sm font-semibold text-on-surface dark:text-[#E2EDE6] truncate">Grand Lucky Market</span>
+                  <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] truncate">Bahan Makanan • 18 Okt</span>
                 </div>
               </div>
               <div class="text-right shrink-0 pl-2">
-                <span class="currency-money balance-sensitive text-xs sm:text-sm text-tertiary-container font-bold block" data-usd="-142.50">-Rp 2.280.000</span>
-                <span class="text-[11px] text-on-surface-variant">Food</span>
+                <span class="currency-money balance-sensitive text-xs sm:text-sm text-tertiary-container dark:text-red-400 font-bold block whitespace-nowrap" data-usd="-142.50">-Rp 2.280.000</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Food</span>
               </div>
             </div>
 
             <!-- Coffee -->
-            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 rounded-xl transition-colors">
+            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 dark:hover:bg-white/5 rounded-xl transition-colors">
               <div class="flex items-center gap-3 min-w-0">
-                <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface shrink-0">
+                <div class="w-10 h-10 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-on-surface dark:text-[#E2EDE6] shrink-0">
                   <span class="material-symbols-outlined text-[20px]">local_cafe</span>
                 </div>
                 <div class="flex flex-col min-w-0">
-                  <span class="text-sm font-semibold text-on-surface truncate">Artisan Coffee</span>
-                  <span class="text-xs text-on-surface-variant truncate">Cafe Senopati • 17 Okt</span>
+                  <span class="text-xs sm:text-sm font-semibold text-on-surface dark:text-[#E2EDE6] truncate">Artisan Coffee</span>
+                  <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] truncate">Cafe Senopati • 17 Okt</span>
                 </div>
               </div>
               <div class="text-right shrink-0 pl-2">
-                <span class="currency-money balance-sensitive text-xs sm:text-sm text-tertiary-container font-bold block" data-usd="-6.75">-Rp 108.000</span>
-                <span class="text-[11px] text-on-surface-variant">Dining</span>
+                <span class="currency-money balance-sensitive text-xs sm:text-sm text-tertiary-container dark:text-red-400 font-bold block whitespace-nowrap" data-usd="-6.75">-Rp 108.000</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Dining</span>
               </div>
             </div>
 
             <!-- Auto Invest -->
-            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 rounded-xl transition-colors">
+            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 dark:hover:bg-white/5 rounded-xl transition-colors">
               <div class="flex items-center gap-3 min-w-0">
-                <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant shrink-0">
+                <div class="w-10 h-10 rounded-full bg-primary-fixed dark:bg-emerald-950 flex items-center justify-center text-on-primary-fixed-variant dark:text-emerald-300 shrink-0">
                   <span class="material-symbols-outlined text-[20px]">query_stats</span>
                 </div>
                 <div class="flex flex-col min-w-0">
-                  <span class="text-sm font-semibold text-on-surface truncate">Bibit / Bareksa Auto-Invest</span>
-                  <span class="text-xs text-on-surface-variant truncate">SBN &amp; Index Fund • 15 Okt</span>
+                  <span class="text-xs sm:text-sm font-semibold text-on-surface dark:text-[#E2EDE6] truncate">Bareksa Auto-Invest</span>
+                  <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] truncate">SBN &amp; Index • 15 Okt</span>
                 </div>
               </div>
               <div class="text-right shrink-0 pl-2">
-                <span class="currency-money balance-sensitive text-xs sm:text-sm text-on-surface font-bold block" data-usd="-500">-Rp 8.000.000</span>
-                <span class="text-[11px] text-secondary font-medium">Wealth</span>
+                <span class="currency-money balance-sensitive text-xs sm:text-sm text-on-surface dark:text-[#E2EDE6] font-bold block whitespace-nowrap" data-usd="-500">-Rp 8.000.000</span>
+                <span class="text-[10px] text-secondary dark:text-emerald-400 font-medium">Wealth</span>
               </div>
             </div>
 
@@ -433,14 +498,14 @@
       <!-- ========================================== -->
       <!-- TAB 2: ANALYTICS & CASHFLOW                -->
       <!-- ========================================== -->
-      <section id="tab-analytics" class="tab-content px-4 pt-4 space-y-5">
+      <section id="tab-analytics" class="tab-content px-4 pt-4 space-y-4">
         
         <div class="flex items-center justify-between">
           <div>
-            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant">Analisis Keuangan</span>
-            <h1 class="text-xl font-bold text-primary tracking-tight">Arus Kas &amp; Pertumbuhan</h1>
+            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant dark:text-[#8D9E94]">Analisis Keuangan</span>
+            <h1 class="text-xl font-bold text-primary dark:text-[#E2EDE6] tracking-tight">Arus Kas &amp; Pertumbuhan</h1>
           </div>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-xs font-semibold">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-fixed dark:bg-emerald-950 text-on-secondary-fixed dark:text-emerald-300 text-xs font-semibold">
             <span class="material-symbols-outlined text-[14px]">verified</span>
             Surplus
           </span>
@@ -448,36 +513,36 @@
 
         <!-- Inflow vs Outflow Cards -->
         <div class="grid grid-cols-2 gap-3">
-          <div class="flex flex-col p-3 rounded-2xl bg-surface-container-lowest border border-surface-container-low shadow-sm">
+          <div class="app-card flex flex-col p-3 rounded-2xl shadow-sm">
             <div class="flex items-center gap-1.5 mb-1">
               <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
-              <span class="text-[11px] text-on-surface-variant font-medium">Pemasukan (In)</span>
+              <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] font-medium">Pemasukan (In)</span>
             </div>
-            <span class="currency-money balance-sensitive text-base sm:text-lg text-secondary font-bold" data-usd="3870">Rp 61.920.000</span>
-            <div class="flex items-center gap-1 mt-1 text-secondary text-[11px]">
+            <span class="currency-money balance-sensitive text-sm sm:text-base text-secondary dark:text-emerald-400 font-bold whitespace-nowrap" data-usd="3870">Rp 61.920.000</span>
+            <div class="flex items-center gap-1 mt-1 text-secondary dark:text-emerald-400 text-[10px]">
               <span class="material-symbols-outlined text-[13px]">trending_up</span>
               <span>+12.4% vs bln lalu</span>
             </div>
           </div>
 
-          <div class="flex flex-col p-3 rounded-2xl bg-surface-container-lowest border border-surface-container-low shadow-sm">
+          <div class="app-card flex flex-col p-3 rounded-2xl shadow-sm">
             <div class="flex items-center gap-1.5 mb-1">
               <span class="w-2.5 h-2.5 rounded-full bg-error"></span>
-              <span class="text-[11px] text-on-surface-variant font-medium">Pengeluaran (Out)</span>
+              <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] font-medium">Pengeluaran (Out)</span>
             </div>
-            <span class="currency-money balance-sensitive text-base sm:text-lg text-error font-bold" data-usd="2450">Rp 39.200.000</span>
-            <div class="flex items-center gap-1 mt-1 text-on-surface-variant text-[11px]">
+            <span class="currency-money balance-sensitive text-sm sm:text-base text-error dark:text-red-400 font-bold whitespace-nowrap" data-usd="2450">Rp 39.200.000</span>
+            <div class="flex items-center gap-1 mt-1 text-on-surface-variant dark:text-[#8D9E94] text-[10px]">
               <span class="material-symbols-outlined text-[13px]">trending_down</span>
-              <span>-4.2% lebih hemat</span>
+              <span>-4.2% hemat</span>
             </div>
           </div>
         </div>
 
         <!-- Smooth Area Chart (SVG from Stitch) -->
-        <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container-low flex flex-col gap-2">
+        <div class="app-card rounded-2xl p-4 shadow-sm flex flex-col gap-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-primary">Dinamika Arus Kas (30 Hari)</span>
-            <div class="flex items-center gap-2 text-[10px] text-on-surface-variant">
+            <span class="text-xs font-semibold text-primary dark:text-[#E2EDE6]">Dinamika Arus Kas (30 Hari)</span>
+            <div class="flex items-center gap-2 text-[10px] text-on-surface-variant dark:text-[#8D9E94]">
               <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary"></span> Masuk</span>
               <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error"></span> Keluar</span>
             </div>
@@ -495,20 +560,18 @@
                   <stop offset="100%" stop-color="#ba1a1a" stop-opacity="0.0"></stop>
                 </linearGradient>
               </defs>
-              <line stroke="#edeeef" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="340" y1="30" y2="30"></line>
-              <line stroke="#edeeef" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="340" y1="75" y2="75"></line>
-              <line stroke="#edeeef" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="340" y1="120" y2="120"></line>
-              <!-- Income curve -->
+              <line stroke="#334438" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="340" y1="30" y2="30"></line>
+              <line stroke="#334438" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="340" y1="75" y2="75"></line>
+              <line stroke="#334438" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="340" y1="120" y2="120"></line>
               <path d="M 0,110 C 45,95 80,45 130,55 C 180,65 210,30 260,35 C 295,40 320,20 340,15 L 340,150 L 0,150 Z" fill="url(#incomeGlow)"></path>
               <path d="M 0,110 C 45,95 80,45 130,55 C 180,65 210,30 260,35 C 295,40 320,20 340,15" fill="none" stroke="#2c694e" stroke-linecap="round" stroke-width="2.5"></path>
-              <!-- Expense curve -->
               <path d="M 0,135 C 50,130 90,85 140,90 C 190,95 220,70 270,75 C 305,80 325,65 340,62 L 340,150 L 0,150 Z" fill="url(#expenseGlow)"></path>
               <path d="M 0,135 C 50,130 90,85 140,90 C 190,95 220,70 270,75 C 305,80 325,65 340,62" fill="none" stroke="#ba1a1a" stroke-linecap="round" stroke-width="2"></path>
               <circle cx="260" cy="35" fill="#2c694e" r="4.5" stroke="#ffffff" stroke-width="2"></circle>
               <circle cx="270" cy="75" fill="#ba1a1a" r="4" stroke="#ffffff" stroke-width="2"></circle>
             </svg>
           </div>
-          <div class="flex justify-between items-center px-1 text-[11px] text-on-surface-variant font-medium">
+          <div class="flex justify-between items-center px-1 text-[11px] text-on-surface-variant dark:text-[#8D9E94] font-medium">
             <span>1 Okt</span>
             <span>8 Okt</span>
             <span>15 Okt</span>
@@ -517,51 +580,51 @@
           </div>
 
           <!-- Net Savings Banner -->
-          <div class="flex items-center justify-between p-3 rounded-xl bg-secondary-fixed/40 mt-1">
+          <div class="flex items-center justify-between p-3 rounded-xl bg-secondary-fixed/40 dark:bg-emerald-950/70 border border-secondary/20 mt-1">
             <div class="flex items-center gap-2">
               <div class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-white">
                 <span class="material-symbols-outlined text-[16px]">savings</span>
               </div>
               <div class="flex flex-col">
-                <span class="text-[11px] text-on-secondary-fixed-variant font-semibold">Surplus Ditabung</span>
-                <span class="currency-money balance-sensitive text-sm font-bold text-on-secondary-fixed" data-usd="1420">+Rp 22.720.000</span>
+                <span class="text-[11px] text-on-secondary-fixed-variant dark:text-emerald-300 font-semibold">Surplus Ditabung</span>
+                <span class="currency-money balance-sensitive text-xs sm:text-sm font-bold text-on-secondary-fixed dark:text-white whitespace-nowrap" data-usd="1420">+Rp 22.720.000</span>
               </div>
             </div>
-            <span class="px-2 py-0.5 rounded-full bg-secondary text-white text-[11px] font-semibold">
-              35% Rasio Tabungan
+            <span class="px-2 py-0.5 rounded-full bg-secondary text-white text-[10px] font-semibold">
+              35% Rasio
             </span>
           </div>
         </div>
 
         <!-- AI Advisor Insight -->
-        <div class="relative overflow-hidden p-4 rounded-2xl bg-gradient-to-br from-[#EAF5EF] via-[#F3F9F6] to-[#E2EFE7] border border-secondary/20 shadow-sm">
+        <div class="relative overflow-hidden p-4 rounded-2xl bg-gradient-to-br from-[#EAF5EF] via-[#F3F9F6] to-[#E2EFE7] dark:from-[#132B20] dark:via-[#183326] dark:to-[#10241A] border border-secondary/30 shadow-sm">
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
               <span class="w-6 h-6 rounded-lg bg-primary-container text-primary-fixed flex items-center justify-center">
                 <span class="material-symbols-outlined text-[15px]">lightbulb</span>
               </span>
-              <span class="text-xs font-bold text-primary uppercase tracking-wide">AI Capital Advisor</span>
+              <span class="text-xs font-bold text-primary dark:text-[#B1F0CE] uppercase tracking-wide">AI Capital Advisor</span>
             </div>
-            <span class="px-2 py-0.5 rounded-full bg-white text-secondary text-[10px] font-semibold shadow-2xs">
+            <span class="px-2 py-0.5 rounded-full bg-white dark:bg-white/10 text-secondary dark:text-emerald-300 text-[10px] font-semibold shadow-2xs">
               Live Intel
             </span>
           </div>
-          <p class="text-xs text-on-surface leading-relaxed">
-            Faari, pengeluaran makan di luar minggu ini <span class="font-semibold text-secondary">turun 18%</span>. Jika laju ini dipertahankan, Anda akan mengamankan tambahan <span class="currency-money font-semibold text-primary" data-usd="240">Rp 3.840.000</span> untuk dialokasikan ke <span class="font-semibold text-secondary">Target Jepang</span>.
+          <p class="text-xs text-on-surface dark:text-[#E2EDE6] leading-relaxed">
+            Faari, pengeluaran makan di luar minggu ini <span class="font-semibold text-secondary dark:text-emerald-400">turun 18%</span>. Jika laju ini dipertahankan, Anda akan mengamankan tambahan <span class="currency-money font-semibold text-primary dark:text-[#B1F0CE] whitespace-nowrap" data-usd="240">Rp 3.840.000</span> untuk dialokasikan ke <span class="font-semibold text-secondary dark:text-emerald-400">Target Jepang</span>.
           </p>
         </div>
 
         <!-- Donut Breakdown -->
-        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col gap-3">
+        <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
           <div class="flex items-center justify-between">
-            <h3 class="text-sm font-bold text-primary">Komposisi Pengeluaran</h3>
-            <span class="text-xs text-on-surface-variant font-medium">5 Sektor</span>
+            <h3 class="text-sm font-bold text-primary dark:text-[#E2EDE6]">Komposisi Pengeluaran</h3>
+            <span class="text-xs text-on-surface-variant dark:text-[#8D9E94] font-medium">5 Sektor</span>
           </div>
           
           <div class="flex items-center justify-center py-2">
             <div class="relative w-36 h-36 flex items-center justify-center">
               <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
-                <circle cx="60" cy="60" fill="transparent" r="46" stroke="#f3f4f5" stroke-width="12"></circle>
+                <circle cx="60" cy="60" fill="transparent" r="46" stroke="#25332a" stroke-width="12"></circle>
                 <circle cx="60" cy="60" fill="transparent" r="46" stroke="#2c694e" stroke-dasharray="112 289" stroke-dashoffset="0" stroke-linecap="round" stroke-width="12"></circle>
                 <circle cx="60" cy="60" fill="transparent" r="46" stroke="#ba1a1a" stroke-dasharray="99 289" stroke-dashoffset="-114" stroke-linecap="round" stroke-width="12"></circle>
                 <circle cx="60" cy="60" fill="transparent" r="46" stroke="#550007" stroke-dasharray="38 289" stroke-dashoffset="-215" stroke-linecap="round" stroke-width="12"></circle>
@@ -569,8 +632,8 @@
                 <circle cx="60" cy="60" fill="transparent" r="46" stroke="#c1c8c2" stroke-dasharray="16 289" stroke-dashoffset="-280" stroke-linecap="round" stroke-width="12"></circle>
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                <span class="text-[10px] text-on-surface-variant">Total</span>
-                <span class="currency-money text-xs font-bold text-primary" data-usd="2450">Rp 39,2 Jt</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Total</span>
+                <span class="currency-money text-xs font-bold text-primary dark:text-[#B1F0CE] whitespace-nowrap" data-usd="2450">Rp 39,2 Jt</span>
               </div>
             </div>
           </div>
@@ -578,19 +641,19 @@
           <div class="space-y-2 text-xs">
             <div class="flex justify-between items-center">
               <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-secondary"></span> Tempat Tinggal (38.8%)</span>
-              <span class="currency-money font-semibold text-primary" data-usd="950">Rp 15.200.000</span>
+              <span class="currency-money font-semibold text-primary dark:text-[#E2EDE6] whitespace-nowrap" data-usd="950">Rp 15.200.000</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-error"></span> Kuliner &amp; Makan (34.3%)</span>
-              <span class="currency-money font-semibold text-primary" data-usd="840">Rp 13.440.000</span>
+              <span class="currency-money font-semibold text-primary dark:text-[#E2EDE6] whitespace-nowrap" data-usd="840">Rp 13.440.000</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span> Cloud &amp; AI Subs (13.1%)</span>
-              <span class="currency-money font-semibold text-primary" data-usd="320">Rp 5.120.000</span>
+              <span class="currency-money font-semibold text-primary dark:text-[#E2EDE6] whitespace-nowrap" data-usd="320">Rp 5.120.000</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-outline"></span> Transportasi (8.2%)</span>
-              <span class="currency-money font-semibold text-primary" data-usd="200">Rp 3.200.000</span>
+              <span class="currency-money font-semibold text-primary dark:text-[#E2EDE6] whitespace-nowrap" data-usd="200">Rp 3.200.000</span>
             </div>
           </div>
         </div>
@@ -600,12 +663,12 @@
       <!-- ========================================== -->
       <!-- TAB 3: CARDS & WALLETS                     -->
       <!-- ========================================== -->
-      <section id="tab-cards" class="tab-content px-4 pt-4 space-y-5">
+      <section id="tab-cards" class="tab-content px-4 pt-4 space-y-4">
         
         <div class="flex items-center justify-between">
           <div>
-            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant">Manajemen Kartu</span>
-            <h1 class="text-xl font-bold text-primary tracking-tight">Kartu &amp; Rekening Bank</h1>
+            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant dark:text-[#8D9E94]">Manajemen Kartu</span>
+            <h1 class="text-xl font-bold text-primary dark:text-[#E2EDE6] tracking-tight">Kartu &amp; Rekening Bank</h1>
           </div>
           <button onclick="showToast('Fitur penambahan kartu aktif')" class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center tap-scale">
             <span class="material-symbols-outlined text-[18px]">add</span>
@@ -615,13 +678,12 @@
         <!-- Virtual Card Showcase -->
         <div class="relative">
           <div id="card-hero-element" class="w-full h-48 rounded-2xl p-5 relative overflow-hidden bg-gradient-to-tr from-[#012d1d] via-[#1b4332] to-[#2c694e] text-white shadow-xl flex flex-col justify-between transition-all duration-300">
-            <!-- Glare effect -->
             <div class="absolute -right-16 -top-16 w-52 h-52 rounded-full bg-secondary-fixed/20 blur-2xl pointer-events-none"></div>
             
             <div class="relative z-10 flex items-start justify-between">
               <div>
                 <span class="text-[10px] tracking-wider uppercase text-primary-fixed-dim">Kartu Platinum Debit</span>
-                <div class="currency-money balance-sensitive text-xl font-bold mt-0.5" data-usd="12450">Rp 199.200.000</div>
+                <div class="currency-money balance-sensitive text-lg sm:text-xl font-bold mt-0.5 whitespace-nowrap" data-usd="12450">Rp 199.200.000</div>
               </div>
               <div class="flex items-center gap-2">
                 <div class="w-8 h-6 rounded-md bg-amber-300/80 flex flex-col justify-around p-0.5 shadow-sm">
@@ -651,85 +713,85 @@
           </div>
 
           <!-- Card Controls Dock -->
-          <div class="grid grid-cols-4 gap-2 p-3 mt-3 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low">
-            <button id="freeze-card-btn" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low tap-scale">
-              <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary transition-colors" id="freeze-icon-box">
+          <div class="app-card grid grid-cols-4 gap-2 p-3 mt-3 rounded-2xl shadow-sm">
+            <button id="freeze-card-btn" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low dark:hover:bg-white/5 tap-scale">
+              <div class="w-10 h-10 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-primary dark:text-[#B1F0CE] transition-colors" id="freeze-icon-box">
                 <span class="material-symbols-outlined text-[18px]" id="freeze-icon">lock_open</span>
               </div>
-              <span class="text-[11px] text-on-surface-variant font-medium" id="freeze-label">Freeze</span>
+              <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] font-medium" id="freeze-label">Freeze</span>
             </button>
-            <button onclick="showToast('Nomor CVV: 892 • Berlaku 08/29')" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low tap-scale">
-              <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+            <button onclick="showToast('Nomor CVV: 892 • Berlaku 08/29')" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low dark:hover:bg-white/5 tap-scale">
+              <div class="w-10 h-10 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-primary dark:text-[#B1F0CE]">
                 <span class="material-symbols-outlined text-[18px]">visibility</span>
               </div>
-              <span class="text-[11px] text-on-surface-variant font-medium">Info CVV</span>
+              <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] font-medium">Info CVV</span>
             </button>
-            <button onclick="showToast('Limit kartu aktif: Rp 50.000.000/bln')" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low tap-scale">
-              <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+            <button onclick="showToast('Limit kartu aktif: Rp 50.000.000/bln')" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low dark:hover:bg-white/5 tap-scale">
+              <div class="w-10 h-10 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-primary dark:text-[#B1F0CE]">
                 <span class="material-symbols-outlined text-[18px]">tune</span>
               </div>
-              <span class="text-[11px] text-on-surface-variant font-medium">Limit</span>
+              <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] font-medium">Limit</span>
             </button>
-            <button onclick="showToast('Tersambung ke Google Pay &amp; QRIS')" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low tap-scale">
-              <div class="w-10 h-10 rounded-full bg-secondary-container/40 flex items-center justify-center text-on-secondary-container">
+            <button onclick="showToast('Tersambung ke Google Pay &amp; QRIS')" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low dark:hover:bg-white/5 tap-scale">
+              <div class="w-10 h-10 rounded-full bg-secondary-container/40 dark:bg-emerald-950 flex items-center justify-center text-on-secondary-container dark:text-emerald-300">
                 <span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
               </div>
-              <span class="text-[11px] text-secondary font-semibold">Wallet</span>
+              <span class="text-[11px] text-secondary dark:text-emerald-400 font-semibold">Wallet</span>
             </button>
           </div>
         </div>
 
         <!-- Spending Limit Tracker -->
-        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col gap-2.5">
+        <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-primary">Batas Pengeluaran Bulanan</span>
-            <span class="text-xs text-secondary font-bold bg-secondary-fixed/50 px-2 py-0.5 rounded-full">61.6%</span>
+            <span class="text-xs font-semibold text-primary dark:text-[#E2EDE6]">Batas Pengeluaran Bulanan</span>
+            <span class="text-xs text-secondary dark:text-[#B1F0CE] font-bold bg-secondary-fixed/50 dark:bg-emerald-950 px-2 py-0.5 rounded-full">61.6%</span>
           </div>
           <div class="flex items-baseline justify-between">
-            <span class="currency-money text-base font-bold text-primary" data-usd="1850">Rp 29.600.000</span>
-            <span class="text-xs text-on-surface-variant">dari kuota <span class="currency-money" data-usd="3000">Rp 48.000.000</span></span>
+            <span class="currency-money text-sm sm:text-base font-bold text-primary dark:text-[#B1F0CE] whitespace-nowrap" data-usd="1850">Rp 29.600.000</span>
+            <span class="text-xs text-on-surface-variant dark:text-[#8D9E94]">dari kuota <span class="currency-money font-medium whitespace-nowrap" data-usd="3000">Rp 48.000.000</span></span>
           </div>
-          <div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+          <div class="w-full h-2 rounded-full bg-surface-container dark:bg-white/10 overflow-hidden">
             <div class="h-full rounded-full bg-gradient-to-r from-secondary to-primary-container" style="width: 61.6%;"></div>
           </div>
         </div>
 
         <!-- Linked Bank Accounts -->
         <div class="flex flex-col gap-2.5">
-          <h2 class="text-sm font-bold text-primary tracking-tight">Rekening Bank Terhubung</h2>
+          <h2 class="text-sm font-bold text-primary dark:text-[#E2EDE6] tracking-tight">Rekening Bank Terhubung</h2>
           
           <div class="space-y-2">
             <!-- BCA -->
-            <div class="p-3.5 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex items-center justify-between">
+            <div class="app-card p-3.5 rounded-2xl shadow-sm flex items-center justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-[#003d79]/10 text-[#003d79] flex items-center justify-center font-bold text-sm">
+                <div class="w-10 h-10 rounded-xl bg-[#003d79]/15 text-[#3b82f6] flex items-center justify-center font-bold text-sm">
                   BCA
                 </div>
                 <div class="flex flex-col">
-                  <span class="text-xs font-semibold text-on-surface">BCA Priority Checking</span>
-                  <span class="text-[11px] text-on-surface-variant font-mono">•••• 9022 • Default</span>
+                  <span class="text-xs font-semibold text-on-surface dark:text-[#E2EDE6]">BCA Priority Checking</span>
+                  <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] font-mono">•••• 9022 • Default</span>
                 </div>
               </div>
               <div class="text-right">
-                <span class="currency-money text-xs sm:text-sm font-bold text-primary block" data-usd="30400">Rp 486.400.000</span>
-                <span class="text-[10px] text-secondary font-medium">Likuiditas Utama</span>
+                <span class="currency-money text-xs sm:text-sm font-bold text-primary dark:text-[#B1F0CE] block whitespace-nowrap" data-usd="30400">Rp 486.400.000</span>
+                <span class="text-[10px] text-secondary dark:text-emerald-400 font-medium">Likuiditas Utama</span>
               </div>
             </div>
 
             <!-- Mandiri -->
-            <div class="p-3.5 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex items-center justify-between">
+            <div class="app-card p-3.5 rounded-2xl shadow-sm flex items-center justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-[#e38800]/10 text-[#a06000] flex items-center justify-center font-bold text-sm">
+                <div class="w-10 h-10 rounded-xl bg-[#e38800]/15 text-[#f59e0b] flex items-center justify-center font-bold text-sm">
                   MDR
                 </div>
                 <div class="flex flex-col">
-                  <span class="text-xs font-semibold text-on-surface">Bank Mandiri Tabungan</span>
-                  <span class="text-[11px] text-on-surface-variant font-mono">•••• 6118</span>
+                  <span class="text-xs font-semibold text-on-surface dark:text-[#E2EDE6]">Bank Mandiri Tabungan</span>
+                  <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] font-mono">•••• 6118</span>
                 </div>
               </div>
               <div class="text-right">
-                <span class="currency-money text-xs sm:text-sm font-bold text-primary block" data-usd="8250">Rp 132.000.000</span>
-                <span class="text-[10px] text-secondary font-medium">+2.25% Bunga</span>
+                <span class="currency-money text-xs sm:text-sm font-bold text-primary dark:text-[#B1F0CE] block whitespace-nowrap" data-usd="8250">Rp 132.000.000</span>
+                <span class="text-[10px] text-secondary dark:text-emerald-400 font-medium">+2.25% Bunga</span>
               </div>
             </div>
           </div>
@@ -740,12 +802,12 @@
       <!-- ========================================== -->
       <!-- TAB 4: GOALS & VAULTS                      -->
       <!-- ========================================== -->
-      <section id="tab-goals" class="tab-content px-4 pt-4 space-y-5">
+      <section id="tab-goals" class="tab-content px-4 pt-4 space-y-4">
         
         <div class="flex items-center justify-between">
           <div>
-            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant">Target Masa Depan</span>
-            <h1 class="text-xl font-bold text-primary tracking-tight">Vault &amp; Tabungan Impian</h1>
+            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant dark:text-[#8D9E94]">Target Masa Depan</span>
+            <h1 class="text-xl font-bold text-primary dark:text-[#E2EDE6] tracking-tight">Vault &amp; Tabungan Impian</h1>
           </div>
           <button onclick="showToast('Buat target baru')" class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center tap-scale">
             <span class="material-symbols-outlined text-[18px]">add</span>
@@ -753,19 +815,19 @@
         </div>
 
         <!-- Total Saved Hero Banner -->
-        <div class="p-4 rounded-2xl bg-primary-container text-on-primary shadow-lg flex flex-col gap-2 relative overflow-hidden">
+        <div class="p-4 rounded-2xl bg-primary-container dark:bg-gradient-to-tr dark:from-[#012d1d] dark:via-[#163c2c] dark:to-[#1b4332] text-on-primary shadow-lg flex flex-col gap-2 relative overflow-hidden">
           <div class="flex items-center justify-between">
             <span class="text-[11px] text-primary-fixed-dim uppercase tracking-wider">Total Dana Terkumpul</span>
-            <span class="px-2 py-0.5 rounded-full bg-secondary-fixed/20 text-secondary-fixed text-[11px] font-semibold">
+            <span class="px-2 py-0.5 rounded-full bg-secondary-fixed/20 text-secondary-fixed text-[10px] font-semibold">
               74% Tercapai
             </span>
           </div>
-          <div class="currency-money balance-sensitive text-2xl font-bold text-white tracking-tight" data-usd="28400">
+          <div class="currency-money balance-sensitive text-xl sm:text-2xl font-bold text-white tracking-tight whitespace-nowrap" data-usd="28400">
             Rp 454.400.000
           </div>
-          <div class="flex items-center gap-2 pt-1 text-xs text-secondary-fixed">
+          <div class="flex items-center gap-2 pt-0.5 text-xs text-secondary-fixed">
             <span class="material-symbols-outlined text-[16px] text-amber-300">local_fire_department</span>
-            <span>6 Bulan Disiplin Menabung tanpa bolong</span>
+            <span>6 Bulan Disiplin Menabung</span>
           </div>
         </div>
 
@@ -773,66 +835,66 @@
         <div class="space-y-3">
           
           <!-- Goal 1: Emergency Fund (100%) -->
-          <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container-low flex flex-col gap-3">
+          <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
             <div class="flex items-start justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-secondary-fixed/30 flex items-center justify-center text-primary">
+                <div class="w-10 h-10 rounded-xl bg-secondary-fixed/30 dark:bg-emerald-950 flex items-center justify-center text-primary dark:text-emerald-300">
                   <span class="material-symbols-outlined text-[22px]">verified_user</span>
                 </div>
                 <div>
-                  <h3 class="text-sm font-bold text-on-surface">Dana Darurat (6 Bulan)</h3>
-                  <p class="text-[11px] text-on-surface-variant">Terkunci di Deposito • 5.25% p.a</p>
+                  <h3 class="text-sm font-bold text-on-surface dark:text-[#E2EDE6]">Dana Darurat (6 Bulan)</h3>
+                  <p class="text-[11px] text-on-surface-variant dark:text-[#8D9E94]">Terkunci Deposito • 5.25% p.a</p>
                 </div>
               </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant text-[10px] font-bold">
+              <span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 dark:bg-emerald-950 text-on-secondary-fixed-variant dark:text-emerald-300 text-[10px] font-bold">
                 100% Selesai
               </span>
             </div>
             <div class="space-y-1">
               <div class="flex justify-between text-xs">
-                <span class="currency-money font-bold text-primary" data-usd="15000">Rp 240.000.000</span>
-                <span class="text-on-surface-variant">dari <span class="currency-money" data-usd="15000">Rp 240.000.000</span></span>
+                <span class="currency-money font-bold text-primary dark:text-[#B1F0CE] whitespace-nowrap" data-usd="15000">Rp 240.000.000</span>
+                <span class="text-on-surface-variant dark:text-[#8D9E94]">dari <span class="currency-money font-medium whitespace-nowrap" data-usd="15000">Rp 240.000.000</span></span>
               </div>
-              <div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+              <div class="w-full h-2 rounded-full bg-surface-container-high dark:bg-white/10 overflow-hidden">
                 <div class="h-full bg-secondary rounded-full" style="width: 100%;"></div>
               </div>
             </div>
             <div class="flex items-center justify-between pt-1">
-              <span class="text-[11px] text-on-surface-variant flex items-center gap-1">
-                <span class="material-symbols-outlined text-[14px] text-secondary">check_circle</span>
+              <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px] text-secondary dark:text-emerald-400">check_circle</span>
                 Tercapai sejak Okt 2024
               </span>
-              <button onclick="showToast('Membuka detail Dana Darurat')" class="px-3 py-1 bg-surface-container-low text-primary text-xs font-semibold rounded-full hover:bg-surface-container">Kelola</button>
+              <button onclick="showToast('Membuka detail Dana Darurat')" class="px-3 py-1 bg-surface-container-low dark:bg-white/10 text-primary dark:text-[#E2EDE6] text-xs font-semibold rounded-full hover:bg-surface-container">Kelola</button>
             </div>
           </div>
 
           <!-- Goal 2: Japan Trip (64%) -->
-          <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container-low flex flex-col gap-3">
+          <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
             <div class="flex items-start justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-primary-fixed/30 flex items-center justify-center text-primary">
+                <div class="w-10 h-10 rounded-xl bg-primary-fixed/30 dark:bg-emerald-950 flex items-center justify-center text-primary dark:text-emerald-300">
                   <span class="material-symbols-outlined text-[22px]">flight_takeoff</span>
                 </div>
                 <div>
-                  <h3 class="text-sm font-bold text-on-surface">Liburan Musim Gugur Jepang</h3>
-                  <p class="text-[11px] text-on-surface-variant">Auto-debit <span class="currency-money" data-usd="300">Rp 4.800.000</span>/bln</p>
+                  <h3 class="text-sm font-bold text-on-surface dark:text-[#E2EDE6]">Liburan Musim Gugur Jepang</h3>
+                  <p class="text-[11px] text-on-surface-variant dark:text-[#8D9E94]">Auto-debit <span class="currency-money whitespace-nowrap" data-usd="300">Rp 4.800.000</span>/bln</p>
                 </div>
               </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-primary-fixed/40 text-on-primary-fixed-variant text-[10px] font-bold">
+              <span class="px-2.5 py-0.5 rounded-full bg-primary-fixed/40 dark:bg-emerald-950 text-on-primary-fixed-variant dark:text-emerald-300 text-[10px] font-bold">
                 64% Tercapai
               </span>
             </div>
             <div class="space-y-1">
               <div class="flex justify-between text-xs">
-                <span class="currency-money font-bold text-primary" data-usd="3200">Rp 51.200.000</span>
-                <span class="text-on-surface-variant">dari target <span class="currency-money" data-usd="5000">Rp 80.000.000</span></span>
+                <span class="currency-money font-bold text-primary dark:text-[#B1F0CE] whitespace-nowrap" data-usd="3200">Rp 51.200.000</span>
+                <span class="text-on-surface-variant dark:text-[#8D9E94]">dari target <span class="currency-money font-medium whitespace-nowrap" data-usd="5000">Rp 80.000.000</span></span>
               </div>
-              <div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+              <div class="w-full h-2 rounded-full bg-surface-container-high dark:bg-white/10 overflow-hidden">
                 <div class="h-full bg-secondary rounded-full" style="width: 64%;"></div>
               </div>
             </div>
             <div class="flex items-center justify-between pt-1">
-              <span class="text-[11px] text-on-surface-variant flex items-center gap-1">
+              <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94] flex items-center gap-1">
                 <span class="material-symbols-outlined text-[14px]">calendar_today</span>
                 Target: Okt 2025
               </span>
@@ -843,27 +905,27 @@
           </div>
 
           <!-- Goal 3: Angel Fund (51%) -->
-          <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container-low flex flex-col gap-3">
+          <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
             <div class="flex items-start justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-secondary-fixed/20 flex items-center justify-center text-secondary">
+                <div class="w-10 h-10 rounded-xl bg-secondary-fixed/20 dark:bg-emerald-950 flex items-center justify-center text-secondary dark:text-emerald-300">
                   <span class="material-symbols-outlined text-[22px]">rocket_launch</span>
                 </div>
                 <div>
-                  <h3 class="text-sm font-bold text-on-surface">Startup Angel Fund</h3>
-                  <p class="text-[11px] text-on-surface-variant">Modal Bisnis &amp; Ventura</p>
+                  <h3 class="text-sm font-bold text-on-surface dark:text-[#E2EDE6]">Startup Angel Fund</h3>
+                  <p class="text-[11px] text-on-surface-variant dark:text-[#8D9E94]">Modal Bisnis &amp; Ventura</p>
                 </div>
               </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant text-[10px] font-bold">
+              <span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 dark:bg-emerald-950 text-on-secondary-fixed-variant dark:text-emerald-300 text-[10px] font-bold">
                 51%
               </span>
             </div>
             <div class="space-y-1">
               <div class="flex justify-between text-xs">
-                <span class="currency-money font-bold text-primary" data-usd="10200">Rp 163.200.000</span>
-                <span class="text-on-surface-variant">dari <span class="currency-money" data-usd="20000">Rp 320.000.000</span></span>
+                <span class="currency-money font-bold text-primary dark:text-[#B1F0CE] whitespace-nowrap" data-usd="10200">Rp 163.200.000</span>
+                <span class="text-on-surface-variant dark:text-[#8D9E94]">dari <span class="currency-money font-medium whitespace-nowrap" data-usd="20000">Rp 320.000.000</span></span>
               </div>
-              <div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+              <div class="w-full h-2 rounded-full bg-surface-container-high dark:bg-white/10 overflow-hidden">
                 <div class="h-full bg-secondary rounded-full" style="width: 51%;"></div>
               </div>
             </div>
@@ -871,128 +933,117 @@
 
         </div>
 
-        <!-- Automated Rules Switches -->
-        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col gap-3">
-          <h3 class="text-sm font-bold text-primary">Aturan Otomasi Pintar</h3>
-          
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary">
-                <span class="material-symbols-outlined text-[18px]">toll</span>
-              </div>
-              <div>
-                <span class="text-xs font-semibold text-on-surface block">Bulatkan Kembalian Transaksi</span>
-                <span class="text-[10px] text-on-surface-variant">Otomatis masuk Dana Darurat</span>
-              </div>
-            </div>
-            <input type="checkbox" checked class="w-5 h-5 accent-emerald-800 cursor-pointer" onchange="showToast('Aturan bulatkan transaksi diperbarui')"/>
-          </div>
-
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary">
-                <span class="material-symbols-outlined text-[18px]">call_split</span>
-              </div>
-              <div>
-                <span class="text-xs font-semibold text-on-surface block">Auto-Split Gajian (20%)</span>
-                <span class="text-[10px] text-on-surface-variant">Jadwal tiap tgl 25</span>
-              </div>
-            </div>
-            <input type="checkbox" checked class="w-5 h-5 accent-emerald-800 cursor-pointer" onchange="showToast('Aturan auto-split gajian diperbarui')"/>
-          </div>
-        </div>
-
       </section>
 
       <!-- ========================================== -->
       <!-- TAB 5: SETTINGS & PREFERENCES              -->
       <!-- ========================================== -->
-      <section id="tab-settings" class="tab-content px-4 pt-4 space-y-5">
+      <section id="tab-settings" class="tab-content px-4 pt-4 space-y-4">
         
         <!-- Profile Banner -->
-        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex items-center gap-3">
+        <div class="app-card p-4 rounded-2xl shadow-sm flex items-center gap-3">
           <div class="w-14 h-14 rounded-full bg-primary-container text-primary-fixed-dim flex items-center justify-center font-bold text-lg ring-2 ring-primary-fixed/30 shadow-sm">
             FA
           </div>
           <div class="flex flex-col">
             <div class="flex items-center gap-1.5">
-              <h2 class="text-base font-bold text-primary">Muhammad Faari Akbar</h2>
-              <span class="material-symbols-outlined text-[16px] text-secondary">verified</span>
+              <h2 class="text-base font-bold text-primary dark:text-[#E2EDE6]">Muhammad Faari Akbar</h2>
+              <span class="material-symbols-outlined text-[16px] text-secondary dark:text-emerald-400">verified</span>
             </div>
-            <span class="text-xs text-on-surface-variant">faari@sovereign.io • Jakarta</span>
-            <span class="inline-block px-2 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant text-[10px] font-semibold w-max mt-1">
+            <span class="text-xs text-on-surface-variant dark:text-[#8D9E94]">faari@sovereign.io • Jakarta</span>
+            <span class="inline-block px-2 py-0.5 rounded-full bg-secondary-fixed/40 dark:bg-emerald-950 text-on-secondary-fixed-variant dark:text-emerald-300 text-[10px] font-semibold w-max mt-1">
               World Platinum Member
             </span>
           </div>
         </div>
 
-        <!-- Currency & Regional Preferences -->
-        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col gap-3">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Preferensi Finansial &amp; Mata Uang</h3>
+        <!-- Mode Tampilan (Theme Switcher Card) -->
+        <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant dark:text-[#8D9E94]">Tampilan &amp; Tema</h3>
           
-          <button onclick="document.getElementById('currency-modal-trigger').click()" class="flex items-center justify-between p-2.5 rounded-xl hover:bg-surface-container-low transition-colors w-full text-left">
+          <div class="flex items-center justify-between p-2 rounded-xl bg-surface-container/60 dark:bg-white/5">
             <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary">
+              <div class="w-9 h-9 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-primary dark:text-[#B1F0CE]">
+                <span class="material-symbols-outlined text-[18px]">contrast</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-xs font-semibold text-on-surface dark:text-[#E2EDE6]">Mode Gelap (Dark Mode)</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Nyaman untuk mata di malam hari</span>
+              </div>
+            </div>
+            <button id="theme-switch-slider" onclick="toggleTheme()" class="w-12 h-6 bg-primary dark:bg-emerald-600 rounded-full p-0.5 transition-colors duration-200 relative">
+              <div id="theme-slider-thumb" class="w-5 h-5 bg-white rounded-full shadow-md transform translate-x-6 transition-transform duration-200"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Currency & Regional Preferences -->
+        <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant dark:text-[#8D9E94]">Preferensi Finansial</h3>
+          
+          <button onclick="document.getElementById('currency-modal-trigger').click()" class="flex items-center justify-between p-2.5 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-colors w-full text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-primary dark:text-[#B1F0CE]">
                 <span class="material-symbols-outlined text-[18px]">currency_exchange</span>
               </div>
               <div class="flex flex-col">
-                <span class="text-xs font-semibold text-on-surface">Mata Uang Tampilan</span>
-                <span class="text-[11px] text-on-surface-variant">Konversi otomatis ke 8 mata uang dunia</span>
+                <span class="text-xs font-semibold text-on-surface dark:text-[#E2EDE6]">Mata Uang Tampilan</span>
+                <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94]">Konversi otomatis ke 8 mata uang</span>
               </div>
             </div>
-            <div class="flex items-center gap-1 text-xs font-bold text-secondary">
+            <div class="flex items-center gap-1 text-xs font-bold text-secondary dark:text-emerald-400">
               <span id="settings-curr-display">IDR (Rp)</span>
               <span class="material-symbols-outlined text-[16px]">chevron_right</span>
             </div>
           </button>
 
-          <button onclick="showToast('Laporan PDF bulan ini sedang diunduh...')" class="flex items-center justify-between p-2.5 rounded-xl hover:bg-surface-container-low transition-colors w-full text-left">
+          <button onclick="showToast('Laporan PDF bulan ini sedang diunduh...')" class="flex items-center justify-between p-2.5 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-colors w-full text-left">
             <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary">
+              <div class="w-9 h-9 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-primary dark:text-[#B1F0CE]">
                 <span class="material-symbols-outlined text-[18px]">description</span>
               </div>
               <div class="flex flex-col">
-                <span class="text-xs font-semibold text-on-surface">Ekspor Rekening Koran (PDF)</span>
-                <span class="text-[11px] text-on-surface-variant">Statement resmi dengan cap digital</span>
+                <span class="text-xs font-semibold text-on-surface dark:text-[#E2EDE6]">Ekspor Rekening Koran (PDF)</span>
+                <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94]">Statement resmi dengan cap digital</span>
               </div>
             </div>
-            <span class="material-symbols-outlined text-[16px] text-on-surface-variant">download</span>
+            <span class="material-symbols-outlined text-[16px] text-on-surface-variant dark:text-[#8D9E94]">download</span>
           </button>
         </div>
 
         <!-- Security & Privacy -->
-        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col gap-3">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Keamanan &amp; Biometrik</h3>
+        <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col gap-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant dark:text-[#8D9E94]">Keamanan &amp; Biometrik</h3>
 
           <div class="flex items-center justify-between p-1">
             <div class="flex items-center gap-2.5">
-              <span class="material-symbols-outlined text-[20px] text-primary">fingerprint</span>
+              <span class="material-symbols-outlined text-[20px] text-primary dark:text-emerald-400">fingerprint</span>
               <div>
-                <span class="text-xs font-semibold text-on-surface block">Login Biometrik / PIN</span>
-                <span class="text-[10px] text-on-surface-variant">Sidik jari Lenovo IdeaPad / FaceID</span>
+                <span class="text-xs font-semibold text-on-surface dark:text-[#E2EDE6] block">Login Biometrik / PIN</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Sidik jari &amp; Face Unlock</span>
               </div>
             </div>
-            <input type="checkbox" checked class="w-5 h-5 accent-emerald-800 cursor-pointer" onchange="showToast('Status biometrik diubah')"/>
+            <input type="checkbox" checked class="w-5 h-5 accent-emerald-600 cursor-pointer" onchange="showToast('Status biometrik diubah')"/>
           </div>
 
           <div class="flex items-center justify-between p-1">
             <div class="flex items-center gap-2.5">
-              <span class="material-symbols-outlined text-[20px] text-primary">visibility_off</span>
+              <span class="material-symbols-outlined text-[20px] text-primary dark:text-emerald-400">visibility_off</span>
               <div>
-                <span class="text-xs font-semibold text-on-surface block">Samarkan Saldo Saat Buka App</span>
-                <span class="text-[10px] text-on-surface-variant">Privasi saat membuka di ruang publik</span>
+                <span class="text-xs font-semibold text-on-surface dark:text-[#E2EDE6] block">Samarkan Saldo Saat Buka App</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Privasi di ruang publik</span>
               </div>
             </div>
-            <input type="checkbox" class="w-5 h-5 accent-emerald-800 cursor-pointer" onchange="showToast('Pengaturan privasi diperbarui')"/>
+            <input type="checkbox" class="w-5 h-5 accent-emerald-600 cursor-pointer" onchange="showToast('Pengaturan privasi diperbarui')"/>
           </div>
         </div>
 
         <!-- Logout / Footer -->
         <div class="pt-2">
-          <button onclick="showToast('Akun Anda aman')" class="w-full py-3 rounded-xl border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-50 transition-colors">
+          <button onclick="showToast('Sesi Anda tersimpan dengan aman')" class="w-full py-3 rounded-xl border border-red-500/30 text-red-500 text-xs font-semibold hover:bg-red-500/10 transition-colors">
             Keluar dari Sesi
           </button>
-          <p class="text-center text-[10px] text-on-surface-variant mt-3">
+          <p class="text-center text-[10px] text-on-surface-variant dark:text-[#8D9E94] mt-3">
             Sovereign Wealth Management v2.4 • Client ID: 2225245212490318666
           </p>
         </div>
@@ -1005,81 +1056,81 @@
       <section id="tab-send" class="tab-content px-4 pt-4 space-y-4">
         
         <div class="flex items-center justify-between">
-          <button onclick="switchTab('home')" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary tap-scale">
+          <button onclick="switchTab('home')" class="w-9 h-9 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-primary dark:text-[#E2EDE6] tap-scale">
             <span class="material-symbols-outlined text-[20px]">arrow_back</span>
           </button>
-          <h2 class="text-base font-bold text-primary">Kirim &amp; Transfer Uang</h2>
-          <button onclick="showToast('Scan QRIS tujuan aktif')" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary tap-scale">
+          <h2 class="text-base font-bold text-primary dark:text-[#E2EDE6]">Kirim &amp; Transfer Uang</h2>
+          <button onclick="showToast('Scan QRIS tujuan aktif')" class="w-9 h-9 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-primary dark:text-[#E2EDE6] tap-scale">
             <span class="material-symbols-outlined text-[20px]">qr_code_scanner</span>
           </button>
         </div>
 
         <!-- Recent Contacts -->
         <div>
-          <span class="text-xs font-semibold text-on-surface-variant block mb-2">Penerima Favorit</span>
+          <span class="text-xs font-semibold text-on-surface-variant dark:text-[#8D9E94] block mb-2">Penerima Favorit</span>
           <div class="flex gap-3 overflow-x-auto no-scrollbar py-1">
             <button onclick="selectRecipient('Sarah Jenkins', 'BCA •••• 5590')" class="flex flex-col items-center gap-1 shrink-0 tap-scale">
               <div class="w-12 h-12 rounded-full bg-secondary-fixed/50 text-secondary font-bold flex items-center justify-center text-xs ring-2 ring-transparent hover:ring-secondary">
                 SJ
               </div>
-              <span class="text-[11px] font-medium text-on-surface">Sarah J.</span>
+              <span class="text-[11px] font-medium text-on-surface dark:text-[#E2EDE6]">Sarah J.</span>
             </button>
             <button onclick="selectRecipient('Alex Morgan', 'Mandiri •••• 3319')" class="flex flex-col items-center gap-1 shrink-0 tap-scale">
               <div class="w-12 h-12 rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center text-xs">
                 AM
               </div>
-              <span class="text-[11px] font-medium text-on-surface">Alex M.</span>
+              <span class="text-[11px] font-medium text-on-surface dark:text-[#E2EDE6]">Alex M.</span>
             </button>
             <button onclick="selectRecipient('Design Team Office', 'Bank Jago •••• 1022')" class="flex flex-col items-center gap-1 shrink-0 tap-scale">
               <div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
                 <span class="material-symbols-outlined text-[18px]">groups</span>
               </div>
-              <span class="text-[11px] font-medium text-on-surface">Tim Desain</span>
+              <span class="text-[11px] font-medium text-on-surface dark:text-[#E2EDE6]">Tim Desain</span>
             </button>
             <button onclick="showToast('Tambah kontak baru')" class="flex flex-col items-center gap-1 shrink-0 tap-scale">
-              <div class="w-12 h-12 rounded-full border-2 border-dashed border-outline-variant flex items-center justify-center text-on-surface-variant">
+              <div class="w-12 h-12 rounded-full border-2 border-dashed border-outline-variant flex items-center justify-center text-on-surface-variant dark:text-[#8D9E94]">
                 <span class="material-symbols-outlined text-[18px]">add</span>
               </div>
-              <span class="text-[11px] font-medium text-on-surface-variant">Baru</span>
+              <span class="text-[11px] font-medium text-on-surface-variant dark:text-[#8D9E94]">Baru</span>
             </button>
           </div>
         </div>
 
         <!-- Transfer Hero Card -->
-        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col items-center text-center gap-3">
+        <div class="app-card p-4 rounded-2xl shadow-sm flex flex-col items-center text-center gap-3">
           <div class="w-full flex items-center justify-between text-xs">
-            <span class="text-on-surface-variant">Saldo Tersedia: <strong class="currency-money text-primary" data-usd="42850">Rp 685.600.000</strong></span>
-            <span class="px-2 py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed-variant text-[10px] font-bold">Bebas Biaya (VIP)</span>
+            <span class="text-on-surface-variant dark:text-[#8D9E94]">Saldo: <strong class="currency-money text-primary dark:text-[#B1F0CE] whitespace-nowrap" data-usd="42850">Rp 685.600.000</strong></span>
+            <span class="px-2 py-0.5 rounded-full bg-secondary-fixed/50 dark:bg-emerald-950 text-on-secondary-fixed-variant dark:text-emerald-300 text-[10px] font-bold">Bebas Biaya (VIP)</span>
           </div>
 
           <div class="py-2 w-full">
-            <span class="text-xs text-on-surface-variant block mb-1">Tujuan: <strong class="text-primary" id="selected-target-name">Sarah Jenkins (BCA)</strong></span>
-            <div class="flex items-baseline justify-center gap-1 text-primary">
+            <span class="text-xs text-on-surface-variant dark:text-[#8D9E94] block mb-1">Tujuan: <strong class="text-primary dark:text-[#E2EDE6]" id="selected-target-name">Sarah Jenkins (BCA)</strong></span>
+            <div class="flex items-baseline justify-center gap-1 text-primary dark:text-[#B1F0CE]">
               <span class="text-2xl font-bold" id="transfer-curr-symbol">Rp</span>
-              <input type="text" id="transfer-input" value="1.000.000" class="w-56 text-center text-3xl font-bold text-primary bg-transparent focus:outline-none"/>
+              <input type="text" id="transfer-input" value="1.000.000" class="w-56 text-center text-2xl sm:text-3xl font-bold text-primary dark:text-[#B1F0CE] bg-transparent focus:outline-none"/>
             </div>
           </div>
 
           <div class="grid grid-cols-4 gap-2 w-full pt-1">
-            <button onclick="adjustTransfer(100000)" class="py-2 rounded-xl bg-surface-container-low text-xs font-semibold hover:bg-surface-container tap-scale">+100rb</button>
-            <button onclick="adjustTransfer(500000)" class="py-2 rounded-xl bg-surface-container-low text-xs font-semibold hover:bg-surface-container tap-scale">+500rb</button>
-            <button onclick="adjustTransfer(1000000)" class="py-2 rounded-xl bg-surface-container-low text-xs font-semibold hover:bg-surface-container tap-scale">+1 Juta</button>
+            <button onclick="adjustTransfer(100000)" class="py-2 rounded-xl bg-surface-container-low dark:bg-white/10 text-xs font-semibold hover:bg-surface-container tap-scale text-on-surface dark:text-[#E2EDE6]">+100rb</button>
+            <button onclick="adjustTransfer(500000)" class="py-2 rounded-xl bg-surface-container-low dark:bg-white/10 text-xs font-semibold hover:bg-surface-container tap-scale text-on-surface dark:text-[#E2EDE6]">+500rb</button>
+            <button onclick="adjustTransfer(1000000)" class="py-2 rounded-xl bg-surface-container-low dark:bg-white/10 text-xs font-semibold hover:bg-surface-container tap-scale text-on-surface dark:text-[#E2EDE6]">+1 Juta</button>
             <button onclick="setTransferMax()" class="py-2 rounded-xl bg-primary-container text-on-primary text-xs font-semibold tap-scale">Max</button>
           </div>
         </div>
 
         <!-- Pay From Selector -->
-        <div class="p-3.5 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex items-center justify-between">
+        <div class="app-card p-3.5 rounded-2xl shadow-sm flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center font-bold text-xs">
+            <div class="w-10 h-10 rounded-xl bg-primary-fixed dark:bg-emerald-950 text-primary dark:text-emerald-300 flex items-center justify-center font-bold text-xs">
               BCA
             </div>
             <div class="flex flex-col text-left">
-              <span class="text-xs font-semibold text-on-surface">BCA Priority Checking</span>
-              <span class="text-[11px] text-on-surface-variant">•••• 9022 • Saldo Cukup</span>
+              <span class="text-xs font-semibold text-on-surface dark:text-[#E2EDE6]">BCA Priority Checking</span>
+              <span class="text-[11px] text-on-surface-variant dark:text-[#8D9E94]">•••• 9022 • Saldo Cukup</span>
             </div>
           </div>
-          <span class="material-symbols-outlined text-[18px] text-on-surface-variant">expand_more</span>
+          <span class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-[#8D9E94]">expand_more</span>
         </div>
 
         <!-- Submit Button -->
@@ -1093,29 +1144,29 @@
 
     <!-- Floating Bottom Navigation Bar -->
     <div class="fixed sm:absolute bottom-0 w-full z-40 pb-safe px-4 mb-2 pointer-events-none">
-      <nav class="pointer-events-auto mx-auto max-w-sm w-full bg-surface-container-lowest/90 backdrop-blur-xl rounded-full shadow-[0_12px_36px_-6px_rgba(17,25,21,0.12),0_4px_12px_-2px_rgba(17,25,21,0.06)] border border-surface-container-high/60 p-1.5 flex items-center justify-between">
+      <nav class="app-nav pointer-events-auto mx-auto max-w-sm w-full backdrop-blur-xl rounded-full shadow-[0_12px_36px_-6px_rgba(17,25,21,0.2)] p-1.5 flex items-center justify-between">
         
         <button data-tab="home" onclick="switchTab('home')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full transition-all bg-primary-container text-on-primary">
           <span class="material-symbols-outlined text-[20px]">account_balance</span>
           <span class="text-[10px] font-medium mt-0.5">Home</span>
         </button>
 
-        <button data-tab="analytics" onclick="switchTab('analytics')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all">
+        <button data-tab="analytics" onclick="switchTab('analytics')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant dark:text-[#8D9E94] hover:text-on-surface transition-all">
           <span class="material-symbols-outlined text-[20px]">analytics</span>
           <span class="text-[10px] font-medium mt-0.5">Analytics</span>
         </button>
 
-        <button data-tab="cards" onclick="switchTab('cards')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all">
+        <button data-tab="cards" onclick="switchTab('cards')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant dark:text-[#8D9E94] hover:text-on-surface transition-all">
           <span class="material-symbols-outlined text-[20px]">credit_card</span>
           <span class="text-[10px] font-medium mt-0.5">Cards</span>
         </button>
 
-        <button data-tab="goals" onclick="switchTab('goals')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all">
+        <button data-tab="goals" onclick="switchTab('goals')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant dark:text-[#8D9E94] hover:text-on-surface transition-all">
           <span class="material-symbols-outlined text-[20px]">savings</span>
           <span class="text-[10px] font-medium mt-0.5">Goals</span>
         </button>
 
-        <button data-tab="settings" onclick="switchTab('settings')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all">
+        <button data-tab="settings" onclick="switchTab('settings')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant dark:text-[#8D9E94] hover:text-on-surface transition-all">
           <span class="material-symbols-outlined text-[20px]">settings</span>
           <span class="text-[10px] font-medium mt-0.5">Settings</span>
         </button>
@@ -1126,141 +1177,141 @@
     <!-- ========================================== -->
     <!-- MODAL: CURRENCY SELECTOR (8 CURRENCIES)    -->
     <!-- ========================================== -->
-    <div id="currency-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div class="w-full max-w-md bg-surface-container-lowest rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-3">
-        <div class="flex items-center justify-between border-b border-surface-container pb-3">
+    <div id="currency-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="app-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-3">
+        <div class="flex items-center justify-between border-b border-surface-container dark:border-white/10 pb-3">
           <div>
-            <h3 class="text-base font-bold text-primary">Pilih Mata Uang Portofolio</h3>
-            <p class="text-xs text-on-surface-variant">Konversi otomatis seluruh saldo &amp; transaksi</p>
+            <h3 class="text-base font-bold text-primary dark:text-[#E2EDE6]">Pilih Mata Uang Portofolio</h3>
+            <p class="text-xs text-on-surface-variant dark:text-[#8D9E94]">Konversi otomatis seluruh saldo &amp; transaksi</p>
           </div>
-          <button id="close-currency-modal" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high">
+          <button id="close-currency-modal" class="w-8 h-8 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-on-surface-variant dark:text-[#8D9E94] hover:bg-surface-container-high">
             <span class="material-symbols-outlined text-sm">close</span>
           </button>
         </div>
 
-        <div class="grid grid-cols-1 gap-2 max-h-80 overflow-y-auto no-scrollbar py-1">
+        <div class="grid grid-cols-1 gap-1.5 max-h-80 overflow-y-auto no-scrollbar py-1">
           <!-- IDR -->
-          <button onclick="setCurrency('IDR')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+          <button onclick="setCurrency('IDR')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-colors border border-transparent hover:border-secondary-fixed">
             <div class="flex items-center gap-3">
               <span class="text-2xl">🇮🇩</span>
               <div class="flex flex-col text-left">
-                <span class="text-xs font-bold text-primary">IDR • Indonesian Rupiah (Rp)</span>
-                <span class="text-[10px] text-on-surface-variant">Mata uang utama Indonesia • 1 USD = Rp 16.000</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2EDE6]">IDR • Indonesian Rupiah (Rp)</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Mata uang utama Indonesia</span>
               </div>
             </div>
-            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+            <span class="material-symbols-outlined text-secondary dark:text-emerald-400 check-icon hidden">check_circle</span>
           </button>
 
           <!-- USD -->
-          <button onclick="setCurrency('USD')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+          <button onclick="setCurrency('USD')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-colors border border-transparent hover:border-secondary-fixed">
             <div class="flex items-center gap-3">
               <span class="text-2xl">🇺🇸</span>
               <div class="flex flex-col text-left">
-                <span class="text-xs font-bold text-primary">USD • US Dollar ($)</span>
-                <span class="text-[10px] text-on-surface-variant">Mata uang patokan global</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2EDE6]">USD • US Dollar ($)</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Mata uang patokan global</span>
               </div>
             </div>
-            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+            <span class="material-symbols-outlined text-secondary dark:text-emerald-400 check-icon hidden">check_circle</span>
           </button>
 
           <!-- EUR -->
-          <button onclick="setCurrency('EUR')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+          <button onclick="setCurrency('EUR')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-colors border border-transparent hover:border-secondary-fixed">
             <div class="flex items-center gap-3">
               <span class="text-2xl">🇪🇺</span>
               <div class="flex flex-col text-left">
-                <span class="text-xs font-bold text-primary">EUR • Euro (€)</span>
-                <span class="text-[10px] text-on-surface-variant">Zona Eropa • 1 EUR ≈ 1.09 USD</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2EDE6]">EUR • Euro (€)</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Zona Eropa</span>
               </div>
             </div>
-            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+            <span class="material-symbols-outlined text-secondary dark:text-emerald-400 check-icon hidden">check_circle</span>
           </button>
 
           <!-- GBP -->
-          <button onclick="setCurrency('GBP')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+          <button onclick="setCurrency('GBP')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-colors border border-transparent hover:border-secondary-fixed">
             <div class="flex items-center gap-3">
               <span class="text-2xl">🇬🇧</span>
               <div class="flex flex-col text-left">
-                <span class="text-xs font-bold text-primary">GBP • British Pound (£)</span>
-                <span class="text-[10px] text-on-surface-variant">Inggris Raya • 1 GBP ≈ 1.27 USD</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2EDE6]">GBP • British Pound (£)</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Inggris Raya</span>
               </div>
             </div>
-            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+            <span class="material-symbols-outlined text-secondary dark:text-emerald-400 check-icon hidden">check_circle</span>
           </button>
 
           <!-- JPY -->
-          <button onclick="setCurrency('JPY')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+          <button onclick="setCurrency('JPY')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-colors border border-transparent hover:border-secondary-fixed">
             <div class="flex items-center gap-3">
               <span class="text-2xl">🇯🇵</span>
               <div class="flex flex-col text-left">
-                <span class="text-xs font-bold text-primary">JPY • Japanese Yen (¥)</span>
-                <span class="text-[10px] text-on-surface-variant">Jepang • 1 USD ≈ 152 JPY</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2EDE6]">JPY • Japanese Yen (¥)</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Jepang</span>
               </div>
             </div>
-            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+            <span class="material-symbols-outlined text-secondary dark:text-emerald-400 check-icon hidden">check_circle</span>
           </button>
 
           <!-- KRW -->
-          <button onclick="setCurrency('KRW')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+          <button onclick="setCurrency('KRW')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-colors border border-transparent hover:border-secondary-fixed">
             <div class="flex items-center gap-3">
               <span class="text-2xl">🇰🇷</span>
               <div class="flex flex-col text-left">
-                <span class="text-xs font-bold text-primary">KRW • South Korean Won (₩)</span>
-                <span class="text-[10px] text-on-surface-variant">Korea Selatan • 1 USD ≈ 1.380 KRW</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2EDE6]">KRW • South Korean Won (₩)</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Korea Selatan</span>
               </div>
             </div>
-            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+            <span class="material-symbols-outlined text-secondary dark:text-emerald-400 check-icon hidden">check_circle</span>
           </button>
 
           <!-- CNY -->
-          <button onclick="setCurrency('CNY')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+          <button onclick="setCurrency('CNY')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-colors border border-transparent hover:border-secondary-fixed">
             <div class="flex items-center gap-3">
               <span class="text-2xl">🇨🇳</span>
               <div class="flex flex-col text-left">
-                <span class="text-xs font-bold text-primary">CNY • Chinese Yuan (¥)</span>
-                <span class="text-[10px] text-on-surface-variant">Tiongkok • 1 USD ≈ 7.25 CNY</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2EDE6]">CNY • Chinese Yuan (¥)</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Tiongkok</span>
               </div>
             </div>
-            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+            <span class="material-symbols-outlined text-secondary dark:text-emerald-400 check-icon hidden">check_circle</span>
           </button>
 
           <!-- SGD -->
-          <button onclick="setCurrency('SGD')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+          <button onclick="setCurrency('SGD')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-colors border border-transparent hover:border-secondary-fixed">
             <div class="flex items-center gap-3">
               <span class="text-2xl">🇸🇬</span>
               <div class="flex flex-col text-left">
-                <span class="text-xs font-bold text-primary">SGD • Singapore Dollar (S$)</span>
-                <span class="text-[10px] text-on-surface-variant">Singapura • 1 USD ≈ 1.34 SGD</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2EDE6]">SGD • Singapore Dollar (S$)</span>
+                <span class="text-[10px] text-on-surface-variant dark:text-[#8D9E94]">Singapura</span>
               </div>
             </div>
-            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+            <span class="material-symbols-outlined text-secondary dark:text-emerald-400 check-icon hidden">check_circle</span>
           </button>
         </div>
       </div>
     </div>
 
     <!-- Quick Modal: Add Expense Sheet -->
-    <div id="modal-expense" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div class="w-full max-w-md bg-surface-container-lowest rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-4">
-        <div class="flex items-center justify-between border-b border-surface-container pb-3">
-          <h3 class="text-base font-bold text-primary">Catat Pengeluaran Baru</h3>
-          <button id="close-modal-expense" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high">
+    <div id="modal-expense" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="app-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b border-surface-container dark:border-white/10 pb-3">
+          <h3 class="text-base font-bold text-primary dark:text-[#E2EDE6]">Catat Pengeluaran Baru</h3>
+          <button id="close-modal-expense" class="w-8 h-8 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-on-surface-variant dark:text-[#8D9E94] hover:bg-surface-container-high">
             <span class="material-symbols-outlined text-sm">close</span>
           </button>
         </div>
         <div>
-          <label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block mb-1">Nominal</label>
-          <div class="flex items-center gap-2 border-b-2 border-primary-container pb-1">
-            <span class="text-2xl font-bold text-primary" id="modal-curr-symbol">Rp</span>
-            <input type="number" id="input-amount" placeholder="50000" class="w-full text-3xl font-bold text-primary bg-transparent focus:outline-none"/>
+          <label class="text-xs font-semibold text-on-surface-variant dark:text-[#8D9E94] uppercase tracking-wider block mb-1">Nominal</label>
+          <div class="flex items-center gap-2 border-b-2 border-primary-container dark:border-[#B1F0CE] pb-1">
+            <span class="text-2xl font-bold text-primary dark:text-[#B1F0CE]" id="modal-curr-symbol">Rp</span>
+            <input type="number" id="input-amount" placeholder="50000" class="w-full text-2xl sm:text-3xl font-bold text-primary dark:text-[#E2EDE6] bg-transparent focus:outline-none"/>
           </div>
         </div>
         <div>
-          <label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block mb-1.5">Kategori</label>
+          <label class="text-xs font-semibold text-on-surface-variant dark:text-[#8D9E94] uppercase tracking-wider block mb-1.5">Kategori</label>
           <div class="flex gap-2 overflow-x-auto no-scrollbar py-1">
             <button class="px-3 py-1.5 rounded-full bg-primary-container text-on-primary text-xs font-medium shrink-0">Kuliner</button>
-            <button class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-medium shrink-0">Belanja</button>
-            <button class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-medium shrink-0">Transport</button>
-            <button class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-medium shrink-0">Tagihan</button>
+            <button class="px-3 py-1.5 rounded-full bg-surface-container dark:bg-white/10 text-on-surface-variant dark:text-[#8D9E94] text-xs font-medium shrink-0">Belanja</button>
+            <button class="px-3 py-1.5 rounded-full bg-surface-container dark:bg-white/10 text-on-surface-variant dark:text-[#8D9E94] text-xs font-medium shrink-0">Transport</button>
+            <button class="px-3 py-1.5 rounded-full bg-surface-container dark:bg-white/10 text-on-surface-variant dark:text-[#8D9E94] text-xs font-medium shrink-0">Tagihan</button>
           </div>
         </div>
         <button id="submit-expense" class="w-full py-3.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary font-semibold text-sm shadow-md tap-scale transition-colors mt-2">
@@ -1270,7 +1321,7 @@
     </div>
 
     <!-- Interactive Toast -->
-    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-neutral-900/90 text-white px-4 py-2.5 rounded-full text-xs font-medium shadow-2xl backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2">
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-neutral-900/95 dark:bg-emerald-950/95 text-white px-4 py-2.5 rounded-full text-xs font-medium shadow-2xl backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2 border border-white/10">
       <span class="material-symbols-outlined text-sm text-secondary-fixed">check_circle</span>
       <span id="toast-msg">Aksi berhasil</span>
     </div>
@@ -1280,7 +1331,44 @@
   <!-- Currency Conversion & Core Interactions Script -->
   <script>
     // ==========================================
-    // 1. CURRENCY CONVERSION ENGINE
+    // 1. THEME ENGINE (DARK / LIGHT MODE)
+    // ==========================================
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark mode
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      updateThemeUI(savedTheme === 'dark');
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      updateThemeUI(isDark);
+      showToast(isDark ? 'Mode Gelap Aktif 🌙' : 'Mode Terang Aktif ☀️');
+    }
+
+    function updateThemeUI(isDark) {
+      const icon = document.getElementById('theme-icon');
+      if (icon) {
+        icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+      }
+      const sliderThumb = document.getElementById('theme-slider-thumb');
+      if (sliderThumb) {
+        if (isDark) {
+          sliderThumb.classList.add('translate-x-6');
+          sliderThumb.classList.remove('translate-x-0');
+        } else {
+          sliderThumb.classList.remove('translate-x-6');
+          sliderThumb.classList.add('translate-x-0');
+        }
+      }
+    }
+
+    // ==========================================
+    // 2. CURRENCY CONVERSION ENGINE
     // ==========================================
     const CURRENCIES = {
       IDR: { name: 'Indonesian Rupiah', symbol: 'Rp', rate: 16000, flag: '🇮🇩', locale: 'id-ID', round: true },
@@ -1293,7 +1381,7 @@
       SGD: { name: 'Singapore Dollar', symbol: 'S$', rate: 1.34, flag: '🇸🇬', locale: 'en-SG', round: false }
     };
 
-    let currentCurrency = 'IDR'; // Default to Indonesian Rupiah
+    let currentCurrency = 'IDR';
     let isHidden = false;
 
     function formatMoney(amountInUSD, currCode = currentCurrency) {
@@ -1314,7 +1402,7 @@
 
       const prefix = isNegative ? '-' : '';
       if (curr.symbol === 'Rp') {
-        return `${prefix}Rp ${formattedNumber}`;
+        return `${prefix}Rp\u00A0${formattedNumber}`; // Non-breaking space prevents line wrap
       } else if (curr.symbol === 'S$') {
         return `${prefix}S$${formattedNumber}`;
       } else {
@@ -1372,7 +1460,7 @@
     });
 
     // ==========================================
-    // 2. SENSITIVE BALANCE TOGGLE (Eye Icon)
+    // 3. SENSITIVE BALANCE TOGGLE (Eye Icon)
     // ==========================================
     const toggleBtn = document.getElementById('balance-toggle-btn');
     const eyeIcon = document.getElementById('eye-icon');
@@ -1396,7 +1484,7 @@
     }
 
     // ==========================================
-    // 3. TAB NAVIGATION (Home, Analytics, Cards, Goals, Settings)
+    // 4. TAB NAVIGATION
     // ==========================================
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(tab => {
@@ -1408,17 +1496,15 @@
         target.classList.add('active');
       }
 
-      // Update Nav buttons
       document.querySelectorAll('.nav-tab').forEach(btn => {
         const bTab = btn.getAttribute('data-tab');
         if (bTab === tabId) {
           btn.className = 'nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full transition-all bg-primary-container text-on-primary';
         } else {
-          btn.className = 'nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all';
+          btn.className = 'nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant dark:text-[#8D9E94] hover:text-on-surface transition-all';
         }
       });
 
-      // Scroll to top of content
       const scrollBody = document.querySelector('.overflow-y-auto');
       if (scrollBody) scrollBody.scrollTop = 0;
     }
@@ -1428,7 +1514,7 @@
     }
 
     // ==========================================
-    // 4. CARD FREEZE INTERACTION
+    // 5. CARD FREEZE INTERACTION
     // ==========================================
     let isCardFrozen = false;
     const freezeBtn = document.getElementById('freeze-card-btn');
@@ -1452,7 +1538,7 @@
     });
 
     // ==========================================
-    // 5. SEND & TRANSFER FLOW
+    // 6. SEND & TRANSFER FLOW
     // ==========================================
     function selectRecipient(name, detail) {
       document.getElementById('selected-target-name').textContent = `${name} (${detail})`;
@@ -1479,7 +1565,7 @@
     }
 
     // ==========================================
-    // 6. EXPENSE MODAL & TOAST
+    // 7. EXPENSE MODAL & TOAST
     // ==========================================
     const modalExpense = document.getElementById('modal-expense');
     const modalContent = modalExpense ? modalExpense.querySelector('div') : null;
@@ -1526,10 +1612,11 @@
 
     // Initialize application on load
     document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
       updateAllCurrencyDisplays();
     });
 
-    // PWA Service Worker Registration for PWABuilder
+    // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
