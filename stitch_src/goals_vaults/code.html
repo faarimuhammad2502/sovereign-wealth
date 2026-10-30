@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary": "#550007", "on-secondary-fixed-variant": "#0e5138", "secondary-fixed": "#b1f0ce", "on-background": "#191c1d", "on-primary-fixed": "#002114", "on-error": "#ffffff", "on-secondary": "#ffffff", "inverse-on-surface": "#f0f1f2", "secondary": "#2c694e", "inverse-primary": "#a5d0b9", "primary-fixed": "#c1ecd4", "on-secondary-container": "#316e52", "surface": "#f8f9fa", "primary": "#012d1d", "tertiary-fixed": "#ffdad7", "primary-fixed-dim": "#a5d0b9", "background": "#f8f9fa", "on-error-container": "#93000a", "surface-container-low": "#f3f4f5", "surface-dim": "#d9dadb", "surface-container": "#edeeef", "on-surface": "#191c1d", "on-primary-container": "#86af99", "on-tertiary-fixed": "#410004", "surface-container-highest": "#e1e3e4", "primary-container": "#1b4332", "secondary-fixed-dim": "#95d4b3", "inverse-surface": "#2e3132", "error-container": "#ffdad6", "outline-variant": "#c1c8c2", "on-surface-variant": "#414844", "surface-variant": "#e1e3e4", "error": "#ba1a1a", "surface-bright": "#f8f9fa", "on-tertiary-container": "#ff817a", "outline": "#717973", "secondary-container": "#aeeecb", "surface-tint": "#3f6653", "on-primary": "#ffffff", "tertiary-container": "#7b0b13", "surface-container-high": "#e7e8e9", "tertiary-fixed-dim": "#ffb3ae", "on-secondary-fixed": "#002114", "on-tertiary-fixed-variant": "#8b191d", "on-tertiary": "#ffffff", "on-primary-fixed-variant": "#274e3d", "surface-container-lowest": "#ffffff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-md": "1rem", "space-lg": "1.5rem", "space-xs": "0.25rem", "space-sm": "0.5rem", "gutter-desktop": "1.5rem", "margin": "1rem", "margin-desktop": "2.5rem", "space-xl": "2rem", "gutter": "1rem" }, fontFamily: { "body-sm": ["Inter"], "headline-sm": ["Inter"], "headline-md": ["Inter"], "currency-stat": ["Inter"], "body-md": ["Inter"], "label-sm": ["Inter"], "display-hero-mobile": ["Inter"], "body-lg": ["Inter"], "headline-lg": ["Inter"], "display-hero": ["Inter"], "label-md": ["Inter"] }, fontSize: { "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "currency-stat": ["24px", { "lineHeight": "30px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500" }], "display-hero-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.025em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }], "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "display-hero": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }] } } } }</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="flex flex-col"><span class="font-label-sm text-label-sm text-on-surface-variant">Sovereign Wealth</span><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Wealth Goals</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UpfOqkZUoHniXFgRatiS2Jc6x3uCXP0Hf_FyTypyNi3KlsBruS25PsBZkrTGp9np7rexYw0PFZynPQ8IDNqOloFbC4nRG_ZN--r11RpEVDI46cGekxBU8AEj8av0qyHVKPiiqDc5mn_DlTCmmYKVEjYb6jEiGNbrjid_QlHhSHWr7T6AWPfrCrD7I-jnuMGr-YdcafbFw6J22Y5kvguQFURSk0bBoyFWCxB-H2-0f7"/></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full px-margin pb-10 space-y-5">
+<!-- Title & Action Bar -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex flex-col">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">Savings Goals</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">You've funded 74% of your total milestones</p>
+</div>
+<button class="flex items-center gap-1.5 px-3.5 py-2 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full shadow-sm active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>New Goal</span>
+</button>
+</div>
+<!-- Total Savings Hero Banner -->
+<div class="relative overflow-hidden bg-primary-container text-on-primary rounded-2xl p-5 shadow-lg">
+<!-- Subtle Ambient Graphic & Glow -->
+<div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-secondary opacity-30 blur-2xl pointer-events-none"></div>
+<div class="absolute -left-6 -top-6 w-32 h-32 rounded-full bg-secondary-fixed opacity-10 blur-xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col space-y-4">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider">Total Vault Savings</span>
+<div class="font-display-hero-mobile text-display-hero-mobile tracking-tight mt-0.5">$28,400.00</div>
+</div>
+<!-- Progress Ring Badge -->
+<div class="flex items-center justify-center relative w-12 h-12 bg-primary/40 rounded-full">
+<svg class="w-10 h-10 -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface/20" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-secondary-fixed" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="71, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<span class="absolute font-label-sm text-label-sm text-on-primary font-bold">71%</span>
+</div>
+</div>
+<!-- Target Caption & Metric -->
+<div class="flex items-center justify-between text-on-primary-container text-body-sm font-body-sm pt-1">
+<span>Target: $40,000 across 3 vaults</span>
+<span class="text-on-primary font-medium">$11,600 left</span>
+</div>
+<!-- Streaks Pill & Metadata -->
+<div class="pt-1 flex items-center gap-2">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-lowest/10 backdrop-blur-md rounded-full text-secondary-fixed font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed">local_fire_department</span>
+<span>6 Months Disciplined Saver</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Section Divider / Label -->
+<div class="flex items-center justify-between px-0.5">
+<h2 class="font-headline-sm text-headline-sm text-primary">Active Vaults</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">3 in progress</span>
+</div>
+<!-- Active Goal Cards Stack -->
+<div class="flex flex-col space-y-3.5">
+<!-- Card 1: Emergency Fund (100%) -->
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm space-y-3.5">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-secondary-fixed/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">verified_user</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Emergency Fund 6M</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Locked Vault • 4.85% APY</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold">
+          100% Complete
+        </span>
+</div>
+<div class="space-y-1.5">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-headline-sm text-headline-sm text-primary">$15,000.00</span>
+<span class="text-on-surface-variant">of $15,000.00</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary">check_circle</span>
+          Goal attained Oct 2024
+        </span>
+<button class="px-3.5 py-1.5 bg-surface-container-low text-primary font-label-md text-label-md rounded-full active:bg-surface-container transition-colors">
+          Manage
+        </button>
+</div>
+</div>
+<!-- Card 2: Japan Trip (64%) -->
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm space-y-3.5">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-primary-fixed/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">flight_takeoff</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Japan Autumn Trip</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">$300/mo auto-deposit • Next Nov 1</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-primary-fixed/40 text-on-primary-fixed-variant font-label-sm text-label-sm font-semibold">
+          64% Funded
+        </span>
+</div>
+<div class="space-y-1.5">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-headline-sm text-headline-sm text-primary">$3,200.00</span>
+<span class="text-on-surface-variant">of $5,000.00</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 64%;"></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+          Target: Oct 2025
+        </span>
+<button class="px-4 py-1.5 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm active:scale-95 transition-transform flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add</span>
+          Deposit
+        </button>
+</div>
+</div>
+<!-- Card 3: Angel Fund (51%) -->
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm space-y-3.5">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-secondary-fixed/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">rocket_launch</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Startup Angel Fund</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">High-Yield Treasury Vault</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold">
+          51% Funded
+        </span>
+</div>
+<div class="space-y-1.5">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-headline-sm text-headline-sm text-primary">$10,200.00</span>
+<span class="text-on-surface-variant">of $20,000.00</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 51%;"></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">flag</span>
+          Target: Dec 2026
+        </span>
+<button class="px-4 py-1.5 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm active:scale-95 transition-transform flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add</span>
+          Deposit
+        </button>
+</div>
+</div>
+</div>
+<!-- Smart Wealth Engines: Automated Rules -->
+<div class="space-y-3 pt-2">
+<div class="flex items-center justify-between px-0.5">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-primary">Automated Rules</h2>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+          Active (2)
+        </span>
+</div>
+<button class="font-label-md text-label-md text-secondary hover:underline flex items-center">
+        Settings
+      </button>
+</div>
+<!-- Rule 1: Round-up spare change -->
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex flex-col space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">toll</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-body-lg font-semibold text-on-surface">Round-up spare change</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sweeps into Emergency Fund</p>
+</div>
+</div>
+<!-- iOS Style Switch Active -->
+<button aria-checked="true" class="toggle-rule w-12 h-7 bg-primary rounded-full p-0.5 transition-colors duration-200 ease-in-out focus:outline-none flex items-center" role="switch">
+<div class="w-6 h-6 bg-surface-container-lowest rounded-full shadow transform translate-x-5 transition-transform duration-200"></div>
+</button>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container-low text-secondary font-label-md text-label-md self-start">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+$38.40 swept this week</span>
+</div>
+</div>
+<!-- Rule 2: Payday auto-split -->
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex flex-col space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">call_split</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-body-lg font-semibold text-on-surface">Payday auto-split (20%)</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Allocated on incoming salary</p>
+</div>
+</div>
+<!-- iOS Style Switch Active -->
+<button aria-checked="true" class="toggle-rule w-12 h-7 bg-primary rounded-full p-0.5 transition-colors duration-200 ease-in-out focus:outline-none flex items-center" role="switch">
+<div class="w-6 h-6 bg-surface-container-lowest rounded-full shadow transform translate-x-5 transition-transform duration-200"></div>
+</button>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container-low text-on-surface-variant font-label-md text-label-md self-start">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Scheduled for Oct 31</span>
+</div>
+</div>
+<!-- Action Link -->
+<div class="pt-1 text-center">
+<button class="inline-flex items-center gap-1 text-secondary font-label-md text-label-md hover:text-primary transition-colors py-2 px-3">
+<span>Explore More Automation Rules</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive toggle logic for smart rules
+  document.querySelectorAll('.toggle-rule').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const knob = toggle.querySelector('div');
+      const isChecked = toggle.getAttribute('aria-checked') === 'true';
+      if (isChecked) {
+        toggle.setAttribute('aria-checked', 'false');
+        toggle.classList.remove('bg-primary');
+        toggle.classList.add('bg-outline-variant');
+        knob.classList.remove('translate-x-5');
+        knob.classList.add('translate-x-0');
+      } else {
+        toggle.setAttribute('aria-checked', 'true');
+        toggle.classList.remove('bg-outline-variant');
+        toggle.classList.add('bg-primary');
+        knob.classList.remove('translate-x-0');
+        knob.classList.add('translate-x-5');
+      }
+    });
+  });
+</script></main><div class="fixed bottom-0 w-full z-50 pb-safe pointer-events-none px-margin mb-3"><nav class="pointer-events-auto mx-auto max-w-sm w-full bg-surface-container-lowest/90 backdrop-blur-xl rounded-full shadow-[0_12px_36px_-6px_rgba(17,25,21,0.08),0_4px_12px_-2px_rgba(17,25,21,0.03)] p-1.5 flex items-center justify-between" data-active-classes="bg-primary-container text-on-primary font-label-md"><a class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="home-wealth-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">account_balance</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="analytics-cashflow" href="#"><span class="material-symbols-outlined text-[20px]">analytics</span><span class="font-label-sm text-label-sm mt-0.5">Analytics</span></a><a class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="cards-wallets" href="#"><span class="material-symbols-outlined text-[20px]">credit_card</span><span class="font-label-sm text-label-sm mt-0.5">Cards</span></a><a aria-current="page" class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full transition-all bg-primary-container text-on-primary font-label-md" data-path="wealth-goals" href="#"><span class="material-symbols-outlined text-[20px]">savings</span><span class="font-label-sm text-label-sm mt-0.5">Goals</span></a><a class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-label-sm text-label-sm mt-0.5">Settings</span></a></nav></div></body></html>

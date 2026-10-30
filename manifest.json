@@ -1,0 +1,44 @@
+{
+  "name": "Sovereign Wealth - Personal Finance",
+  "short_name": "Sovereign",
+  "description": "Personal Wealth, Expense & Cashflow Management App by Muhammad Faari Akbar",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1b4332",
+  "theme_color": "#1b4332",
+  "lang": "id",
+  "dir": "ltr",
+  "categories": ["finance", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Catat Pengeluaran",
+      "short_name": "Catat",
+      "description": "Input transaksi pengeluaran baru",
+      "url": "./index.html#expense",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Kirim Uang",
+      "short_name": "Transfer",
+      "description": "Kirim uang ke kontak favorit",
+      "url": "./index.html#send",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

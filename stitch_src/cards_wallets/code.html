@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary": "#550007", "on-secondary-fixed-variant": "#0e5138", "secondary-fixed": "#b1f0ce", "on-background": "#191c1d", "on-primary-fixed": "#002114", "on-error": "#ffffff", "on-secondary": "#ffffff", "inverse-on-surface": "#f0f1f2", "secondary": "#2c694e", "inverse-primary": "#a5d0b9", "primary-fixed": "#c1ecd4", "on-secondary-container": "#316e52", "surface": "#f8f9fa", "primary": "#012d1d", "tertiary-fixed": "#ffdad7", "primary-fixed-dim": "#a5d0b9", "background": "#f8f9fa", "on-error-container": "#93000a", "surface-container-low": "#f3f4f5", "surface-dim": "#d9dadb", "surface-container": "#edeeef", "on-surface": "#191c1d", "on-primary-container": "#86af99", "on-tertiary-fixed": "#410004", "surface-container-highest": "#e1e3e4", "primary-container": "#1b4332", "secondary-fixed-dim": "#95d4b3", "inverse-surface": "#2e3132", "error-container": "#ffdad6", "outline-variant": "#c1c8c2", "on-surface-variant": "#414844", "surface-variant": "#e1e3e4", "error": "#ba1a1a", "surface-bright": "#f8f9fa", "on-tertiary-container": "#ff817a", "outline": "#717973", "secondary-container": "#aeeecb", "surface-tint": "#3f6653", "on-primary": "#ffffff", "tertiary-container": "#7b0b13", "surface-container-high": "#e7e8e9", "tertiary-fixed-dim": "#ffb3ae", "on-secondary-fixed": "#002114", "on-tertiary-fixed-variant": "#8b191d", "on-tertiary": "#ffffff", "on-primary-fixed-variant": "#274e3d", "surface-container-lowest": "#ffffff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-md": "1rem", "space-lg": "1.5rem", "space-xs": "0.25rem", "space-sm": "0.5rem", "gutter-desktop": "1.5rem", "margin": "1rem", "margin-desktop": "2.5rem", "space-xl": "2rem", "gutter": "1rem" }, fontFamily: { "body-sm": ["Inter"], "headline-sm": ["Inter"], "headline-md": ["Inter"], "currency-stat": ["Inter"], "body-md": ["Inter"], "label-sm": ["Inter"], "display-hero-mobile": ["Inter"], "body-lg": ["Inter"], "headline-lg": ["Inter"], "display-hero": ["Inter"], "label-md": ["Inter"] }, fontSize: { "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "currency-stat": ["24px", { "lineHeight": "30px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500" }], "display-hero-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.025em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }], "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "display-hero": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }] } } } }</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="flex flex-col"><span class="font-label-sm text-label-sm text-on-surface-variant">Cards &amp; Wallets</span><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Cards &amp; Management</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UpfOqkZUoHniXFgRatiS2Jc6x3uCXP0Hf_FyTypyNi3KlsBruS25PsBZkrTGp9np7rexYw0PFZynPQ8IDNqOloFbC4nRG_ZN--r11RpEVDI46cGekxBU8AEj8av0qyHVKPiiqDc5mn_DlTCmmYKVEjYb6jEiGNbrjid_QlHhSHWr7T6AWPfrCrD7I-jnuMGr-YdcafbFw6J22Y5kvguQFURSk0bBoyFWCxB-H2-0f7"/></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full pb-8 select-none">
+<!-- Sub-Header & Action Row -->
+<div class="px-margin pt-3 pb-4 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">Cards &amp; Accounts</h1>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+        3 Active
+      </span>
+</div>
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-primary font-label-md text-label-md transition-all active:scale-95 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Add Card</span>
+</button>
+</div>
+<!-- Virtual Card Carousel Stage -->
+<div class="relative w-full overflow-hidden pt-1 pb-2">
+<div class="flex gap-4 overflow-x-auto px-margin scrollbar-none snap-x snap-mandatory">
+<!-- Active Primary Card (Forest Emerald Metallic) -->
+<div class="snap-center shrink-0 w-[310px] h-[190px] rounded-2xl p-5 relative overflow-hidden bg-gradient-to-br from-primary via-primary-container to-[#082216] text-on-primary shadow-xl flex flex-col justify-between">
+<!-- Decorative Ambient Shimmer Grid Overlay -->
+<div class="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#c1ecd4_1px,transparent_1px)] [background-size:14px_14px]"></div>
+<div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-secondary/20 blur-2xl pointer-events-none"></div>
+<!-- Card Top Bar: Chips & Balance -->
+<div class="relative z-10 flex items-start justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-secondary-fixed opacity-90 block uppercase tracking-wider">Available Balance</span>
+<span class="font-currency-stat text-currency-stat text-surface-container-lowest font-semibold tracking-tight">$12,450.00</span>
+</div>
+<div class="flex items-center gap-2">
+<!-- EMV Chip graphic -->
+<div class="w-8 h-6 rounded-md bg-gradient-to-tr from-[#dfb76c] via-[#f9e79f] to-[#b7950b] p-0.5 flex flex-col justify-around shadow-sm opacity-95">
+<div class="h-0.5 bg-black/20 rounded"></div>
+<div class="h-0.5 bg-black/20 rounded"></div>
+</div>
+<!-- Contactless Icon -->
+<span class="material-symbols-outlined text-secondary-fixed text-[20px] -rotate-90">contactless</span>
+</div>
+</div>
+<!-- Card Bottom Bar: Details & Network Brand -->
+<div class="relative z-10 flex items-end justify-between">
+<div class="flex flex-col gap-1">
+<span class="font-headline-sm text-headline-sm tracking-widest text-surface-container-lowest font-mono opacity-95">•••• •••• •••• 4821</span>
+<div class="flex items-center gap-3 text-surface-container-high/80 font-label-sm text-label-sm">
+<span class="font-medium tracking-wide">FAARI AKBAR</span>
+<span>08/29</span>
+</div>
+</div>
+<!-- Platinum Badge / Card Network -->
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-[9px] uppercase tracking-widest text-primary-fixed-dim font-bold">World Elite</span>
+<div class="flex -space-x-2 opacity-90 mt-0.5">
+<div class="w-5 h-5 rounded-full bg-secondary-fixed"></div>
+<div class="w-5 h-5 rounded-full bg-[#f4a261]/80 backdrop-blur-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Card Peek (Titanium / Frosted White) -->
+<div class="snap-center shrink-0 w-[310px] h-[190px] rounded-2xl p-5 relative overflow-hidden bg-gradient-to-br from-surface-container-lowest to-surface-container-low text-on-surface shadow-md flex flex-col justify-between opacity-85">
+<div class="absolute inset-0 bg-gradient-to-tr from-transparent via-surface-container-highest/20 to-transparent pointer-events-none"></div>
+<div class="relative z-10 flex items-start justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Vault Reserve</span>
+<span class="font-currency-stat text-currency-stat text-primary font-semibold tracking-tight">$85,200.00</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-8 h-6 rounded-md bg-surface-container-highest flex flex-col justify-around p-0.5">
+<div class="h-0.5 bg-outline/30 rounded"></div>
+<div class="h-0.5 bg-outline/30 rounded"></div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px] -rotate-90">contactless</span>
+</div>
+</div>
+<div class="relative z-10 flex items-end justify-between">
+<div class="flex flex-col gap-1">
+<span class="font-headline-sm text-headline-sm tracking-widest text-primary font-mono">•••• •••• •••• 1094</span>
+<div class="flex items-center gap-3 text-on-surface-variant font-label-sm text-label-sm">
+<span class="font-medium tracking-wide">FAARI AKBAR</span>
+<span>11/31</span>
+</div>
+</div>
+<span class="font-label-sm text-[10px] uppercase tracking-wider text-secondary font-bold">Infinite</span>
+</div>
+</div>
+</div>
+<!-- Active Indicator & Status Metadata -->
+<div class="px-margin mt-3 flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">Active • Physical &amp; Virtual</span>
+</div>
+<!-- Pagination Dots -->
+<div class="flex items-center gap-1.5">
+<span class="w-5 h-1.5 rounded-full bg-primary transition-all"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-surface-container-highest"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-surface-container-highest"></span>
+</div>
+</div>
+</div>
+<!-- Card Quick Action Controls Dock -->
+<div class="px-margin mt-4">
+<div class="grid grid-cols-4 gap-2.5 p-3 rounded-2xl bg-surface-container-lowest shadow-sm">
+<!-- Freeze Card -->
+<button class="flex flex-col items-center justify-center gap-1.5 p-1 rounded-xl hover:bg-surface-container-low transition-transform active:scale-95 group" id="freeze-btn" type="button">
+<div class="w-11 h-11 rounded-full bg-surface-container-low group-hover:bg-surface-container flex items-center justify-center text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">lock_open</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center font-medium">Freeze</span>
+</button>
+<!-- Details (CVV) -->
+<button class="flex flex-col items-center justify-center gap-1.5 p-1 rounded-xl hover:bg-surface-container-low transition-transform active:scale-95 group" type="button">
+<div class="w-11 h-11 rounded-full bg-surface-container-low group-hover:bg-surface-container flex items-center justify-center text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center font-medium">Card Info</span>
+</button>
+<!-- Limits -->
+<button class="flex flex-col items-center justify-center gap-1.5 p-1 rounded-xl hover:bg-surface-container-low transition-transform active:scale-95 group" type="button">
+<div class="w-11 h-11 rounded-full bg-surface-container-low group-hover:bg-surface-container flex items-center justify-center text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center font-medium">Set Limits</span>
+</button>
+<!-- Apple Wallet -->
+<button class="flex flex-col items-center justify-center gap-1.5 p-1 rounded-xl hover:bg-surface-container-low transition-transform active:scale-95 group" type="button">
+<div class="relative w-11 h-11 rounded-full bg-secondary-container/40 flex items-center justify-center text-on-secondary-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span class="absolute -top-1 -right-1 w-4 h-4 bg-secondary text-on-secondary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px]">check</span>
+</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary text-center font-semibold">Wallet</span>
+</button>
+</div>
+</div>
+<!-- Spending Limit Tracker Card -->
+<div class="px-margin mt-4">
+<div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">speed</span>
+</div>
+<span class="font-headline-sm text-body-lg text-primary font-semibold">Monthly Spending Cap</span>
+</div>
+<button class="font-label-md text-label-md text-secondary hover:text-primary transition-colors" type="button">Adjust</button>
+</div>
+<!-- Metric Stack -->
+<div class="flex items-baseline justify-between pt-1">
+<div>
+<span class="font-currency-stat text-currency-stat text-on-surface font-semibold">$1,850</span>
+<span class="font-body-md text-body-md text-on-surface-variant"> / $3,000 used</span>
+</div>
+<span class="font-label-md text-label-md text-secondary bg-secondary-fixed/50 px-2 py-0.5 rounded-full font-semibold">61.6%</span>
+</div>
+<!-- Segmented Track Bar -->
+<div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden p-0.5">
+<div class="h-full rounded-full bg-gradient-to-r from-secondary to-primary-container transition-all" style="width: 61.6%;"></div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm pt-0.5">
+<span class="flex items-center gap-1 text-secondary font-medium">
+<span class="material-symbols-outlined text-[14px]">savings</span>
+          $1,150 remaining for October
+        </span>
+<span>Resets in 14d</span>
+</div>
+</div>
+</div>
+<!-- Linked Bank Accounts & E-Wallets -->
+<div class="px-margin mt-6 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-primary tracking-tight">Linked Accounts &amp; Wallets</h2>
+<button class="font-label-md text-label-md text-secondary hover:text-primary transition-colors" type="button">Manage</button>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Item 1: BCA Priority -->
+<div class="p-3.5 rounded-2xl bg-surface-container-lowest shadow-sm flex items-center justify-between transition-all hover:bg-surface-container-low/50">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-[#003d79]/10 text-[#003d79] flex items-center justify-center font-bold text-base">
+<span class="material-symbols-outlined text-[22px]">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-lg text-on-surface font-semibold">BCA Priority Checking</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-mono">•••• 9022</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded-md bg-secondary-fixed/40 text-on-secondary-fixed-variant font-label-sm text-[10px] font-semibold">
+                Default Payout
+              </span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-currency-stat text-body-lg text-primary font-semibold">$30,400.00</span>
+<span class="font-label-sm text-[11px] text-on-surface-variant">Primary Liquidity</span>
+</div>
+</div>
+<!-- Item 2: Mandiri Savings -->
+<div class="p-3.5 rounded-2xl bg-surface-container-lowest shadow-sm flex items-center justify-between transition-all hover:bg-surface-container-low/50">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-[#e38800]/10 text-[#a06000] flex items-center justify-center font-bold text-base">
+<span class="material-symbols-outlined text-[22px]">assured_workload</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-lg text-on-surface font-semibold">Bank Mandiri Savings</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-mono">•••• 6118</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded-md bg-primary-fixed/40 text-on-primary-fixed-variant font-label-sm text-[10px] font-semibold">
+                Auto-sweep Active
+              </span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-currency-stat text-body-lg text-primary font-semibold">$8,250.00</span>
+<span class="font-label-sm text-[11px] text-secondary font-medium">+1.85% APY</span>
+</div>
+</div>
+<!-- Item 3: PayPal Wallet -->
+<div class="p-3.5 rounded-2xl bg-surface-container-lowest shadow-sm flex items-center justify-between transition-all hover:bg-surface-container-low/50">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-[#0079c1]/10 text-[#0079c1] flex items-center justify-center font-bold text-base">
+<span class="material-symbols-outlined text-[22px]">payments</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-lg text-on-surface font-semibold">PayPal E-Wallet</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant">faari@sovereign.io</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-[10px] font-semibold">
+                Connected
+              </span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-currency-stat text-body-lg text-primary font-semibold">$1,200.00</span>
+<span class="font-label-sm text-[11px] text-on-surface-variant">Instant Rail</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Card Transactions (•••• 4821) -->
+<div class="px-margin mt-6 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-primary tracking-tight">Recent Activity</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">(•••• 4821)</span>
+</div>
+<a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors" href="#">See All</a>
+</div>
+<!-- Transaction Rows Card Container -->
+<div class="p-2 rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col">
+<!-- Item 1: Apple Store -->
+<div class="p-3 flex items-center justify-between hover:bg-surface-container-low/40 rounded-xl transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">laptop_mac</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Apple Store 5th Ave</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hardware &amp; Tech • Today, 2:15 PM</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">-$129.00</span>
+<span class="font-label-sm text-[11px] text-secondary font-medium">1% Back</span>
+</div>
+</div>
+<div class="h-[1px] bg-surface-container-low mx-3"></div>
+<!-- Item 2: Blue Bottle Coffee -->
+<div class="p-3 flex items-center justify-between hover:bg-surface-container-low/40 rounded-xl transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">coffee</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Blue Bottle Coffee</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Dining • Yesterday, 9:40 AM</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">-$6.75</span>
+<span class="font-label-sm text-[11px] text-on-surface-variant">Settled</span>
+</div>
+</div>
+<div class="h-[1px] bg-surface-container-low mx-3"></div>
+<!-- Item 3: Uber Black Executive -->
+<div class="p-3 flex items-center justify-between hover:bg-surface-container-low/40 rounded-xl transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">directions_car</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Uber Black Executive</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Transport • Oct 20, 11:12 PM</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">-$44.20</span>
+<span class="font-label-sm text-[11px] text-on-surface-variant">Settled</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Interactive toggle for Freeze Card button micro-delight
+  const freezeBtn = document.getElementById('freeze-btn');
+  if (freezeBtn) {
+    let isFrozen = false;
+    freezeBtn.addEventListener('click', () => {
+      isFrozen = !isFrozen;
+      const icon = freezeBtn.querySelector('.material-symbols-outlined');
+      const label = freezeBtn.querySelector('span:last-child');
+      const iconBg = freezeBtn.querySelector('div');
+      
+      if (isFrozen) {
+        icon.textContent = 'lock';
+        label.textContent = 'Frozen';
+        label.classList.add('text-error');
+        iconBg.classList.add('bg-error-container', 'text-error');
+      } else {
+        icon.textContent = 'lock_open';
+        label.textContent = 'Freeze';
+        label.classList.remove('text-error');
+        iconBg.classList.remove('bg-error-container', 'text-error');
+      }
+    });
+  }
+</script></main><div class="fixed bottom-0 w-full z-50 pb-safe pointer-events-none px-margin mb-3"><nav class="pointer-events-auto mx-auto max-w-sm w-full bg-surface-container-lowest/90 backdrop-blur-xl rounded-full shadow-[0_12px_36px_-6px_rgba(17,25,21,0.08),0_4px_12px_-2px_rgba(17,25,21,0.03)] p-1.5 flex items-center justify-between" data-active-classes="bg-primary-container text-on-primary font-label-md"><a class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="home" href="#"><span class="material-symbols-outlined text-[20px]">account_balance</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="analytics" href="#"><span class="material-symbols-outlined text-[20px]">analytics</span><span class="font-label-sm text-label-sm mt-0.5">Analytics</span></a><a class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full bg-primary-container text-on-primary font-label-md transition-all" data-path="cards" href="#"><span class="material-symbols-outlined text-[20px]">credit_card</span><span class="font-label-sm text-label-sm mt-0.5">Cards</span></a><a class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="goals" href="#"><span class="material-symbols-outlined text-[20px]">savings</span><span class="font-label-sm text-label-sm mt-0.5">Goals</span></a><a class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-label-sm text-label-sm mt-0.5">Settings</span></a></nav></div></body></html>

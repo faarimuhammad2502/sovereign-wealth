@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>Sovereign Wealth • Fintech Manager (Faari Akbar)</title>
+  
+  <!-- PWA Manifest & App Config for PWABuilder & Mobile -->
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#1b4332"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Sovereign"/>
+  <link rel="apple-touch-icon" href="icon-192.png"/>
+  <link rel="icon" type="image/png" href="icon-192.png"/>
+  
+  <!-- Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "tertiary": "#550007",
+            "on-secondary-fixed-variant": "#0e5138",
+            "secondary-fixed": "#b1f0ce",
+            "on-background": "#191c1d",
+            "on-primary-fixed": "#002114",
+            "on-error": "#ffffff",
+            "on-secondary": "#ffffff",
+            "inverse-on-surface": "#f0f1f2",
+            "secondary": "#2c694e",
+            "inverse-primary": "#a5d0b9",
+            "primary-fixed": "#c1ecd4",
+            "on-secondary-container": "#316e52",
+            "surface": "#f8f9fa",
+            "primary": "#012d1d",
+            "tertiary-fixed": "#ffdad7",
+            "primary-fixed-dim": "#a5d0b9",
+            "background": "#f8f9fa",
+            "on-error-container": "#93000a",
+            "surface-container-low": "#f3f4f5",
+            "surface-dim": "#d9dadb",
+            "surface-container": "#edeeef",
+            "on-surface": "#191c1d",
+            "on-primary-container": "#86af99",
+            "on-tertiary-fixed": "#410004",
+            "surface-container-highest": "#e1e3e4",
+            "primary-container": "#1b4332",
+            "secondary-fixed-dim": "#95d4b3",
+            "inverse-surface": "#2e3132",
+            "error-container": "#ffdad6",
+            "outline-variant": "#c1c8c2",
+            "on-surface-variant": "#414844",
+            "surface-variant": "#e1e3e4",
+            "error": "#ba1a1a",
+            "surface-bright": "#f8f9fa",
+            "on-tertiary-container": "#ff817a",
+            "outline": "#717973",
+            "secondary-container": "#aeeecb",
+            "surface-tint": "#3f6653",
+            "on-primary": "#ffffff",
+            "tertiary-container": "#7b0b13",
+            "surface-container-high": "#e7e8e9",
+            "tertiary-fixed-dim": "#ffb3ae",
+            "on-secondary-fixed": "#002114",
+            "on-tertiary-fixed-variant": "#8b191d",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed-variant": "#274e3d",
+            "surface-container-lowest": "#ffffff"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .pb-safe { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px); }
+    .pt-safe { padding-top: max(env(safe-area-inset-top, 0px), 12px); }
+    ::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .tap-scale { transition: transform 0.15s ease-out; }
+    .tap-scale:active { transform: scale(0.96); }
+    .tab-content { display: none; animation: fadeIn 0.25s ease-out forwards; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-neutral-900 text-on-surface font-sans antialiased min-h-screen flex justify-center items-start sm:py-6">
+
+  <!-- Mobile Screen Frame Container -->
+  <div class="w-full max-w-md bg-surface min-h-screen sm:min-h-[890px] sm:rounded-[36px] sm:shadow-[0_25px_70px_rgba(0,0,0,0.5)] sm:border-[8px] sm:border-neutral-800 flex flex-col relative overflow-hidden">
+
+    <!-- Top Sticky Header -->
+    <header class="sticky top-0 w-full z-40 pt-safe bg-surface/90 backdrop-blur-xl border-b border-surface-container">
+      <div class="h-16 px-4 flex items-center justify-between">
+        
+        <!-- Profile / Brand -->
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-full bg-primary-container text-primary-fixed-dim flex items-center justify-center font-bold text-xs ring-2 ring-primary-fixed/30 shadow-sm cursor-pointer" onclick="switchTab('settings')">
+            FA
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant">Sovereign Wealth</span>
+            <span class="text-sm font-bold text-primary tracking-tight" id="header-user-name">Faari Akbar</span>
+          </div>
+        </div>
+
+        <!-- Controls: Currency Switcher & Notifications -->
+        <div class="flex items-center gap-1.5">
+          <!-- Currency Switcher Pill -->
+          <button id="currency-modal-trigger" class="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-xs font-semibold text-primary border border-surface-container-highest shadow-xs tap-scale">
+            <span id="curr-flag">🇮🇩</span>
+            <span id="curr-code">IDR</span>
+            <span class="material-symbols-outlined text-[14px] text-on-surface-variant">expand_more</span>
+          </button>
+
+          <!-- Notification Bell -->
+          <button id="notif-btn" aria-label="Notifications" class="w-9 h-9 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-low transition-colors relative tap-scale">
+            <span class="material-symbols-outlined text-[20px]">notifications</span>
+            <span class="w-2 h-2 rounded-full bg-secondary absolute top-1.5 right-1.5 ring-2 ring-surface"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Scrollable Body -->
+    <div class="flex-1 w-full overflow-y-auto pb-28">
+
+      <!-- ========================================== -->
+      <!-- TAB 1: HOME (Wealth Dashboard)             -->
+      <!-- ========================================== -->
+      <section id="tab-home" class="tab-content active px-4 pt-4 space-y-5">
+        
+        <!-- Greeting & Privacy Toggle -->
+        <div class="flex items-center justify-between">
+          <div class="flex flex-col">
+            <h1 class="text-xl font-bold text-primary tracking-tight">Selamat pagi, Faari</h1>
+            <p class="text-xs text-on-surface-variant">Ringkasan portofolio &amp; arus kas Anda</p>
+          </div>
+          <button id="balance-toggle-btn" aria-label="Toggle sensitive balances visibility" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary transition-all hover:bg-surface-container-high tap-scale shadow-sm">
+            <span class="material-symbols-outlined text-[20px]" id="eye-icon">visibility</span>
+          </button>
+        </div>
+
+        <!-- Net Worth Hero Card -->
+        <div class="relative overflow-hidden bg-primary-container text-on-primary rounded-2xl p-5 shadow-xl flex flex-col gap-4">
+          <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full bg-secondary/30 blur-2xl pointer-events-none"></div>
+          <div class="absolute -left-10 -bottom-10 w-40 h-40 rounded-full bg-primary/40 blur-xl pointer-events-none"></div>
+
+          <div class="relative z-10 flex flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-medium tracking-wider uppercase text-primary-fixed-dim">Total Kekayaan Bersih</span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed/20 text-secondary-fixed text-[11px] font-medium backdrop-blur-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed animate-pulse"></span>
+                Live synced
+              </span>
+            </div>
+
+            <div class="flex items-baseline gap-1 mt-1">
+              <span class="currency-money balance-sensitive text-3xl sm:text-4xl font-bold text-on-primary tracking-tight" data-usd="42850">Rp 685.600.000</span>
+            </div>
+
+            <div class="flex items-center gap-2 mt-1">
+              <div class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold">
+                <span class="material-symbols-outlined text-[15px]">arrow_upward_alt</span>
+                <span class="currency-money balance-sensitive" data-usd="3240">+Rp 51.840.000</span>
+                <span class="text-on-secondary-container/80 text-[11px] font-normal">(+8.4% bulan ini)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Pill Buttons -->
+          <div class="relative z-10 grid grid-cols-4 gap-2 pt-2 border-t border-white/10">
+            <button id="btn-send-nav" onclick="openSendFlow()" class="flex flex-col items-center gap-1.5 group tap-scale">
+              <div class="w-12 h-12 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">north_east</span>
+              </div>
+              <span class="text-[11px] font-medium text-surface-container-high">Kirim</span>
+            </button>
+            
+            <button id="btn-expense" class="flex flex-col items-center gap-1.5 group tap-scale">
+              <div class="w-12 h-12 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+              </div>
+              <span class="text-[11px] font-medium text-surface-container-high">Catat</span>
+            </button>
+            
+            <button id="btn-scan" class="flex flex-col items-center gap-1.5 group tap-scale">
+              <div class="w-12 h-12 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">document_scanner</span>
+              </div>
+              <span class="text-[11px] font-medium text-surface-container-high">Scan AI</span>
+            </button>
+            
+            <button onclick="switchTab('analytics')" class="flex flex-col items-center gap-1.5 group tap-scale">
+              <div class="w-12 h-12 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-on-primary group-hover:bg-white/25 transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">tune</span>
+              </div>
+              <span class="text-[11px] font-medium text-surface-container-high">Budget</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Monthly Budget Track -->
+        <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container-low flex flex-col gap-3.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-2.5 h-2.5 rounded-full bg-secondary"></div>
+              <span class="text-sm font-semibold text-primary">Anggaran Bulan Ini</span>
+            </div>
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant text-[11px] font-semibold">
+              On Track • Sisa 14 hari
+            </span>
+          </div>
+
+          <div class="flex items-baseline justify-between">
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-xs text-on-surface-variant font-medium">Terpakai</span>
+              <span class="currency-money balance-sensitive text-xl font-bold text-primary" data-usd="2450">Rp 39.200.000</span>
+              <span class="text-xs text-on-surface-variant">dari <span class="currency-money" data-usd="4000">Rp 64.000.000</span></span>
+            </div>
+            <span class="text-xs font-bold text-secondary">61.2%</span>
+          </div>
+
+          <div class="space-y-2">
+            <div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex gap-0.5 p-0.5">
+              <div class="h-full rounded-full bg-tertiary-container" style="width: 21%;" title="Food"></div>
+              <div class="h-full rounded-full bg-surface-tint" style="width: 8%;" title="Subscriptions"></div>
+              <div class="h-full rounded-full bg-secondary" style="width: 23.75%;" title="Housing"></div>
+              <div class="h-full rounded-full bg-primary-fixed-dim" style="width: 8.5%;" title="Misc"></div>
+            </div>
+            
+            <div class="flex items-center justify-between pt-1 text-on-surface-variant text-[11px]">
+              <div class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+                <span>Makan</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-surface-tint"></span>
+                <span>Subs</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-secondary"></span>
+                <span>Rumah</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-primary-fixed-dim"></span>
+                <span>Lainnya</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spending Breakdown Carousel -->
+        <div class="flex flex-col gap-2.5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-base font-bold text-primary tracking-tight">Kategori Pengeluaran</h2>
+            <button onclick="switchTab('analytics')" class="text-xs font-semibold text-secondary hover:underline tap-scale">Lihat Analisis</button>
+          </div>
+
+          <div class="flex gap-3 overflow-x-auto pb-1 -mx-4 px-4 no-scrollbar">
+            <!-- Food & Dining -->
+            <div class="flex-shrink-0 w-40 bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm border border-surface-container-low flex flex-col justify-between h-36">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary">
+                  <span class="material-symbols-outlined text-[18px]">restaurant</span>
+                </div>
+                <span class="text-xs text-on-surface-variant font-medium">34.3%</span>
+              </div>
+              <div>
+                <span class="text-xs text-on-surface-variant block truncate">Kuliner &amp; Belanja</span>
+                <span class="currency-money balance-sensitive text-sm font-bold text-primary mt-0.5 block" data-usd="840">Rp 13.440.000</span>
+              </div>
+            </div>
+
+            <!-- Housing -->
+            <div class="flex-shrink-0 w-40 bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm border border-surface-container-low flex flex-col justify-between h-36">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed-variant">
+                  <span class="material-symbols-outlined text-[18px]">home</span>
+                </div>
+                <span class="text-xs text-on-surface-variant font-medium">38.8%</span>
+              </div>
+              <div>
+                <span class="text-xs text-on-surface-variant block truncate">Tempat Tinggal</span>
+                <span class="currency-money balance-sensitive text-sm font-bold text-primary mt-0.5 block" data-usd="950">Rp 15.200.000</span>
+              </div>
+            </div>
+
+            <!-- Investments -->
+            <div class="flex-shrink-0 w-40 bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm border border-surface-container-low flex flex-col justify-between h-36">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center text-on-primary">
+                  <span class="material-symbols-outlined text-[18px]">trending_up</span>
+                </div>
+                <span class="text-xs text-secondary font-semibold">Invest</span>
+              </div>
+              <div>
+                <span class="text-xs text-on-surface-variant block truncate">Investasi Reksadana</span>
+                <span class="currency-money balance-sensitive text-sm font-bold text-primary mt-0.5 block" data-usd="1250">Rp 20.000.000</span>
+              </div>
+            </div>
+
+            <!-- Tech & Cloud -->
+            <div class="flex-shrink-0 w-40 bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm border border-surface-container-low flex flex-col justify-between h-36">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-secondary">
+                  <span class="material-symbols-outlined text-[18px]">cloud_sync</span>
+                </div>
+                <span class="text-xs text-on-surface-variant font-medium">13.1%</span>
+              </div>
+              <div>
+                <span class="text-xs text-on-surface-variant block truncate">Cloud &amp; Subs</span>
+                <span class="currency-money balance-sensitive text-sm font-bold text-primary mt-0.5 block" data-usd="320">Rp 5.120.000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="flex flex-col gap-2.5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-base font-bold text-primary tracking-tight">Transaksi Terakhir</h2>
+            <button class="text-xs font-semibold text-secondary hover:underline tap-scale" onclick="showToast('Menampilkan seluruh riwayat')">Semua</button>
+          </div>
+
+          <div class="bg-surface-container-lowest rounded-2xl p-2 shadow-sm border border-surface-container-low divide-y divide-surface-container-low">
+            
+            <!-- Apple Services -->
+            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 rounded-xl transition-colors">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface shrink-0">
+                  <span class="material-symbols-outlined text-[20px]">music_note</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <span class="text-sm font-semibold text-on-surface truncate">Apple Services</span>
+                  <span class="text-xs text-on-surface-variant truncate">iCloud+ &amp; Music • Hari ini, 09:41</span>
+                </div>
+              </div>
+              <div class="text-right shrink-0 pl-2">
+                <span class="currency-money balance-sensitive text-xs sm:text-sm text-tertiary-container font-bold block" data-usd="-9.99">-Rp 159.840</span>
+                <span class="text-[11px] text-on-surface-variant">Subs</span>
+              </div>
+            </div>
+
+            <!-- Freelance Payout -->
+            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 rounded-xl transition-colors">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-on-secondary-fixed-variant shrink-0">
+                  <span class="material-symbols-outlined text-[20px]">payments</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <span class="text-sm font-semibold text-on-surface truncate">Gaji &amp; Freelance</span>
+                  <span class="text-xs text-on-surface-variant truncate">Project Sprint • Kemarin</span>
+                </div>
+              </div>
+              <div class="text-right shrink-0 pl-2">
+                <span class="currency-money balance-sensitive text-xs sm:text-sm text-secondary font-bold block" data-usd="1200">+Rp 19.200.000</span>
+                <span class="text-[11px] text-secondary font-medium">Income</span>
+              </div>
+            </div>
+
+            <!-- Supermarket -->
+            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 rounded-xl transition-colors">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-full bg-tertiary-fixed/60 flex items-center justify-center text-tertiary shrink-0">
+                  <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <span class="text-sm font-semibold text-on-surface truncate">Grand Lucky / Supermarket</span>
+                  <span class="text-xs text-on-surface-variant truncate">Bahan Masak &amp; Buah • 18 Okt</span>
+                </div>
+              </div>
+              <div class="text-right shrink-0 pl-2">
+                <span class="currency-money balance-sensitive text-xs sm:text-sm text-tertiary-container font-bold block" data-usd="-142.50">-Rp 2.280.000</span>
+                <span class="text-[11px] text-on-surface-variant">Food</span>
+              </div>
+            </div>
+
+            <!-- Coffee -->
+            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 rounded-xl transition-colors">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface shrink-0">
+                  <span class="material-symbols-outlined text-[20px]">local_cafe</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <span class="text-sm font-semibold text-on-surface truncate">Artisan Coffee</span>
+                  <span class="text-xs text-on-surface-variant truncate">Cafe Senopati • 17 Okt</span>
+                </div>
+              </div>
+              <div class="text-right shrink-0 pl-2">
+                <span class="currency-money balance-sensitive text-xs sm:text-sm text-tertiary-container font-bold block" data-usd="-6.75">-Rp 108.000</span>
+                <span class="text-[11px] text-on-surface-variant">Dining</span>
+              </div>
+            </div>
+
+            <!-- Auto Invest -->
+            <div class="flex items-center justify-between p-2.5 hover:bg-surface-container-low/50 rounded-xl transition-colors">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant shrink-0">
+                  <span class="material-symbols-outlined text-[20px]">query_stats</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <span class="text-sm font-semibold text-on-surface truncate">Bibit / Bareksa Auto-Invest</span>
+                  <span class="text-xs text-on-surface-variant truncate">SBN &amp; Index Fund • 15 Okt</span>
+                </div>
+              </div>
+              <div class="text-right shrink-0 pl-2">
+                <span class="currency-money balance-sensitive text-xs sm:text-sm text-on-surface font-bold block" data-usd="-500">-Rp 8.000.000</span>
+                <span class="text-[11px] text-secondary font-medium">Wealth</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 2: ANALYTICS & CASHFLOW                -->
+      <!-- ========================================== -->
+      <section id="tab-analytics" class="tab-content px-4 pt-4 space-y-5">
+        
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant">Analisis Keuangan</span>
+            <h1 class="text-xl font-bold text-primary tracking-tight">Arus Kas &amp; Pertumbuhan</h1>
+          </div>
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-xs font-semibold">
+            <span class="material-symbols-outlined text-[14px]">verified</span>
+            Surplus
+          </span>
+        </div>
+
+        <!-- Inflow vs Outflow Cards -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col p-3 rounded-2xl bg-surface-container-lowest border border-surface-container-low shadow-sm">
+            <div class="flex items-center gap-1.5 mb-1">
+              <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+              <span class="text-[11px] text-on-surface-variant font-medium">Pemasukan (In)</span>
+            </div>
+            <span class="currency-money balance-sensitive text-base sm:text-lg text-secondary font-bold" data-usd="3870">Rp 61.920.000</span>
+            <div class="flex items-center gap-1 mt-1 text-secondary text-[11px]">
+              <span class="material-symbols-outlined text-[13px]">trending_up</span>
+              <span>+12.4% vs bln lalu</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col p-3 rounded-2xl bg-surface-container-lowest border border-surface-container-low shadow-sm">
+            <div class="flex items-center gap-1.5 mb-1">
+              <span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+              <span class="text-[11px] text-on-surface-variant font-medium">Pengeluaran (Out)</span>
+            </div>
+            <span class="currency-money balance-sensitive text-base sm:text-lg text-error font-bold" data-usd="2450">Rp 39.200.000</span>
+            <div class="flex items-center gap-1 mt-1 text-on-surface-variant text-[11px]">
+              <span class="material-symbols-outlined text-[13px]">trending_down</span>
+              <span>-4.2% lebih hemat</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Smooth Area Chart (SVG from Stitch) -->
+        <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container-low flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-primary">Dinamika Arus Kas (30 Hari)</span>
+            <div class="flex items-center gap-2 text-[10px] text-on-surface-variant">
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary"></span> Masuk</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error"></span> Keluar</span>
+            </div>
+          </div>
+
+          <div class="relative w-full h-40 pt-2">
+            <svg class="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 340 160">
+              <defs>
+                <linearGradient id="incomeGlow" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#2c694e" stop-opacity="0.3"></stop>
+                  <stop offset="100%" stop-color="#2c694e" stop-opacity="0.0"></stop>
+                </linearGradient>
+                <linearGradient id="expenseGlow" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#ba1a1a" stop-opacity="0.2"></stop>
+                  <stop offset="100%" stop-color="#ba1a1a" stop-opacity="0.0"></stop>
+                </linearGradient>
+              </defs>
+              <line stroke="#edeeef" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="340" y1="30" y2="30"></line>
+              <line stroke="#edeeef" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="340" y1="75" y2="75"></line>
+              <line stroke="#edeeef" stroke-dasharray="3,3" stroke-width="1" x1="0" x2="340" y1="120" y2="120"></line>
+              <!-- Income curve -->
+              <path d="M 0,110 C 45,95 80,45 130,55 C 180,65 210,30 260,35 C 295,40 320,20 340,15 L 340,150 L 0,150 Z" fill="url(#incomeGlow)"></path>
+              <path d="M 0,110 C 45,95 80,45 130,55 C 180,65 210,30 260,35 C 295,40 320,20 340,15" fill="none" stroke="#2c694e" stroke-linecap="round" stroke-width="2.5"></path>
+              <!-- Expense curve -->
+              <path d="M 0,135 C 50,130 90,85 140,90 C 190,95 220,70 270,75 C 305,80 325,65 340,62 L 340,150 L 0,150 Z" fill="url(#expenseGlow)"></path>
+              <path d="M 0,135 C 50,130 90,85 140,90 C 190,95 220,70 270,75 C 305,80 325,65 340,62" fill="none" stroke="#ba1a1a" stroke-linecap="round" stroke-width="2"></path>
+              <circle cx="260" cy="35" fill="#2c694e" r="4.5" stroke="#ffffff" stroke-width="2"></circle>
+              <circle cx="270" cy="75" fill="#ba1a1a" r="4" stroke="#ffffff" stroke-width="2"></circle>
+            </svg>
+          </div>
+          <div class="flex justify-between items-center px-1 text-[11px] text-on-surface-variant font-medium">
+            <span>1 Okt</span>
+            <span>8 Okt</span>
+            <span>15 Okt</span>
+            <span>22 Okt</span>
+            <span>29 Okt</span>
+          </div>
+
+          <!-- Net Savings Banner -->
+          <div class="flex items-center justify-between p-3 rounded-xl bg-secondary-fixed/40 mt-1">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-white">
+                <span class="material-symbols-outlined text-[16px]">savings</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-[11px] text-on-secondary-fixed-variant font-semibold">Surplus Ditabung</span>
+                <span class="currency-money balance-sensitive text-sm font-bold text-on-secondary-fixed" data-usd="1420">+Rp 22.720.000</span>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-secondary text-white text-[11px] font-semibold">
+              35% Rasio Tabungan
+            </span>
+          </div>
+        </div>
+
+        <!-- AI Advisor Insight -->
+        <div class="relative overflow-hidden p-4 rounded-2xl bg-gradient-to-br from-[#EAF5EF] via-[#F3F9F6] to-[#E2EFE7] border border-secondary/20 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-primary-container text-primary-fixed flex items-center justify-center">
+                <span class="material-symbols-outlined text-[15px]">lightbulb</span>
+              </span>
+              <span class="text-xs font-bold text-primary uppercase tracking-wide">AI Capital Advisor</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-white text-secondary text-[10px] font-semibold shadow-2xs">
+              Live Intel
+            </span>
+          </div>
+          <p class="text-xs text-on-surface leading-relaxed">
+            Faari, pengeluaran makan di luar minggu ini <span class="font-semibold text-secondary">turun 18%</span>. Jika laju ini dipertahankan, Anda akan mengamankan tambahan <span class="currency-money font-semibold text-primary" data-usd="240">Rp 3.840.000</span> untuk dialokasikan ke <span class="font-semibold text-secondary">Target Jepang</span>.
+          </p>
+        </div>
+
+        <!-- Donut Breakdown -->
+        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-primary">Komposisi Pengeluaran</h3>
+            <span class="text-xs text-on-surface-variant font-medium">5 Sektor</span>
+          </div>
+          
+          <div class="flex items-center justify-center py-2">
+            <div class="relative w-36 h-36 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" fill="transparent" r="46" stroke="#f3f4f5" stroke-width="12"></circle>
+                <circle cx="60" cy="60" fill="transparent" r="46" stroke="#2c694e" stroke-dasharray="112 289" stroke-dashoffset="0" stroke-linecap="round" stroke-width="12"></circle>
+                <circle cx="60" cy="60" fill="transparent" r="46" stroke="#ba1a1a" stroke-dasharray="99 289" stroke-dashoffset="-114" stroke-linecap="round" stroke-width="12"></circle>
+                <circle cx="60" cy="60" fill="transparent" r="46" stroke="#550007" stroke-dasharray="38 289" stroke-dashoffset="-215" stroke-linecap="round" stroke-width="12"></circle>
+                <circle cx="60" cy="60" fill="transparent" r="46" stroke="#717973" stroke-dasharray="24 289" stroke-dashoffset="-255" stroke-linecap="round" stroke-width="12"></circle>
+                <circle cx="60" cy="60" fill="transparent" r="46" stroke="#c1c8c2" stroke-dasharray="16 289" stroke-dashoffset="-280" stroke-linecap="round" stroke-width="12"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                <span class="text-[10px] text-on-surface-variant">Total</span>
+                <span class="currency-money text-xs font-bold text-primary" data-usd="2450">Rp 39,2 Jt</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between items-center">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-secondary"></span> Tempat Tinggal (38.8%)</span>
+              <span class="currency-money font-semibold text-primary" data-usd="950">Rp 15.200.000</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-error"></span> Kuliner &amp; Makan (34.3%)</span>
+              <span class="currency-money font-semibold text-primary" data-usd="840">Rp 13.440.000</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span> Cloud &amp; AI Subs (13.1%)</span>
+              <span class="currency-money font-semibold text-primary" data-usd="320">Rp 5.120.000</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-outline"></span> Transportasi (8.2%)</span>
+              <span class="currency-money font-semibold text-primary" data-usd="200">Rp 3.200.000</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 3: CARDS & WALLETS                     -->
+      <!-- ========================================== -->
+      <section id="tab-cards" class="tab-content px-4 pt-4 space-y-5">
+        
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant">Manajemen Kartu</span>
+            <h1 class="text-xl font-bold text-primary tracking-tight">Kartu &amp; Rekening Bank</h1>
+          </div>
+          <button onclick="showToast('Fitur penambahan kartu aktif')" class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center tap-scale">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+          </button>
+        </div>
+
+        <!-- Virtual Card Showcase -->
+        <div class="relative">
+          <div id="card-hero-element" class="w-full h-48 rounded-2xl p-5 relative overflow-hidden bg-gradient-to-tr from-[#012d1d] via-[#1b4332] to-[#2c694e] text-white shadow-xl flex flex-col justify-between transition-all duration-300">
+            <!-- Glare effect -->
+            <div class="absolute -right-16 -top-16 w-52 h-52 rounded-full bg-secondary-fixed/20 blur-2xl pointer-events-none"></div>
+            
+            <div class="relative z-10 flex items-start justify-between">
+              <div>
+                <span class="text-[10px] tracking-wider uppercase text-primary-fixed-dim">Kartu Platinum Debit</span>
+                <div class="currency-money balance-sensitive text-xl font-bold mt-0.5" data-usd="12450">Rp 199.200.000</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-6 rounded-md bg-amber-300/80 flex flex-col justify-around p-0.5 shadow-sm">
+                  <div class="h-0.5 bg-black/40 rounded"></div>
+                  <div class="h-0.5 bg-black/40 rounded"></div>
+                </div>
+                <span class="material-symbols-outlined text-secondary-fixed text-[20px] -rotate-90">contactless</span>
+              </div>
+            </div>
+
+            <div class="relative z-10 flex items-end justify-between">
+              <div class="flex flex-col gap-0.5">
+                <span class="text-sm tracking-widest font-mono opacity-90">•••• •••• •••• 4821</span>
+                <div class="flex items-center gap-3 text-xs text-surface-container-high/80">
+                  <span class="font-semibold tracking-wide uppercase">FAARI AKBAR</span>
+                  <span>08/29</span>
+                </div>
+              </div>
+              <div class="flex flex-col items-end">
+                <span class="text-[9px] uppercase tracking-widest text-primary-fixed-dim font-bold">World Elite</span>
+                <div class="flex -space-x-2 mt-0.5 opacity-90">
+                  <div class="w-4 h-4 rounded-full bg-secondary-fixed"></div>
+                  <div class="w-4 h-4 rounded-full bg-amber-400"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Controls Dock -->
+          <div class="grid grid-cols-4 gap-2 p-3 mt-3 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low">
+            <button id="freeze-card-btn" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low tap-scale">
+              <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary transition-colors" id="freeze-icon-box">
+                <span class="material-symbols-outlined text-[18px]" id="freeze-icon">lock_open</span>
+              </div>
+              <span class="text-[11px] text-on-surface-variant font-medium" id="freeze-label">Freeze</span>
+            </button>
+            <button onclick="showToast('Nomor CVV: 892 • Berlaku 08/29')" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low tap-scale">
+              <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[18px]">visibility</span>
+              </div>
+              <span class="text-[11px] text-on-surface-variant font-medium">Info CVV</span>
+            </button>
+            <button onclick="showToast('Limit kartu aktif: Rp 50.000.000/bln')" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low tap-scale">
+              <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[18px]">tune</span>
+              </div>
+              <span class="text-[11px] text-on-surface-variant font-medium">Limit</span>
+            </button>
+            <button onclick="showToast('Tersambung ke Google Pay &amp; QRIS')" class="flex flex-col items-center gap-1 p-1 rounded-xl hover:bg-surface-container-low tap-scale">
+              <div class="w-10 h-10 rounded-full bg-secondary-container/40 flex items-center justify-center text-on-secondary-container">
+                <span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+              </div>
+              <span class="text-[11px] text-secondary font-semibold">Wallet</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Spending Limit Tracker -->
+        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-primary">Batas Pengeluaran Bulanan</span>
+            <span class="text-xs text-secondary font-bold bg-secondary-fixed/50 px-2 py-0.5 rounded-full">61.6%</span>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <span class="currency-money text-base font-bold text-primary" data-usd="1850">Rp 29.600.000</span>
+            <span class="text-xs text-on-surface-variant">dari kuota <span class="currency-money" data-usd="3000">Rp 48.000.000</span></span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+            <div class="h-full rounded-full bg-gradient-to-r from-secondary to-primary-container" style="width: 61.6%;"></div>
+          </div>
+        </div>
+
+        <!-- Linked Bank Accounts -->
+        <div class="flex flex-col gap-2.5">
+          <h2 class="text-sm font-bold text-primary tracking-tight">Rekening Bank Terhubung</h2>
+          
+          <div class="space-y-2">
+            <!-- BCA -->
+            <div class="p-3.5 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#003d79]/10 text-[#003d79] flex items-center justify-center font-bold text-sm">
+                  BCA
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-xs font-semibold text-on-surface">BCA Priority Checking</span>
+                  <span class="text-[11px] text-on-surface-variant font-mono">•••• 9022 • Default</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="currency-money text-xs sm:text-sm font-bold text-primary block" data-usd="30400">Rp 486.400.000</span>
+                <span class="text-[10px] text-secondary font-medium">Likuiditas Utama</span>
+              </div>
+            </div>
+
+            <!-- Mandiri -->
+            <div class="p-3.5 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#e38800]/10 text-[#a06000] flex items-center justify-center font-bold text-sm">
+                  MDR
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-xs font-semibold text-on-surface">Bank Mandiri Tabungan</span>
+                  <span class="text-[11px] text-on-surface-variant font-mono">•••• 6118</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="currency-money text-xs sm:text-sm font-bold text-primary block" data-usd="8250">Rp 132.000.000</span>
+                <span class="text-[10px] text-secondary font-medium">+2.25% Bunga</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 4: GOALS & VAULTS                      -->
+      <!-- ========================================== -->
+      <section id="tab-goals" class="tab-content px-4 pt-4 space-y-5">
+        
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-semibold tracking-wider uppercase text-on-surface-variant">Target Masa Depan</span>
+            <h1 class="text-xl font-bold text-primary tracking-tight">Vault &amp; Tabungan Impian</h1>
+          </div>
+          <button onclick="showToast('Buat target baru')" class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center tap-scale">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+          </button>
+        </div>
+
+        <!-- Total Saved Hero Banner -->
+        <div class="p-4 rounded-2xl bg-primary-container text-on-primary shadow-lg flex flex-col gap-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-primary-fixed-dim uppercase tracking-wider">Total Dana Terkumpul</span>
+            <span class="px-2 py-0.5 rounded-full bg-secondary-fixed/20 text-secondary-fixed text-[11px] font-semibold">
+              74% Tercapai
+            </span>
+          </div>
+          <div class="currency-money balance-sensitive text-2xl font-bold text-white tracking-tight" data-usd="28400">
+            Rp 454.400.000
+          </div>
+          <div class="flex items-center gap-2 pt-1 text-xs text-secondary-fixed">
+            <span class="material-symbols-outlined text-[16px] text-amber-300">local_fire_department</span>
+            <span>6 Bulan Disiplin Menabung tanpa bolong</span>
+          </div>
+        </div>
+
+        <!-- Active Goal Cards -->
+        <div class="space-y-3">
+          
+          <!-- Goal 1: Emergency Fund (100%) -->
+          <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container-low flex flex-col gap-3">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-secondary-fixed/30 flex items-center justify-center text-primary">
+                  <span class="material-symbols-outlined text-[22px]">verified_user</span>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-on-surface">Dana Darurat (6 Bulan)</h3>
+                  <p class="text-[11px] text-on-surface-variant">Terkunci di Deposito • 5.25% p.a</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant text-[10px] font-bold">
+                100% Selesai
+              </span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs">
+                <span class="currency-money font-bold text-primary" data-usd="15000">Rp 240.000.000</span>
+                <span class="text-on-surface-variant">dari <span class="currency-money" data-usd="15000">Rp 240.000.000</span></span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+                <div class="h-full bg-secondary rounded-full" style="width: 100%;"></div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-[11px] text-on-surface-variant flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px] text-secondary">check_circle</span>
+                Tercapai sejak Okt 2024
+              </span>
+              <button onclick="showToast('Membuka detail Dana Darurat')" class="px-3 py-1 bg-surface-container-low text-primary text-xs font-semibold rounded-full hover:bg-surface-container">Kelola</button>
+            </div>
+          </div>
+
+          <!-- Goal 2: Japan Trip (64%) -->
+          <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container-low flex flex-col gap-3">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-primary-fixed/30 flex items-center justify-center text-primary">
+                  <span class="material-symbols-outlined text-[22px]">flight_takeoff</span>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-on-surface">Liburan Musim Gugur Jepang</h3>
+                  <p class="text-[11px] text-on-surface-variant">Auto-debit <span class="currency-money" data-usd="300">Rp 4.800.000</span>/bln</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full bg-primary-fixed/40 text-on-primary-fixed-variant text-[10px] font-bold">
+                64% Tercapai
+              </span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs">
+                <span class="currency-money font-bold text-primary" data-usd="3200">Rp 51.200.000</span>
+                <span class="text-on-surface-variant">dari target <span class="currency-money" data-usd="5000">Rp 80.000.000</span></span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+                <div class="h-full bg-secondary rounded-full" style="width: 64%;"></div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-[11px] text-on-surface-variant flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                Target: Okt 2025
+              </span>
+              <button onclick="showToast('Setoran Rp 1.000.000 berhasil disimulasikan!')" class="px-3 py-1 bg-primary-container text-on-primary text-xs font-semibold rounded-full shadow-xs tap-scale flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">add</span> Top Up
+              </button>
+            </div>
+          </div>
+
+          <!-- Goal 3: Angel Fund (51%) -->
+          <div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-surface-container-low flex flex-col gap-3">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-secondary-fixed/20 flex items-center justify-center text-secondary">
+                  <span class="material-symbols-outlined text-[22px]">rocket_launch</span>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-on-surface">Startup Angel Fund</h3>
+                  <p class="text-[11px] text-on-surface-variant">Modal Bisnis &amp; Ventura</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant text-[10px] font-bold">
+                51%
+              </span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs">
+                <span class="currency-money font-bold text-primary" data-usd="10200">Rp 163.200.000</span>
+                <span class="text-on-surface-variant">dari <span class="currency-money" data-usd="20000">Rp 320.000.000</span></span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+                <div class="h-full bg-secondary rounded-full" style="width: 51%;"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Automated Rules Switches -->
+        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col gap-3">
+          <h3 class="text-sm font-bold text-primary">Aturan Otomasi Pintar</h3>
+          
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[18px]">toll</span>
+              </div>
+              <div>
+                <span class="text-xs font-semibold text-on-surface block">Bulatkan Kembalian Transaksi</span>
+                <span class="text-[10px] text-on-surface-variant">Otomatis masuk Dana Darurat</span>
+              </div>
+            </div>
+            <input type="checkbox" checked class="w-5 h-5 accent-emerald-800 cursor-pointer" onchange="showToast('Aturan bulatkan transaksi diperbarui')"/>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[18px]">call_split</span>
+              </div>
+              <div>
+                <span class="text-xs font-semibold text-on-surface block">Auto-Split Gajian (20%)</span>
+                <span class="text-[10px] text-on-surface-variant">Jadwal tiap tgl 25</span>
+              </div>
+            </div>
+            <input type="checkbox" checked class="w-5 h-5 accent-emerald-800 cursor-pointer" onchange="showToast('Aturan auto-split gajian diperbarui')"/>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 5: SETTINGS & PREFERENCES              -->
+      <!-- ========================================== -->
+      <section id="tab-settings" class="tab-content px-4 pt-4 space-y-5">
+        
+        <!-- Profile Banner -->
+        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex items-center gap-3">
+          <div class="w-14 h-14 rounded-full bg-primary-container text-primary-fixed-dim flex items-center justify-center font-bold text-lg ring-2 ring-primary-fixed/30 shadow-sm">
+            FA
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <h2 class="text-base font-bold text-primary">Muhammad Faari Akbar</h2>
+              <span class="material-symbols-outlined text-[16px] text-secondary">verified</span>
+            </div>
+            <span class="text-xs text-on-surface-variant">faari@sovereign.io • Jakarta</span>
+            <span class="inline-block px-2 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant text-[10px] font-semibold w-max mt-1">
+              World Platinum Member
+            </span>
+          </div>
+        </div>
+
+        <!-- Currency & Regional Preferences -->
+        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col gap-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Preferensi Finansial &amp; Mata Uang</h3>
+          
+          <button onclick="document.getElementById('currency-modal-trigger').click()" class="flex items-center justify-between p-2.5 rounded-xl hover:bg-surface-container-low transition-colors w-full text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[18px]">currency_exchange</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-xs font-semibold text-on-surface">Mata Uang Tampilan</span>
+                <span class="text-[11px] text-on-surface-variant">Konversi otomatis ke 8 mata uang dunia</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-1 text-xs font-bold text-secondary">
+              <span id="settings-curr-display">IDR (Rp)</span>
+              <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </div>
+          </button>
+
+          <button onclick="showToast('Laporan PDF bulan ini sedang diunduh...')" class="flex items-center justify-between p-2.5 rounded-xl hover:bg-surface-container-low transition-colors w-full text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[18px]">description</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-xs font-semibold text-on-surface">Ekspor Rekening Koran (PDF)</span>
+                <span class="text-[11px] text-on-surface-variant">Statement resmi dengan cap digital</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-[16px] text-on-surface-variant">download</span>
+          </button>
+        </div>
+
+        <!-- Security & Privacy -->
+        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col gap-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Keamanan &amp; Biometrik</h3>
+
+          <div class="flex items-center justify-between p-1">
+            <div class="flex items-center gap-2.5">
+              <span class="material-symbols-outlined text-[20px] text-primary">fingerprint</span>
+              <div>
+                <span class="text-xs font-semibold text-on-surface block">Login Biometrik / PIN</span>
+                <span class="text-[10px] text-on-surface-variant">Sidik jari Lenovo IdeaPad / FaceID</span>
+              </div>
+            </div>
+            <input type="checkbox" checked class="w-5 h-5 accent-emerald-800 cursor-pointer" onchange="showToast('Status biometrik diubah')"/>
+          </div>
+
+          <div class="flex items-center justify-between p-1">
+            <div class="flex items-center gap-2.5">
+              <span class="material-symbols-outlined text-[20px] text-primary">visibility_off</span>
+              <div>
+                <span class="text-xs font-semibold text-on-surface block">Samarkan Saldo Saat Buka App</span>
+                <span class="text-[10px] text-on-surface-variant">Privasi saat membuka di ruang publik</span>
+              </div>
+            </div>
+            <input type="checkbox" class="w-5 h-5 accent-emerald-800 cursor-pointer" onchange="showToast('Pengaturan privasi diperbarui')"/>
+          </div>
+        </div>
+
+        <!-- Logout / Footer -->
+        <div class="pt-2">
+          <button onclick="showToast('Akun Anda aman')" class="w-full py-3 rounded-xl border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-50 transition-colors">
+            Keluar dari Sesi
+          </button>
+          <p class="text-center text-[10px] text-on-surface-variant mt-3">
+            Sovereign Wealth Management v2.4 • Client ID: 2225245212490318666
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 6: SEND & TRANSFER MONEY (Sub-flow)   -->
+      <!-- ========================================== -->
+      <section id="tab-send" class="tab-content px-4 pt-4 space-y-4">
+        
+        <div class="flex items-center justify-between">
+          <button onclick="switchTab('home')" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary tap-scale">
+            <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+          </button>
+          <h2 class="text-base font-bold text-primary">Kirim &amp; Transfer Uang</h2>
+          <button onclick="showToast('Scan QRIS tujuan aktif')" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary tap-scale">
+            <span class="material-symbols-outlined text-[20px]">qr_code_scanner</span>
+          </button>
+        </div>
+
+        <!-- Recent Contacts -->
+        <div>
+          <span class="text-xs font-semibold text-on-surface-variant block mb-2">Penerima Favorit</span>
+          <div class="flex gap-3 overflow-x-auto no-scrollbar py-1">
+            <button onclick="selectRecipient('Sarah Jenkins', 'BCA •••• 5590')" class="flex flex-col items-center gap-1 shrink-0 tap-scale">
+              <div class="w-12 h-12 rounded-full bg-secondary-fixed/50 text-secondary font-bold flex items-center justify-center text-xs ring-2 ring-transparent hover:ring-secondary">
+                SJ
+              </div>
+              <span class="text-[11px] font-medium text-on-surface">Sarah J.</span>
+            </button>
+            <button onclick="selectRecipient('Alex Morgan', 'Mandiri •••• 3319')" class="flex flex-col items-center gap-1 shrink-0 tap-scale">
+              <div class="w-12 h-12 rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center text-xs">
+                AM
+              </div>
+              <span class="text-[11px] font-medium text-on-surface">Alex M.</span>
+            </button>
+            <button onclick="selectRecipient('Design Team Office', 'Bank Jago •••• 1022')" class="flex flex-col items-center gap-1 shrink-0 tap-scale">
+              <div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-[18px]">groups</span>
+              </div>
+              <span class="text-[11px] font-medium text-on-surface">Tim Desain</span>
+            </button>
+            <button onclick="showToast('Tambah kontak baru')" class="flex flex-col items-center gap-1 shrink-0 tap-scale">
+              <div class="w-12 h-12 rounded-full border-2 border-dashed border-outline-variant flex items-center justify-center text-on-surface-variant">
+                <span class="material-symbols-outlined text-[18px]">add</span>
+              </div>
+              <span class="text-[11px] font-medium text-on-surface-variant">Baru</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Transfer Hero Card -->
+        <div class="p-4 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex flex-col items-center text-center gap-3">
+          <div class="w-full flex items-center justify-between text-xs">
+            <span class="text-on-surface-variant">Saldo Tersedia: <strong class="currency-money text-primary" data-usd="42850">Rp 685.600.000</strong></span>
+            <span class="px-2 py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed-variant text-[10px] font-bold">Bebas Biaya (VIP)</span>
+          </div>
+
+          <div class="py-2 w-full">
+            <span class="text-xs text-on-surface-variant block mb-1">Tujuan: <strong class="text-primary" id="selected-target-name">Sarah Jenkins (BCA)</strong></span>
+            <div class="flex items-baseline justify-center gap-1 text-primary">
+              <span class="text-2xl font-bold" id="transfer-curr-symbol">Rp</span>
+              <input type="text" id="transfer-input" value="1.000.000" class="w-56 text-center text-3xl font-bold text-primary bg-transparent focus:outline-none"/>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-4 gap-2 w-full pt-1">
+            <button onclick="adjustTransfer(100000)" class="py-2 rounded-xl bg-surface-container-low text-xs font-semibold hover:bg-surface-container tap-scale">+100rb</button>
+            <button onclick="adjustTransfer(500000)" class="py-2 rounded-xl bg-surface-container-low text-xs font-semibold hover:bg-surface-container tap-scale">+500rb</button>
+            <button onclick="adjustTransfer(1000000)" class="py-2 rounded-xl bg-surface-container-low text-xs font-semibold hover:bg-surface-container tap-scale">+1 Juta</button>
+            <button onclick="setTransferMax()" class="py-2 rounded-xl bg-primary-container text-on-primary text-xs font-semibold tap-scale">Max</button>
+          </div>
+        </div>
+
+        <!-- Pay From Selector -->
+        <div class="p-3.5 rounded-2xl bg-surface-container-lowest shadow-sm border border-surface-container-low flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center font-bold text-xs">
+              BCA
+            </div>
+            <div class="flex flex-col text-left">
+              <span class="text-xs font-semibold text-on-surface">BCA Priority Checking</span>
+              <span class="text-[11px] text-on-surface-variant">•••• 9022 • Saldo Cukup</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-[18px] text-on-surface-variant">expand_more</span>
+        </div>
+
+        <!-- Submit Button -->
+        <button onclick="executeTransfer()" class="w-full py-4 rounded-xl bg-primary-container hover:bg-primary text-on-primary font-bold text-sm shadow-md tap-scale transition-colors mt-2">
+          Kirim Uang Sekarang →
+        </button>
+
+      </section>
+
+    </div>
+
+    <!-- Floating Bottom Navigation Bar -->
+    <div class="fixed sm:absolute bottom-0 w-full z-40 pb-safe px-4 mb-2 pointer-events-none">
+      <nav class="pointer-events-auto mx-auto max-w-sm w-full bg-surface-container-lowest/90 backdrop-blur-xl rounded-full shadow-[0_12px_36px_-6px_rgba(17,25,21,0.12),0_4px_12px_-2px_rgba(17,25,21,0.06)] border border-surface-container-high/60 p-1.5 flex items-center justify-between">
+        
+        <button data-tab="home" onclick="switchTab('home')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full transition-all bg-primary-container text-on-primary">
+          <span class="material-symbols-outlined text-[20px]">account_balance</span>
+          <span class="text-[10px] font-medium mt-0.5">Home</span>
+        </button>
+
+        <button data-tab="analytics" onclick="switchTab('analytics')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all">
+          <span class="material-symbols-outlined text-[20px]">analytics</span>
+          <span class="text-[10px] font-medium mt-0.5">Analytics</span>
+        </button>
+
+        <button data-tab="cards" onclick="switchTab('cards')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all">
+          <span class="material-symbols-outlined text-[20px]">credit_card</span>
+          <span class="text-[10px] font-medium mt-0.5">Cards</span>
+        </button>
+
+        <button data-tab="goals" onclick="switchTab('goals')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all">
+          <span class="material-symbols-outlined text-[20px]">savings</span>
+          <span class="text-[10px] font-medium mt-0.5">Goals</span>
+        </button>
+
+        <button data-tab="settings" onclick="switchTab('settings')" class="nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all">
+          <span class="material-symbols-outlined text-[20px]">settings</span>
+          <span class="text-[10px] font-medium mt-0.5">Settings</span>
+        </button>
+
+      </nav>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: CURRENCY SELECTOR (8 CURRENCIES)    -->
+    <!-- ========================================== -->
+    <div id="currency-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="w-full max-w-md bg-surface-container-lowest rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-3">
+        <div class="flex items-center justify-between border-b border-surface-container pb-3">
+          <div>
+            <h3 class="text-base font-bold text-primary">Pilih Mata Uang Portofolio</h3>
+            <p class="text-xs text-on-surface-variant">Konversi otomatis seluruh saldo &amp; transaksi</p>
+          </div>
+          <button id="close-currency-modal" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 gap-2 max-h-80 overflow-y-auto no-scrollbar py-1">
+          <!-- IDR -->
+          <button onclick="setCurrency('IDR')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🇮🇩</span>
+              <div class="flex flex-col text-left">
+                <span class="text-xs font-bold text-primary">IDR • Indonesian Rupiah (Rp)</span>
+                <span class="text-[10px] text-on-surface-variant">Mata uang utama Indonesia • 1 USD = Rp 16.000</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+          </button>
+
+          <!-- USD -->
+          <button onclick="setCurrency('USD')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🇺🇸</span>
+              <div class="flex flex-col text-left">
+                <span class="text-xs font-bold text-primary">USD • US Dollar ($)</span>
+                <span class="text-[10px] text-on-surface-variant">Mata uang patokan global</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+          </button>
+
+          <!-- EUR -->
+          <button onclick="setCurrency('EUR')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🇪🇺</span>
+              <div class="flex flex-col text-left">
+                <span class="text-xs font-bold text-primary">EUR • Euro (€)</span>
+                <span class="text-[10px] text-on-surface-variant">Zona Eropa • 1 EUR ≈ 1.09 USD</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+          </button>
+
+          <!-- GBP -->
+          <button onclick="setCurrency('GBP')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🇬🇧</span>
+              <div class="flex flex-col text-left">
+                <span class="text-xs font-bold text-primary">GBP • British Pound (£)</span>
+                <span class="text-[10px] text-on-surface-variant">Inggris Raya • 1 GBP ≈ 1.27 USD</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+          </button>
+
+          <!-- JPY -->
+          <button onclick="setCurrency('JPY')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🇯🇵</span>
+              <div class="flex flex-col text-left">
+                <span class="text-xs font-bold text-primary">JPY • Japanese Yen (¥)</span>
+                <span class="text-[10px] text-on-surface-variant">Jepang • 1 USD ≈ 152 JPY</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+          </button>
+
+          <!-- KRW -->
+          <button onclick="setCurrency('KRW')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🇰🇷</span>
+              <div class="flex flex-col text-left">
+                <span class="text-xs font-bold text-primary">KRW • South Korean Won (₩)</span>
+                <span class="text-[10px] text-on-surface-variant">Korea Selatan • 1 USD ≈ 1.380 KRW</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+          </button>
+
+          <!-- CNY -->
+          <button onclick="setCurrency('CNY')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🇨🇳</span>
+              <div class="flex flex-col text-left">
+                <span class="text-xs font-bold text-primary">CNY • Chinese Yuan (¥)</span>
+                <span class="text-[10px] text-on-surface-variant">Tiongkok • 1 USD ≈ 7.25 CNY</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+          </button>
+
+          <!-- SGD -->
+          <button onclick="setCurrency('SGD')" class="curr-option flex items-center justify-between p-3 rounded-xl hover:bg-surface-container transition-colors border border-transparent hover:border-secondary-fixed">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">🇸🇬</span>
+              <div class="flex flex-col text-left">
+                <span class="text-xs font-bold text-primary">SGD • Singapore Dollar (S$)</span>
+                <span class="text-[10px] text-on-surface-variant">Singapura • 1 USD ≈ 1.34 SGD</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-secondary check-icon hidden">check_circle</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Modal: Add Expense Sheet -->
+    <div id="modal-expense" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="w-full max-w-md bg-surface-container-lowest rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl transform translate-y-full sm:translate-y-4 transition-transform duration-300 flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b border-surface-container pb-3">
+          <h3 class="text-base font-bold text-primary">Catat Pengeluaran Baru</h3>
+          <button id="close-modal-expense" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block mb-1">Nominal</label>
+          <div class="flex items-center gap-2 border-b-2 border-primary-container pb-1">
+            <span class="text-2xl font-bold text-primary" id="modal-curr-symbol">Rp</span>
+            <input type="number" id="input-amount" placeholder="50000" class="w-full text-3xl font-bold text-primary bg-transparent focus:outline-none"/>
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block mb-1.5">Kategori</label>
+          <div class="flex gap-2 overflow-x-auto no-scrollbar py-1">
+            <button class="px-3 py-1.5 rounded-full bg-primary-container text-on-primary text-xs font-medium shrink-0">Kuliner</button>
+            <button class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-medium shrink-0">Belanja</button>
+            <button class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-medium shrink-0">Transport</button>
+            <button class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-medium shrink-0">Tagihan</button>
+          </div>
+        </div>
+        <button id="submit-expense" class="w-full py-3.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary font-semibold text-sm shadow-md tap-scale transition-colors mt-2">
+          Simpan Transaksi
+        </button>
+      </div>
+    </div>
+
+    <!-- Interactive Toast -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-neutral-900/90 text-white px-4 py-2.5 rounded-full text-xs font-medium shadow-2xl backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2">
+      <span class="material-symbols-outlined text-sm text-secondary-fixed">check_circle</span>
+      <span id="toast-msg">Aksi berhasil</span>
+    </div>
+
+  </div>
+
+  <!-- Currency Conversion & Core Interactions Script -->
+  <script>
+    // ==========================================
+    // 1. CURRENCY CONVERSION ENGINE
+    // ==========================================
+    const CURRENCIES = {
+      IDR: { name: 'Indonesian Rupiah', symbol: 'Rp', rate: 16000, flag: '🇮🇩', locale: 'id-ID', round: true },
+      USD: { name: 'US Dollar', symbol: '$', rate: 1.0, flag: '🇺🇸', locale: 'en-US', round: false },
+      EUR: { name: 'Euro', symbol: '€', rate: 0.92, flag: '🇪🇺', locale: 'de-DE', round: false },
+      GBP: { name: 'British Pound', symbol: '£', rate: 0.79, flag: '🇬🇧', locale: 'en-GB', round: false },
+      JPY: { name: 'Japanese Yen', symbol: '¥', rate: 152.0, flag: '🇯🇵', locale: 'ja-JP', round: true },
+      KRW: { name: 'Korean Won', symbol: '₩', rate: 1380.0, flag: '🇰🇷', locale: 'ko-KR', round: true },
+      CNY: { name: 'Chinese Yuan', symbol: '¥', rate: 7.25, flag: '🇨🇳', locale: 'zh-CN', round: false },
+      SGD: { name: 'Singapore Dollar', symbol: 'S$', rate: 1.34, flag: '🇸🇬', locale: 'en-SG', round: false }
+    };
+
+    let currentCurrency = 'IDR'; // Default to Indonesian Rupiah
+    let isHidden = false;
+
+    function formatMoney(amountInUSD, currCode = currentCurrency) {
+      const curr = CURRENCIES[currCode] || CURRENCIES.IDR;
+      const isNegative = amountInUSD < 0;
+      const absUSD = Math.abs(amountInUSD);
+      const converted = absUSD * curr.rate;
+
+      let formattedNumber = '';
+      if (curr.round) {
+        formattedNumber = Math.round(converted).toLocaleString(curr.locale);
+      } else {
+        formattedNumber = converted.toLocaleString(curr.locale, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+
+      const prefix = isNegative ? '-' : '';
+      if (curr.symbol === 'Rp') {
+        return `${prefix}Rp ${formattedNumber}`;
+      } else if (curr.symbol === 'S$') {
+        return `${prefix}S$${formattedNumber}`;
+      } else {
+        return `${prefix}${curr.symbol}${formattedNumber}`;
+      }
+    }
+
+    function updateAllCurrencyDisplays() {
+      const curr = CURRENCIES[currentCurrency];
+      
+      // Update header badges
+      document.getElementById('curr-flag').textContent = curr.flag;
+      document.getElementById('curr-code').textContent = currentCurrency;
+      document.getElementById('settings-curr-display').textContent = `${currentCurrency} (${curr.symbol})`;
+      document.getElementById('transfer-curr-symbol').textContent = curr.symbol;
+      document.getElementById('modal-curr-symbol').textContent = curr.symbol;
+
+      // Update all elements with data-usd
+      document.querySelectorAll('.currency-money').forEach(el => {
+        const usdVal = parseFloat(el.getAttribute('data-usd') || '0');
+        const formatted = formatMoney(usdVal);
+        el.setAttribute('data-formatted', formatted);
+        
+        if (!isHidden || !el.classList.contains('balance-sensitive')) {
+          el.textContent = formatted;
+        }
+      });
+    }
+
+    function setCurrency(code) {
+      if (!CURRENCIES[code]) return;
+      currentCurrency = code;
+      updateAllCurrencyDisplays();
+      closeCurrencyModal();
+      showToast(`Mata uang diubah ke ${code} (${CURRENCIES[code].symbol})`);
+    }
+
+    // Modal Currency
+    const currencyModal = document.getElementById('currency-modal');
+    const currencyModalContent = currencyModal ? currencyModal.querySelector('div') : null;
+
+    function openCurrencyModal() {
+      currencyModal.classList.remove('opacity-0', 'pointer-events-none');
+      if (currencyModalContent) currencyModalContent.classList.remove('translate-y-full');
+    }
+    function closeCurrencyModal() {
+      currencyModal.classList.add('opacity-0', 'pointer-events-none');
+      if (currencyModalContent) currencyModalContent.classList.add('translate-y-full');
+    }
+
+    document.getElementById('currency-modal-trigger')?.addEventListener('click', openCurrencyModal);
+    document.getElementById('close-currency-modal')?.addEventListener('click', closeCurrencyModal);
+    currencyModal?.addEventListener('click', (e) => {
+      if (e.target === currencyModal) closeCurrencyModal();
+    });
+
+    // ==========================================
+    // 2. SENSITIVE BALANCE TOGGLE (Eye Icon)
+    // ==========================================
+    const toggleBtn = document.getElementById('balance-toggle-btn');
+    const eyeIcon = document.getElementById('eye-icon');
+
+    if (toggleBtn && eyeIcon) {
+      toggleBtn.addEventListener('click', () => {
+        isHidden = !isHidden;
+        eyeIcon.textContent = isHidden ? 'visibility_off' : 'visibility';
+        
+        document.querySelectorAll('.balance-sensitive').forEach(node => {
+          if (isHidden) {
+            node.setAttribute('data-saved-text', node.textContent);
+            node.textContent = '••••••••';
+          } else {
+            const usd = parseFloat(node.getAttribute('data-usd') || '0');
+            node.textContent = formatMoney(usd);
+          }
+        });
+        showToast(isHidden ? 'Saldo disembunyikan' : 'Saldo ditampilkan');
+      });
+    }
+
+    // ==========================================
+    // 3. TAB NAVIGATION (Home, Analytics, Cards, Goals, Settings)
+    // ==========================================
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      const target = document.getElementById(`tab-${tabId}`);
+      if (target) {
+        target.classList.add('active');
+      }
+
+      // Update Nav buttons
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        const bTab = btn.getAttribute('data-tab');
+        if (bTab === tabId) {
+          btn.className = 'nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full transition-all bg-primary-container text-on-primary';
+        } else {
+          btn.className = 'nav-tab flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all';
+        }
+      });
+
+      // Scroll to top of content
+      const scrollBody = document.querySelector('.overflow-y-auto');
+      if (scrollBody) scrollBody.scrollTop = 0;
+    }
+
+    function openSendFlow() {
+      switchTab('send');
+    }
+
+    // ==========================================
+    // 4. CARD FREEZE INTERACTION
+    // ==========================================
+    let isCardFrozen = false;
+    const freezeBtn = document.getElementById('freeze-card-btn');
+    const cardHero = document.getElementById('card-hero-element');
+    const freezeIcon = document.getElementById('freeze-icon');
+    const freezeLabel = document.getElementById('freeze-label');
+
+    freezeBtn?.addEventListener('click', () => {
+      isCardFrozen = !isCardFrozen;
+      if (isCardFrozen) {
+        cardHero.classList.add('grayscale', 'opacity-70');
+        freezeIcon.textContent = 'lock';
+        freezeLabel.textContent = 'Unfreeze';
+        showToast('Kartu berhasil dibekukan (Freeze)');
+      } else {
+        cardHero.classList.remove('grayscale', 'opacity-70');
+        freezeIcon.textContent = 'lock_open';
+        freezeLabel.textContent = 'Freeze';
+        showToast('Kartu kembali aktif');
+      }
+    });
+
+    // ==========================================
+    // 5. SEND & TRANSFER FLOW
+    // ==========================================
+    function selectRecipient(name, detail) {
+      document.getElementById('selected-target-name').textContent = `${name} (${detail})`;
+      showToast(`Penerima: ${name}`);
+    }
+
+    function adjustTransfer(amount) {
+      const input = document.getElementById('transfer-input');
+      const currVal = parseInt(input.value.replace(/[^0-9]/g, '') || '0');
+      input.value = (currVal + amount).toLocaleString('id-ID');
+    }
+
+    function setTransferMax() {
+      document.getElementById('transfer-input').value = '50.000.000';
+      showToast('Nominal maksimal diisi');
+    }
+
+    function executeTransfer() {
+      const target = document.getElementById('selected-target-name').textContent;
+      const amt = document.getElementById('transfer-input').value;
+      const curr = CURRENCIES[currentCurrency].symbol;
+      showToast(`Transfer ${curr} ${amt} ke ${target} Berhasil!`);
+      setTimeout(() => switchTab('home'), 1200);
+    }
+
+    // ==========================================
+    // 6. EXPENSE MODAL & TOAST
+    // ==========================================
+    const modalExpense = document.getElementById('modal-expense');
+    const modalContent = modalExpense ? modalExpense.querySelector('div') : null;
+
+    function openExpenseModal() {
+      modalExpense.classList.remove('opacity-0', 'pointer-events-none');
+      if (modalContent) modalContent.classList.remove('translate-y-full');
+    }
+    function closeExpenseModal() {
+      modalExpense.classList.add('opacity-0', 'pointer-events-none');
+      if (modalContent) modalContent.classList.add('translate-y-full');
+    }
+
+    document.getElementById('btn-expense')?.addEventListener('click', openExpenseModal);
+    document.getElementById('close-modal-expense')?.addEventListener('click', closeExpenseModal);
+    modalExpense?.addEventListener('click', (e) => {
+      if (e.target === modalExpense) closeExpenseModal();
+    });
+
+    document.getElementById('submit-expense')?.addEventListener('click', () => {
+      const amt = document.getElementById('input-amount').value;
+      closeExpenseModal();
+      const curr = CURRENCIES[currentCurrency].symbol;
+      showToast(amt ? `Pengeluaran ${curr} ${amt} berhasil dicatat!` : 'Pengeluaran dicatat!');
+    });
+
+    document.getElementById('btn-scan')?.addEventListener('click', () => showToast('Kamera AI Scanner sedang mendeteksi struk...'));
+    document.getElementById('notif-btn')?.addEventListener('click', () => showToast('Tidak ada notifikasi baru hari ini'));
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      
+      clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none');
+        toast.classList.remove('opacity-100');
+      }, 2300);
+    }
+
+    // Initialize application on load
+    document.addEventListener('DOMContentLoaded', () => {
+      updateAllCurrencyDisplays();
+    });
+
+    // PWA Service Worker Registration for PWABuilder
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('Sovereign PWA registered:', reg.scope))
+          .catch((err) => console.log('Sovereign PWA registration error:', err));
+      });
+    }
+  </script>
+</body>
+</html>
